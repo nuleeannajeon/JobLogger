@@ -41,7 +41,7 @@ module.exports = (app, baseURL, createSession) => {
     };
 
     callBackFunction = (accessToken, refreshToken, profile, callbackFunction) =>
-        cb(null, profile, accessToken, refreshToken);
+        callbackFunction(null, profile, accessToken, refreshToken);
 
     passport.use(
         new LocalStrategy(
@@ -84,4 +84,5 @@ module.exports = (app, baseURL, createSession) => {
             await createSession(user);
         }
     );
+
 };

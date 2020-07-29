@@ -47,17 +47,6 @@ require('./oAuth')(app, baseURL, createSession)
 
 app.use(routes);
 
-//FOR TESTING AUTH
-app.get('/login', (req, res) => {
-    res.sendFile('testing/login.html', {root: __dirname})
-})
-app.get('/home', secured, (req, res) => {
-    res.sendFile('testing/home.html', {root: __dirname})
-})
-app.get('/register', (req, res) => {
-    res.sendFile('testing/register.html', {root: __dirname})
-})
-
 
 
 // app.use(express.static('client/build'));

@@ -9,7 +9,7 @@ module.exports = {
             .then( result=>result.json() );
     },
     
-    post: ( url, userData ) => {
+    post: async ( url, userData ) => {
         return fetch( url, 
             {   method: 'post',
                 headers: {
@@ -18,8 +18,6 @@ module.exports = {
                     'Session': localStorage.session ? localStorage.session : ''
                 },
                 body: JSON.stringify(userData)
-            }).then( result=>result.json());
+            }).then( result=>result.json()).catch(err => console.log(err));
     }
-
-
 }

@@ -10,9 +10,9 @@ import Home from './pages/Content' // temp for testing
 function App() {
   return (
     <Router>
-        <Route exact path='/register' component={Registration} />
+        <Route exact path={['/register','/']} component={Registration} />
         <Route exact path='/login' component={Login} />
-        <PrivateRoute>
+        <PrivateRoute exact path="/home">
             <Home />
         </PrivateRoute>
     </Router>

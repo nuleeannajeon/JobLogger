@@ -22,8 +22,11 @@ const Registration = (props) => {
         showPassword: false,
     });
 
-    const submitRegistration = () => {
-        
+    const submitRegistration = async () => {
+        const userData = {name: values.name, email: values.email, password: values.password}
+        const serverReturn = await API.post('/register', userData)
+        console.log("submitRegistration -> serverReturn", serverReturn)
+
     }
 
     const handleChange = (prop) => (event) => {
@@ -61,7 +64,7 @@ const Registration = (props) => {
                     type={values.email}
                     value={values.email}
                     onChange={handleChange('email')}
-                    endAdornment={<InputAdornment position="end"></InputAdornment>}
+                    // endAdornment={<InputAdornment position="end"></InputAdornment>}
                 />
             </FormControl>
             <FormControl>
