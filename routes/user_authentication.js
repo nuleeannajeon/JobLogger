@@ -24,8 +24,8 @@ module.exports = (router) => {
     });
 
     router.post('/login', async ({ body }, res) => {
-        const {email, password} = body
-        console.log('user input is', email, password)
+        const { email, password } = body;
+        console.log('user input is', email, password);
         const user = await User.findOne({ email: email });
         if (!user) {
             res.status(403).send({ error: 'No user with that email' });
@@ -46,8 +46,32 @@ module.exports = (router) => {
         }
 
         user.session = uuid();
-        await User.findOneAndUpdate({ _id: user._id }, { user });
+        console.log('updating user with session id', user)
+        await User.findOneAndUpdate({ _id: user._id }, { session: user.session });
         console.log('User successfully logged in!', user);
-        res.status(200).send({ message: 'Successful login' });
+        res.status(200).send({  
+            message: 'Successful login',
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                thumbnail: user.thumbnail,
+                session: user.session,
+                createdAt: user.createdAt,
+            },
+        });
     });
+    router.get('/loginstatus/:session', async ({params}, res) => {
+        const {session} = params
+        console.log('checking session id ', session)
+        const user = await User.findOne({session})
+        console.log('user', user)
+
+        if (!user) {
+            res.status(403).send({error: "User is not logged in"})
+            return
+        }
+        res.status(200).send(true)
+
+    })
 };

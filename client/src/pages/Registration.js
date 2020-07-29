@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useHistory} from 'react-router-dom'
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
@@ -15,6 +16,7 @@ import API from '../utils/API'
 import './registration.css';
 
 const Registration = (props) => {
+    const history = useHistory()
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -26,7 +28,9 @@ const Registration = (props) => {
         const userData = {name: values.name, email: values.email, password: values.password}
         const serverReturn = await API.post('/register', userData)
         console.log("submitRegistration -> serverReturn", serverReturn)
-        // TODO add in redirect and messages on success/failure
+        // TODO add in messages on success/failure
+
+        setTimeout(() => history.push('/login'), 2000)
 
     }
 

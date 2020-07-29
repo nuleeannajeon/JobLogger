@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
@@ -8,11 +9,14 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
-import './login.css'
-import API from '../utils/API'
+import './login.css';
+import API from '../utils/API';
+const saveSession = (sessionID) => {
+    localStorage.session = JSON.stringify(sessionID);
+};
 
-
-const Login = () => {
+const Login = (props) => {
+    const history = useHistory();
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -20,11 +24,22 @@ const Login = () => {
     });
 
     const submitLogin = async () => {
-        const userData = {email: values.email, password: values.password}
-        console.log("submitLogin -> userData", userData)
-        const serverReturn = await API.post('/login', userData)
-        console.log("submitRegistration -> serverReturn", serverReturn)
-    }
+        const userData = { email: values.email, password: values.password };
+        console.log('submitLogin -> userData', userData);
+        const serverReturn = await API.post('/login', userData);
+
+        if (!serverReturn.user || serverReturn.error) {
+            console.log(serverReturn);
+            return;
+            // TODO show a message to the user based on login failure
+        }
+
+        saveSession(serverReturn.user.session);
+
+        console.log('submitRegistration -> serverReturn', serverReturn);
+        props.login();
+        setTimeout(() => history.push('/home'), 1000);
+    };
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -75,8 +90,11 @@ const Login = () => {
             <Button variant="contained" color="primary" onClick={submitLogin}>
                 Login
             </Button>
+            <Button style={{ marginTop: '1em' }} onClick={() => history.push('/register')}>
+                Register
+            </Button>
         </Container>
     );
-}
+};
 
 export default Login;
