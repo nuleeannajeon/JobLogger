@@ -7,20 +7,23 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
-import './login.css'
+
 import API from '../utils/API'
 
+import './registration.css';
 
-const Login = () => {
+const Registration = (props) => {
     const [values, setValues] = useState({
+        name: '',
         email: '',
         password: '',
         showPassword: false,
     });
 
-    const submitLogin = () => {
-        
+    const submitRegistration = () => {
+
     }
 
     const handleChange = (prop) => (event) => {
@@ -36,6 +39,20 @@ const Login = () => {
     };
     return (
         <Container maxWidth="sm" style={{ display: 'flex', flexDirection: 'column' }}>
+            <FormControl>
+                <InputLabel htmlFor="name">Name</InputLabel>
+                <Input
+                    id="name"
+                    className="inp"
+                    value={values.name}
+                    onChange={handleChange('name')}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <AccountCircle />
+                        </InputAdornment>
+                    }
+                />
+            </FormControl>
             <FormControl>
                 <InputLabel htmlFor="email">email</InputLabel>
                 <Input
@@ -69,11 +86,11 @@ const Login = () => {
                 />
             </FormControl>
 
-            <Button variant="contained" color="primary" onClick={submitLogin}>
-                Login
+            <Button variant="contained" color="primary" onClick={submitRegistration}>
+                Submit
             </Button>
         </Container>
     );
-}
+};
 
-export default Login;
+export default Registration;
