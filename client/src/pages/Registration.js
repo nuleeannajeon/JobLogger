@@ -23,7 +23,7 @@ const Registration = (props) => {
     });
 
     const submitRegistration = () => {
-
+        
     }
 
     const handleChange = (prop) => (event) => {
