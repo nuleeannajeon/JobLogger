@@ -11,12 +11,14 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 import './login.css';
 import API from '../utils/API';
+import { useGlobalStore } from '../components/GlobalStore';
 const saveSession = (sessionID) => {
     localStorage.session = JSON.stringify(sessionID);
 };
 
 const Login = (props) => {
     const history = useHistory();
+    const [globalData, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -28,17 +30,22 @@ const Login = (props) => {
         console.log('submitLogin -> userData', userData);
         const serverReturn = await API.post('/login', userData);
 
-        if (!serverReturn.user || serverReturn.error) {
+        if (!serverReturn || !serverReturn.user || serverReturn.error) {
             console.log(serverReturn);
+
+            dispatch({ do: 'setMessage', type: 'error', message: 'Login failed' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+
             return;
-            // TODO show a message to the user based on login failure
         }
 
         saveSession(serverReturn.user.session);
 
         console.log('submitRegistration -> serverReturn', serverReturn);
         props.login();
-        setTimeout(() => history.push('/home'), 1000);
+        dispatch({ do: 'setMessage', type: 'success', message: 'Login Successful!' });
+        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+        setTimeout(() => history.push('/home'), 2000);
     };
 
     const handleChange = (prop) => (event) => {

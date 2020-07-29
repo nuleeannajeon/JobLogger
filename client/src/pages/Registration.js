@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
@@ -10,13 +10,15 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
+import { useGlobalStore } from '../components/GlobalStore';
 
-import API from '../utils/API'
+import API from '../utils/API';
 
 import './registration.css';
 
 const Registration = (props) => {
-    const history = useHistory()
+    const history = useHistory();
+    const [globalData, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -25,14 +27,21 @@ const Registration = (props) => {
     });
 
     const submitRegistration = async () => {
-        const userData = {name: values.name, email: values.email, password: values.password}
-        const serverReturn = await API.post('/register', userData)
-        console.log("submitRegistration -> serverReturn", serverReturn)
-        // TODO add in messages on success/failure
+        const userData = { name: values.name, email: values.email, password: values.password };
+        const serverReturn = await API.post('/register', userData);
+        console.log('submitRegistration -> serverReturn', serverReturn);
 
-        setTimeout(() => history.push('/login'), 2000)
+        if (!serverReturn || serverReturn.error) {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Registration failed' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return // TODO add a case for checking if duplicate entry, prompt to login
+        }
 
-    }
+        dispatch({ do: 'setMessage', type: 'success', message: 'Registration Successful!' });
+        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+
+        setTimeout(() => history.push('/login'), 2000);
+    };
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
