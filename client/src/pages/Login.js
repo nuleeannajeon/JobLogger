@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
@@ -8,20 +9,44 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
-import './login.css'
-import API from '../utils/API'
+import './login.css';
+import API from '../utils/API';
+import { useGlobalStore } from '../components/GlobalStore';
+const saveSession = (sessionID) => {
+    localStorage.session = JSON.stringify(sessionID);
+};
 
-
-const Login = () => {
+const Login = (props) => {
+    const history = useHistory();
+    const [globalData, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
         email: '',
         password: '',
         showPassword: false,
     });
 
-    const submitLogin = () => {
-        
-    }
+    const submitLogin = async () => {
+        const userData = { email: values.email, password: values.password };
+        console.log('submitLogin -> userData', userData);
+        const serverReturn = await API.post('/login', userData);
+
+        if (!serverReturn || !serverReturn.user || serverReturn.error) {
+            console.log(serverReturn);
+
+            dispatch({ do: 'setMessage', type: 'error', message: 'Login failed' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+
+            return;
+        }
+
+        saveSession(serverReturn.user.session);
+
+        console.log('submitRegistration -> serverReturn', serverReturn);
+        props.login();
+        dispatch({ do: 'setMessage', type: 'success', message: 'Login Successful!' });
+        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+        setTimeout(() => history.push('/home'), 2000);
+    };
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -44,7 +69,7 @@ const Login = () => {
                     type={values.email}
                     value={values.email}
                     onChange={handleChange('email')}
-                    endAdornment={<InputAdornment position="end"></InputAdornment>}
+                    // endAdornment={<InputAdornment position="end"></InputAdornment>}
                 />
             </FormControl>
             <FormControl>
@@ -72,8 +97,11 @@ const Login = () => {
             <Button variant="contained" color="primary" onClick={submitLogin}>
                 Login
             </Button>
+            <Button style={{ marginTop: '1em' }} onClick={() => history.push('/register')}>
+                Register
+            </Button>
         </Container>
     );
-}
+};
 
 export default Login;

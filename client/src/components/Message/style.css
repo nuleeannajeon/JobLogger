@@ -1,0 +1,6 @@
+.alertMessage {
+    position: absolute;
+    top: 10;
+    left: calc(50vw - 200px);
+    width: 400px;
+}
