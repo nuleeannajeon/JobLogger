@@ -19,8 +19,11 @@ const Login = () => {
         showPassword: false,
     });
 
-    const submitLogin = () => {
-        
+    const submitLogin = async () => {
+        const userData = {email: values.email, password: values.password}
+        console.log("submitLogin -> userData", userData)
+        const serverReturn = await API.post('/login', userData)
+        console.log("submitRegistration -> serverReturn", serverReturn)
     }
 
     const handleChange = (prop) => (event) => {
@@ -44,7 +47,7 @@ const Login = () => {
                     type={values.email}
                     value={values.email}
                     onChange={handleChange('email')}
-                    endAdornment={<InputAdornment position="end"></InputAdornment>}
+                    // endAdornment={<InputAdornment position="end"></InputAdornment>}
                 />
             </FormControl>
             <FormControl>

@@ -26,6 +26,7 @@ const Registration = (props) => {
         const userData = {name: values.name, email: values.email, password: values.password}
         const serverReturn = await API.post('/register', userData)
         console.log("submitRegistration -> serverReturn", serverReturn)
+        // TODO add in redirect and messages on success/failure
 
     }
 
