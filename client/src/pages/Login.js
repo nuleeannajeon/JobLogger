@@ -12,13 +12,14 @@ import Button from '@material-ui/core/Button';
 import './login.css';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
+
 const saveSession = (sessionID) => {
     localStorage.session = JSON.stringify(sessionID);
 };
 
-const Login = (props) => {
+const Login = () => {
     const history = useHistory();
-    const [globalData, dispatch] = useGlobalStore();
+    const [, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -42,8 +43,8 @@ const Login = (props) => {
         saveSession(serverReturn.user.session);
 
         console.log('submitRegistration -> serverReturn', serverReturn);
-        props.login();
         dispatch({ do: 'setMessage', type: 'success', message: 'Login Successful!' });
+        dispatch({do: 'login'})
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
     };

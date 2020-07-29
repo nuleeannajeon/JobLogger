@@ -18,7 +18,7 @@ import './registration.css';
 
 const Registration = (props) => {
     const history = useHistory();
-    const [globalData, dispatch] = useGlobalStore();
+    const [, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
         name: '',
         email: '',
