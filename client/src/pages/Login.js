@@ -35,12 +35,19 @@ const Login = () => {
     }, []);
 
     const oAuthloginComplete = (returnedData) => {
+
+        if (!returnedData || returnedData.error){
+            dispatch({ do: 'setMessage', type: 'error', message: returnedData.error ? returnedData.error : "The server didn't communicate back" });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            console.log("ERROR IN RETURN", returnedData)
+            return
+        }
+
         localStorage.session = JSON.stringify(returnedData.session)
-        dispatch({ do: 'setMessage', type: 'success', message: 'Login Successful!' });
+        dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
         dispatch({ do: 'login' });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
-
     }
 
     
@@ -49,19 +56,19 @@ const Login = () => {
         console.log('submitLogin -> userData', userData);
         const serverReturn = await API.post('/login', userData);
 
-        if (!serverReturn || !serverReturn.user || serverReturn.error) {
-            console.log(serverReturn);
-
-            dispatch({ do: 'setMessage', type: 'error', message: 'Login failed' });
+        if (serverReturn.error || !serverReturn || !serverReturn.session) {
+            dispatch({ do: 'setMessage', type: 'error', message: serverReturn.error ? serverReturn.error : "The server didn't communicate back" });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-
-            return;
+            console.log("ERROR", serverReturn)
+            return
+        }
+        if (serverReturn.message) {
+            dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         }
 
-        saveSession(serverReturn.user.session);
+        saveSession(serverReturn.session);
 
-        console.log('submitRegistration -> serverReturn', serverReturn);
-        dispatch({ do: 'setMessage', type: 'success', message: 'Login Successful!' });
         dispatch({ do: 'login' });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
