@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
@@ -19,12 +19,19 @@ const saveSession = (sessionID) => {
 
 const Login = () => {
     const history = useHistory();
-    const [, dispatch] = useGlobalStore();
+    const [globalStore, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
         email: '',
         password: '',
         showPassword: false,
     });
+
+    useEffect(() => {
+        if (globalStore.loggedIn) {
+            history.push('/home')
+        }
+        // eslint-disable-next-line
+    }, [])
 
     const submitLogin = async () => {
         const userData = { email: values.email, password: values.password };

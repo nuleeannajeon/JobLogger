@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
@@ -105,6 +105,9 @@ const Registration = (props) => {
 
             <Button variant="contained" color="primary" onClick={submitRegistration}>
                 Submit
+            </Button>
+            <Button style={{ marginTop: '1em' }} onClick={() => history.push('/login')}>
+                I'm already registered
             </Button>
         </Container>
     );
