@@ -13,44 +13,49 @@ module.exports = (app, baseURL, createSession) => {
 
     app.use(passport.initialize());
 
-    passport.serializeUser(function (user, done) {
-        done(null, user._id);
-    });
+    // passport.serializeUser(function (user, done) {
+    //     done(null, user._id);
+    // });
 
-    passport.deserializeUser(function (id, done) {
-        User.findById(id, function (err, user) {
-            done(err, user);
-        });
-    });
+    // passport.deserializeUser(function (id, done) {
+    //     User.findById(id, function (err, user) {
+    //         console.log("yes", user)
+    //         done(err, user);
+    //     });
+    // });
+    passport.serializeUser((user, cb) => cb(null, user));
+    passport.deserializeUser((obj, cb) => cb(null, obj));
 
-    const authenticateUser = async (email, password, done) => {
-        const user = await User.findOne({ email });
-        console.log(user);
-        if (user === null) {
-            return done(null, false, { message: 'No user with that email' });
-        }
-        try {
-            if (await bcrypt.compare(password, user.password)) {
-                return done(null, user);
-            } else {
-                return done(null, false, { message: 'Password incorrect' });
-            }
-        } catch (err) {
-            console.log('error in oAuth authentication check', err);
-        }
-    };
+
+    // const authenticateUser = async (email, password, done) => {
+    //     const user = await User.findOne({ email });
+    //     console.log(user);
+    //     if (user === null) {
+    //         return done(null, false, { message: 'No user with that email' });
+    //     }
+    //     try {
+    //         if (await bcrypt.compare(password, user.password)) {
+    //             return done(null, user);
+    //         } else {
+    //             return done(null, false, { message: 'Password incorrect' });
+    //         }
+    //     } catch (err) {
+    //         console.log('error in oAuth authentication check', err);
+    //     }
+    // };
 
     callBackFunction = (accessToken, refreshToken, profile, callbackFunction) =>
         callbackFunction(null, profile, accessToken, refreshToken);
 
-    passport.use(
-        new LocalStrategy(
-            {
-                usernameField: 'email',
-            },
-            authenticateUser
-        )
-    );
+    // passport.use(
+    //     new LocalStrategy(
+    //         {
+    //             usernameField: 'email',
+    //         },
+    //         authenticateUser
+    //     )
+    // );
+    
     passport.use(
         new LinkedInStrategy(
             {
@@ -64,25 +69,26 @@ module.exports = (app, baseURL, createSession) => {
     );
 
     app.get('/oauth/linkedin', (req, res, next) => {
-        console.log('oauth endpoint called upon', req);
-        passport.authentication('linkedin')(req, res, next);
+        console.log('oauth endpoint called upon');
+        passport.authenticate('linkedin')(req, res, next);
     });
 
     app.get(
-        '/oauth/linkedin/callback',
+        '/oauth/callback',
         (req, res, next) => {
             console.log('linkedin callback called');
             passport.authenticate('linkedin')(req, res, next);
         },
         async ({ user: returnedUser }, res) => {
+            console.log('returned user from linkedin', returnedUser)
             const user = {
                 username: returnedUser.displayName,
-                thumbnail: req.returnedUser.photos[0].value,
+                thumbnail: returnedUser.photos[0].value,
                 email: returnedUser.emails[0].value,
-                authID: returnedUser.id,
+                authId: returnedUser.id,
             };
-            await createSession(user);
+            const sessionData = JSON.stringify(await createSession(user));
+            res.send(`<html><body><script>window.opener.postMessage('${sessionData}', '*');</script>Please wait...</body></html>`)
         }
     );
-
 };

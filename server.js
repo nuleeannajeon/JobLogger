@@ -12,7 +12,7 @@ const uuid = require('uuid').v4
 //AUTH
 const secured = require('./auth')
 
-const orm = require('./orm')
+const orm = require('./auth_orm')
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -33,15 +33,13 @@ app.use(bodyParser.json());
 
 //AUTHENTICATION CONFIG
 const createSession = async (user) => {
+    console.log('creating session for linkedin user')
     const sessionID = uuid()
     const userData = await orm.registerUser(user, sessionID)
 
     return userData
 }
 
-// TODO make secured middleware
-// TODO check on session storage on the user side
-// TODO add React side for auth 
 
 require('./oAuth')(app, baseURL, createSession)
 

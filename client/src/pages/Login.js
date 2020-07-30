@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import './login.css';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
+import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js'
 
 const saveSession = (sessionID) => {
     localStorage.session = JSON.stringify(sessionID);
@@ -28,11 +29,21 @@ const Login = () => {
 
     useEffect(() => {
         if (globalStore.loggedIn) {
-            history.push('/home')
+            history.push('/home');
         }
         // eslint-disable-next-line
-    }, [])
+    }, []);
 
+    const oAuthloginComplete = (returnedData) => {
+        localStorage.session = JSON.stringify(returnedData.session)
+        dispatch({ do: 'setMessage', type: 'success', message: 'Login Successful!' });
+        dispatch({ do: 'login' });
+        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+        setTimeout(() => history.push('/home'), 2000);
+
+    }
+
+    
     const submitLogin = async () => {
         const userData = { email: values.email, password: values.password };
         console.log('submitLogin -> userData', userData);
@@ -51,7 +62,7 @@ const Login = () => {
 
         console.log('submitRegistration -> serverReturn', serverReturn);
         dispatch({ do: 'setMessage', type: 'success', message: 'Login Successful!' });
-        dispatch({do: 'login'})
+        dispatch({ do: 'login' });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
     };
@@ -108,6 +119,7 @@ const Login = () => {
             <Button style={{ marginTop: '1em' }} onClick={() => history.push('/register')}>
                 Register
             </Button>
+            <LinkedInOAuthButton loginComplete={oAuthloginComplete}/>
         </Container>
     );
 };
