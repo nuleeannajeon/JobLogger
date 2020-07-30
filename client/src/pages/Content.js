@@ -6,7 +6,7 @@ const Content = () => {
 
     return (
         <div>
-            Behold, you must be logged in to see me, aren't I glorious.
+            Behold, you must be logged in to see me.  Huraaaaaay.
         </div>
     )
 }

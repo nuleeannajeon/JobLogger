@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,18 +12,26 @@ import Button from '@material-ui/core/Button';
 import './login.css';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
+
 const saveSession = (sessionID) => {
     localStorage.session = JSON.stringify(sessionID);
 };
 
-const Login = (props) => {
+const Login = () => {
     const history = useHistory();
-    const [globalData, dispatch] = useGlobalStore();
+    const [globalStore, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
         email: '',
         password: '',
         showPassword: false,
     });
+
+    useEffect(() => {
+        if (globalStore.loggedIn) {
+            history.push('/home')
+        }
+        // eslint-disable-next-line
+    }, [])
 
     const submitLogin = async () => {
         const userData = { email: values.email, password: values.password };
@@ -42,8 +50,8 @@ const Login = (props) => {
         saveSession(serverReturn.user.session);
 
         console.log('submitRegistration -> serverReturn', serverReturn);
-        props.login();
         dispatch({ do: 'setMessage', type: 'success', message: 'Login Successful!' });
+        dispatch({do: 'login'})
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
     };

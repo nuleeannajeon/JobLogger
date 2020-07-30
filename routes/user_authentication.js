@@ -8,6 +8,14 @@ module.exports = (router) => {
         console.log(body);
         //request needs username and password coming in to register
         const { email, password } = body;
+
+        //Checking for duplicate
+        const existingUser = await User.findOne({email})
+        if (existingUser) {
+            res.status(400).send({error: "User with that email exists"})
+            return
+        }
+
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
             await User.create({
@@ -67,11 +75,19 @@ module.exports = (router) => {
         const user = await User.findOne({session})
         console.log('user', user)
 
-        if (!user) {
+        if (!user || session.length < 3) {
             res.status(403).send({error: "User is not logged in"})
             return
         }
         res.status(200).send(true)
 
+    })
+
+    router.post('/logout', async ({body}, req) => {
+        const user = User.findOneAndUpdate({session: body.session}, {session: ''})
+        if (!user) {
+            console.log("Logout attempted for null user")
+        }
+        req.status(200).send({message: "Successful logout"})
     })
 };

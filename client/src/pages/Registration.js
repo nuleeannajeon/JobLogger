@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
@@ -18,7 +18,7 @@ import './registration.css';
 
 const Registration = (props) => {
     const history = useHistory();
-    const [globalData, dispatch] = useGlobalStore();
+    const [, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -32,7 +32,7 @@ const Registration = (props) => {
         console.log('submitRegistration -> serverReturn', serverReturn);
 
         if (!serverReturn || serverReturn.error) {
-            dispatch({ do: 'setMessage', type: 'error', message: 'Registration failed' });
+            dispatch({ do: 'setMessage', type: 'error', message: (serverReturn.error ? serverReturn.error : "Registration failure") });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return // TODO add a case for checking if duplicate entry, prompt to login
         }
@@ -105,6 +105,9 @@ const Registration = (props) => {
 
             <Button variant="contained" color="primary" onClick={submitRegistration}>
                 Submit
+            </Button>
+            <Button style={{ marginTop: '1em' }} onClick={() => history.push('/login')}>
+                I'm already registered
             </Button>
         </Container>
     );
