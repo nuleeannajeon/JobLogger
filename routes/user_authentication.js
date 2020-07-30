@@ -7,7 +7,7 @@ module.exports = (router) => {
     router.post('/register', async ({ body }, res) => {
         console.log(body);
         //request needs username and password coming in to register
-        const { email, password } = body;
+        const { email, password, name } = body;
 
         //Checking for duplicate
         const existingUser = await User.findOne({email})
@@ -21,8 +21,8 @@ module.exports = (router) => {
             await User.create({
                 email,
                 password: hashedPassword,
+                name
             });
-            // TODO check for duplicate user emails and prevent creation
             res.status(200).send({ message: 'Successful registration' });
         } catch (err) {
             console.log('error occurred inside new user registration', err);
