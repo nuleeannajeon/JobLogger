@@ -8,70 +8,39 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
-import './login.css';
-import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
-import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js'
 
-const saveSession = (sessionID) => {
-    localStorage.session = JSON.stringify(sessionID);
-};
+import API from '../utils/API';
 
-const Login = () => {
+import './registration.css';
+
+const Registration = (props) => {
     const history = useHistory();
-    const [globalStore, dispatch] = useGlobalStore();
+    const [, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
+        name: '',
         email: '',
         password: '',
         showPassword: false,
     });
 
-    useEffect(() => {
-        if (globalStore.loggedIn) {
-            history.push('/home');
-        }
-        // eslint-disable-next-line
-    }, []);
+    const submitRegistration = async () => {
+        const userData = { name: values.name, email: values.email, password: values.password };
+        const serverReturn = await API.post('/register', userData);
+        console.log('submitRegistration -> serverReturn', serverReturn);
 
-    const oAuthloginComplete = (returnedData) => {
-
-        if (!returnedData || returnedData.error){
-            dispatch({ do: 'setMessage', type: 'error', message: returnedData.error ? returnedData.error : "The server didn't communicate back" });
+        if (!serverReturn || serverReturn.error) {
+            dispatch({ do: 'setMessage', type: 'error', message: (serverReturn.error ? serverReturn.error : "Registration failure") });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            console.log("ERROR IN RETURN", returnedData)
-            return
+            return // TODO add a case for checking if duplicate entry, prompt to login
         }
 
-        localStorage.session = JSON.stringify(returnedData.session)
-        dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
-        dispatch({ do: 'login' });
+        dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        setTimeout(() => history.push('/home'), 2000);
-    }
 
-    
-    const submitLogin = async () => {
-        const userData = { email: values.email, password: values.password };
-        console.log('submitLogin -> userData', userData);
-        const serverReturn = await API.post('/login', userData);
-
-        if (serverReturn.error || !serverReturn || !serverReturn.session) {
-            dispatch({ do: 'setMessage', type: 'error', message: serverReturn.error ? serverReturn.error : "The server didn't communicate back" });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            console.log("ERROR", serverReturn)
-            return
-        }
-        if (serverReturn.message) {
-            dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        }
-
-        saveSession(serverReturn.session);
-
-        dispatch({ do: 'login' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        setTimeout(() => history.push('/home'), 2000);
+        setTimeout(() => history.push('/login'), 2000);
     };
 
     const handleChange = (prop) => (event) => {
@@ -87,6 +56,20 @@ const Login = () => {
     };
     return (
         <Container maxWidth="sm" style={{ display: 'flex', flexDirection: 'column' }}>
+            <FormControl>
+                <InputLabel htmlFor="name">Name</InputLabel>
+                <Input
+                    id="name"
+                    className="inp"
+                    value={values.name}
+                    onChange={handleChange('name')}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <AccountCircle />
+                        </InputAdornment>
+                    }
+                />
+            </FormControl>
             <FormControl>
                 <InputLabel htmlFor="email">email</InputLabel>
                 <Input
@@ -120,15 +103,14 @@ const Login = () => {
                 />
             </FormControl>
 
-            <Button variant="contained" color="primary" onClick={submitLogin}>
-                Login
+            <Button variant="contained" color="primary" onClick={submitRegistration}>
+                Submit
             </Button>
-            <Button style={{ marginTop: '1em' }} onClick={() => history.push('/register')}>
-                Register
+            <Button style={{ marginTop: '1em' }} onClick={() => history.push('/login')}>
+                I'm already registered
             </Button>
-            <LinkedInOAuthButton loginComplete={oAuthloginComplete}/>
         </Container>
     );
 };
 
-export default Login;
+export default Registration;
