@@ -1,4 +1,5 @@
 const User = require('./models/userLogin');
+const UserData = require('./models/userData')
 const bcrypt = require('bcrypt');
 
 module.exports = {
@@ -25,6 +26,7 @@ module.exports = {
             newUser = await User.findByIdAndUpdate({ _id: existingUser._id }, { session });
             return {
                 message: 'Welcome back',
+                db_id: newUser.userDataId,
                 id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
@@ -54,6 +56,8 @@ module.exports = {
         try {
             //New user, add to DB
             newUser = await User.create(newUserData);
+            newUserDataObject = await UserData.create({userLogin_id: newUser._id})
+            await User.findByIdAndUpdate({_id: newUser._id}, {userDataId: newUserDataObject._id})
         } catch (err) {
             console.log('there was an error creating the new user', err);
             return { error: 'Error creating user' };
@@ -64,7 +68,9 @@ module.exports = {
 
         return {
             message: `Welcome ${newUser.name}!`,
+            db_id: newUserDataObject._id,
             ...newUser,
+
         };
     },
 };

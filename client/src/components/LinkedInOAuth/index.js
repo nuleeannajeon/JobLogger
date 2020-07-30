@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import Button from '@material-ui/core/Button';
 
@@ -31,6 +30,7 @@ function OAuth({ loginComplete, ...rest }) {
             },
             false
         );
+        //eslint-disable-next-line
     }, []);
 
     function openOAuth() {

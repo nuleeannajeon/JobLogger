@@ -17,6 +17,7 @@ import API from '../utils/API';
 import './registration.css';
 
 function validateEmail(email) {
+    //eslint-disable-next-line
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
@@ -46,7 +47,7 @@ const Registration = (props) => {
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
         }
-        if (! validateEmail(values.email.trim())) {
+        if (!validateEmail(values.email.trim())) {
             dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a valid email' });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
@@ -56,7 +57,7 @@ const Registration = (props) => {
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
         }
-        
+
         const serverReturn = await API.post('/register', userData);
         console.log('submitRegistration -> serverReturn', serverReturn);
 
