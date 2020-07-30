@@ -12,7 +12,10 @@ import Button from '@material-ui/core/Button';
 import './login.css';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
-import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js'
+import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js';
+import JobLoggerIcon from '../components/JobLoggerIcon';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 const saveSession = (sessionID) => {
     localStorage.session = JSON.stringify(sessionID);
@@ -35,32 +38,48 @@ const Login = () => {
     }, []);
 
     const oAuthloginComplete = (returnedData) => {
-
-        if (!returnedData || returnedData.error){
-            dispatch({ do: 'setMessage', type: 'error', message: returnedData.error ? returnedData.error : "The server didn't communicate back" });
+        if (!returnedData || returnedData.error) {
+            dispatch({
+                do: 'setMessage',
+                type: 'error',
+                message: returnedData.error ? returnedData.error : "The server didn't communicate back",
+            });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            console.log("ERROR IN RETURN", returnedData)
-            return
+            return;
         }
 
-        localStorage.session = JSON.stringify(returnedData.session)
+        localStorage.session = JSON.stringify(returnedData.session);
         dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
         dispatch({ do: 'login' });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
-    }
+    };
 
-    
     const submitLogin = async () => {
         const userData = { email: values.email, password: values.password };
-        console.log('submitLogin -> userData', userData);
+
+        if (values.email.trim().length === 0) {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter an email address' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+
+        if (values.password.trim().length === 0) {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a password' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+
         const serverReturn = await API.post('/login', userData);
 
         if (serverReturn.error || !serverReturn || !serverReturn.session) {
-            dispatch({ do: 'setMessage', type: 'error', message: serverReturn.error ? serverReturn.error : "The server didn't communicate back" });
+            dispatch({
+                do: 'setMessage',
+                type: 'error',
+                message: serverReturn.error ? serverReturn.error : "The server didn't communicate back",
+            });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            console.log("ERROR", serverReturn)
-            return
+            return;
         }
         if (serverReturn.message) {
             dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
@@ -86,48 +105,71 @@ const Login = () => {
         event.preventDefault();
     };
     return (
-        <Container maxWidth="sm" style={{ display: 'flex', flexDirection: 'column' }}>
-            <FormControl>
-                <InputLabel htmlFor="email">email</InputLabel>
-                <Input
-                    id="email"
-                    className="inp"
-                    type={values.email}
-                    value={values.email}
-                    onChange={handleChange('email')}
-                    // endAdornment={<InputAdornment position="end"></InputAdornment>}
-                />
-            </FormControl>
-            <FormControl>
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <Input
-                    id="password"
-                    className="inp"
-                    type={values.showPassword ? 'text' : 'password'}
-                    value={values.password}
-                    onChange={handleChange('password')}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                            >
-                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                />
-            </FormControl>
-
-            <Button variant="contained" color="primary" onClick={submitLogin}>
-                Login
-            </Button>
-            <Button style={{ marginTop: '1em' }} onClick={() => history.push('/register')}>
-                Register
-            </Button>
-            <LinkedInOAuthButton loginComplete={oAuthloginComplete}/>
-        </Container>
+        <div className="container">
+            <Container maxWidth="sm">
+                <JobLoggerIcon className="centerMe" />
+                <Typography variant="h4" style={{ textAlign: 'center', marginTop: 40 }} gutterBottom>
+                    Sign In
+                </Typography>
+                <Grid
+                    style={{ maxWidth: 500 }}
+                    container
+                    direction="column"
+                    justify="space-between"
+                    alignItems="stretch"
+                >
+                    {/* <div className="formContainer"> */}
+                    <FormControl>
+                        <InputLabel htmlFor="email">Email Address</InputLabel>
+                        <Input
+                            id="email"
+                            className="spaceMe inputField"
+                            type={values.email}
+                            value={values.email}
+                            onChange={handleChange('email')}
+                            // endAdornment={<InputAdornment position="end"></InputAdornment>}
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <Input
+                            id="password"
+                            className="spaceMe inputField"
+                            type={values.showPassword ? 'text' : 'password'}
+                            value={values.password}
+                            onChange={handleChange('password')}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                    </FormControl>
+                    <div className="buttonContainer">
+                        <Button
+                            variant="contained"
+                            style={{ marginBottom: '1em' }}
+                            color="primary"
+                            className="spaceMe"
+                            onClick={submitLogin}
+                        >
+                            Login
+                        </Button>
+                        <Button className="spaceMe" onClick={() => history.push('/register')}>
+                            Register
+                        </Button>
+                        <LinkedInOAuthButton className="spaceMe" loginComplete={oAuthloginComplete} />
+                    </div>
+                    {/* </div> */}
+                </Grid>
+            </Container>
+        </div>
     );
 };
 
