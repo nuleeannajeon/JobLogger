@@ -26,7 +26,6 @@ module.exports = (app, baseURL, createSession) => {
     passport.serializeUser((user, cb) => cb(null, user));
     passport.deserializeUser((obj, cb) => cb(null, obj));
 
-
     // const authenticateUser = async (email, password, done) => {
     //     const user = await User.findOne({ email });
     //     console.log(user);
@@ -55,7 +54,7 @@ module.exports = (app, baseURL, createSession) => {
     //         authenticateUser
     //     )
     // );
-    
+
     passport.use(
         new LinkedInStrategy(
             {
@@ -80,15 +79,90 @@ module.exports = (app, baseURL, createSession) => {
             passport.authenticate('linkedin')(req, res, next);
         },
         async ({ user: returnedUser }, res) => {
-            console.log('returned user from linkedin', returnedUser)
+            console.log('returned user from linkedin', returnedUser);
             const user = {
                 username: returnedUser.displayName,
-                thumbnail: returnedUser.photos[0].value,
-                email: returnedUser.emails[0].value,
+                thumbnail: returnedUser.photos[0] ? returnedUser.photos[0].value : '',
+                email: returnedUser.emails[0] ? returnedUser.emails[0].value : '',
                 authId: returnedUser.id,
+                type: 'linkedin',
             };
             const sessionData = JSON.stringify(await createSession(user));
-            res.send(`<html><body><script>window.opener.postMessage('${sessionData}', '*');</script>Please wait...</body></html>`)
+            res.send(
+                `<html><body><script>window.opener.postMessage('${sessionData}', '*');</script>Please wait...</body></html>`
+            );
         }
     );
+
+    // local user creation
+    app.post('/register', async ({ body }, res) => {
+        console.log(body);
+        //request needs username and password coming in to register
+        const { email, password, name } = body;
+        const user = {
+            email,
+            password,
+            name,
+            type: 'local',
+        };
+        try {
+            const sessionData = await createSession(user);
+            res.status(200).send(sessionData);
+        } catch (err) {
+            console.log('error occurred inside new user registration', err);
+            res.status(400).send({ error: 'Something happened creating your user account, please try again' });
+        }
+    });
+
+    app.post('/login', async ({ body }, res) => {
+        const { email, password } = body;
+        console.log('user input is', email, password);
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            res.status(403).send({ error: 'No user with that email' });
+            return;
+        }
+        let validPassword;
+        try {
+            validPassword = await bcrypt.compare(password, user.password);
+        } catch (err) {
+            console.log('error inside login', err);
+            res.status(403).send({ error: 'Error finding login' });
+            return;
+        }
+
+        if (!validPassword) {
+            res.status(403).send({ error: 'Invalid password' });
+            return;
+        }
+
+        try {
+            const sessionData = await createSession(user);
+            res.status(200).send(sessionData);
+        } catch (err) {
+            console.log('error creating session for login', user);
+            res.status(403).send({error: "Error creating new session"})
+        }
+    });
+
+    app.get('/loginstatus/:session', async ({ params }, res) => {
+        const { session } = params;
+        console.log('checking session id ', session);
+        const user = await User.findOne({ session });
+        console.log('user', user);
+
+        if (!user || session.length !== 36) {
+            res.status(403).send({ error: 'User is not logged in' });
+            return;
+        }
+        res.status(200).send(true);
+    });
+
+    app.post('/logout', async ({ body }, req) => {
+        const user = User.findOneAndUpdate({ session: body.session }, { session: '' });
+        if (!user) {
+            console.log('Logout attempted for null user');
+        }
+        req.status(200).send({ message: 'Successful logout' });
+    });
 };

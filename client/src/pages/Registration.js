@@ -37,7 +37,7 @@ const Registration = (props) => {
             return // TODO add a case for checking if duplicate entry, prompt to login
         }
 
-        dispatch({ do: 'setMessage', type: 'success', message: 'Registration Successful!' });
+        dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
 
         setTimeout(() => history.push('/login'), 2000);
