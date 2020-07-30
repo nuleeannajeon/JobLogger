@@ -32,7 +32,7 @@ const Registration = (props) => {
         console.log('submitRegistration -> serverReturn', serverReturn);
 
         if (!serverReturn || serverReturn.error) {
-            dispatch({ do: 'setMessage', type: 'error', message: 'Registration failed' });
+            dispatch({ do: 'setMessage', type: 'error', message: (serverReturn.error ? serverReturn.error : "Registration failure") });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return // TODO add a case for checking if duplicate entry, prompt to login
         }
