@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 import { useGlobalStore } from '../components/GlobalStore';
-
+import JobLoggerIcon from '../components/JobLoggerIcon';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import API from '../utils/API';
 
 import './registration.css';
+
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
 
 const Registration = (props) => {
     const history = useHistory();
@@ -25,16 +30,44 @@ const Registration = (props) => {
         password: '',
         showPassword: false,
     });
+    const [validCheck, setValidCheck] = useState({ name: false, email: null, password: null });
 
     const submitRegistration = async () => {
         const userData = { name: values.name, email: values.email, password: values.password };
+
+        //validating
+        if (values.name.trim().length === 0) {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a name' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+        if (values.email.trim().length === 0) {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter an email address' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+        if (! validateEmail(values.email.trim())) {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a valid email' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+        if (values.password.trim().length === 0) {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a password' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+        
         const serverReturn = await API.post('/register', userData);
         console.log('submitRegistration -> serverReturn', serverReturn);
 
         if (!serverReturn || serverReturn.error) {
-            dispatch({ do: 'setMessage', type: 'error', message: (serverReturn.error ? serverReturn.error : "Registration failure") });
+            dispatch({
+                do: 'setMessage',
+                type: 'error',
+                message: serverReturn.error ? serverReturn.error : 'Registration failure',
+            });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return // TODO add a case for checking if duplicate entry, prompt to login
+            return; // TODO add a case for checking if duplicate entry, prompt to login
         }
 
         dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
@@ -44,6 +77,7 @@ const Registration = (props) => {
     };
 
     const handleChange = (prop) => (event) => {
+        setValidCheck({ ...validCheck, [prop]: false });
         setValues({ ...values, [prop]: event.target.value });
     };
 
@@ -55,61 +89,86 @@ const Registration = (props) => {
         event.preventDefault();
     };
     return (
-        <Container maxWidth="sm" style={{ display: 'flex', flexDirection: 'column' }}>
-            <FormControl>
-                <InputLabel htmlFor="name">Name</InputLabel>
-                <Input
-                    id="name"
-                    className="inp"
-                    value={values.name}
-                    onChange={handleChange('name')}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <AccountCircle />
-                        </InputAdornment>
-                    }
-                />
-            </FormControl>
-            <FormControl>
-                <InputLabel htmlFor="email">email</InputLabel>
-                <Input
-                    id="email"
-                    className="inp"
-                    type={values.email}
-                    value={values.email}
-                    onChange={handleChange('email')}
-                    // endAdornment={<InputAdornment position="end"></InputAdornment>}
-                />
-            </FormControl>
-            <FormControl>
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <Input
-                    id="password"
-                    className="inp"
-                    type={values.showPassword ? 'text' : 'password'}
-                    value={values.password}
-                    onChange={handleChange('password')}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                            >
-                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                />
-            </FormControl>
+        <div className="container">
+            <Container maxWidth="sm">
+                <JobLoggerIcon className="centerMe" />
+                <Typography variant="h4" style={{ textAlign: 'center', marginTop: 40 }} gutterBottom>
+                    Register
+                </Typography>
+                <Grid
+                    style={{ maxWidth: 500 }}
+                    container
+                    direction="column"
+                    justify="space-between"
+                    alignItems="stretch"
+                >
+                    {/* <InputLabel htmlFor="name">Name</InputLabel> */}
+                    <TextField
+                        style={{ marginTop: 10 }}
+                        id="name"
+                        label="Name"
+                        required
+                        className="inputField"
+                        value={values.name}
+                        onChange={handleChange('name')}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <AccountCircle />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        style={{ marginTop: 10 }}
+                        id="email"
+                        label="Email Address"
+                        required
+                        className="inputField"
+                        type={values.email}
+                        value={values.email}
+                        onChange={handleChange('email')}
+                        // endAdornment={<InputAdornment position="end"></InputAdornment>}
+                    />
+                    <TextField
+                        style={{ marginTop: 10, marginBottom: 15 }}
+                        id="password"
+                        label="Password"
+                        required
+                        className="inputField"
+                        type={values.showPassword ? 'text' : 'password'}
+                        value={values.password}
+                        onChange={handleChange('password')}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
 
-            <Button variant="contained" color="primary" onClick={submitRegistration}>
-                Submit
-            </Button>
-            <Button style={{ marginTop: '1em' }} onClick={() => history.push('/login')}>
-                I'm already registered
-            </Button>
-        </Container>
+                    <Button
+                        variant="contained"
+                        className="spaceMe"
+                        color="primary"
+                        style={{ marginBottom: '1em' }}
+                        onClick={submitRegistration}
+                    >
+                        Submit
+                    </Button>
+                    <Button className="spaceMe" onClick={() => history.push('/login')}>
+                        I'm already registered
+                    </Button>
+                </Grid>
+            </Container>
+        </div>
     );
 };
 
