@@ -145,17 +145,26 @@ module.exports = (app, baseURL, createSession) => {
         }
     });
 
-    app.get('/loginstatus/:session', async ({ params }, res) => {
-        const { session } = params;
+    app.get('/loginstatus', async ({headers}, res) => {
+        try {
+
+        const { session } = headers;
         console.log('checking session id ', session);
         const user = await User.findOne({ session });
         console.log('user', user);
+        console.log('session length', session.length)
 
         if (!user || session.length !== 36) {
-            res.status(403).send({ error: 'User is not logged in' });
+            res.status(200).send({ loggedIn: false });
             return;
         }
-        res.status(200).send(true);
+
+        res.status(200).send({loggedIn: true, db_id: user.userDataId});
+    } catch (err) {
+        console.log("Error checking for logged in state", err)
+        res.status(500).send({error: "Something has gone wrong checking the login state"})
+    }
+
     });
 
     app.post('/logout', async ({ body }, req) => {

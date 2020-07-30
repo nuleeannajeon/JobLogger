@@ -2,7 +2,7 @@
 import React, { useContext, useReducer } from 'react';
 
 // default global store
-const defaultGlobalStore = { messageType: '', message: '', loggedIn: false };
+const defaultGlobalStore = { messageType: '', message: '', loggedIn: false, userId: '' };
 
 const GlobalData = React.createContext();
 
@@ -29,9 +29,11 @@ function dispatcher(state, action) {
             return newState;
         case 'login':
             newState.loggedIn = true;
+            newState.userId = action.userId
             return newState;
         case 'logout':
             newState.loggedIn = false;
+            newState.userId = ''
             return newState;
         default:
             console.log(`unknown action called from GlobalStore.js: ${action.do}`);

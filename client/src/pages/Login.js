@@ -30,10 +30,22 @@ const Login = () => {
         showPassword: false,
     });
 
+    const checkLoggedIn = async () => {
+        const loggedInReturn = await API.get('/loginstatus');
+        if (loggedInReturn.loggedIn === true) {
+            dispatch({ do: 'login', userId: loggedInReturn.db_id });
+            history.push('/home');
+        }
+    };
+
+    // checking if already logged in
     useEffect(() => {
         if (globalStore.loggedIn) {
             history.push('/home');
+        } else if (localStorage.session) {
+            checkLoggedIn();
         }
+
         // eslint-disable-next-line
     }, []);
 
@@ -47,10 +59,9 @@ const Login = () => {
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
         }
-
         localStorage.session = JSON.stringify(returnedData.session);
         dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
-        dispatch({ do: 'login' });
+        dispatch({ do: 'login', userId: returnedData.db_id });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
     };
@@ -85,7 +96,7 @@ const Login = () => {
             dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         }
-
+        console.log('SETTING SESSION', serverReturn);
         saveSession(serverReturn.session);
 
         dispatch({ do: 'login' });
