@@ -1,0 +1,24 @@
+.navbar {
+    background-color: white;
+}
+
+.navbar-brand {
+    font-family: 'Quando', serif;
+    color: cadetblue;
+    font-weight: bold;
+}
+
+.navbar-brand:hover, .nav-link:hover {
+    color: rgb(69, 117, 119);
+}
+
+.nav-link {
+    color: black;
+}
+.navbar-toggler-icon{
+    color: cadetblue;
+}
+.navbar-toggler:hover + .navbar-toggler-icon{
+    content: '<i class="fas fa-hamburger"></i>';
+}
+/* rgb(110, 129, 129); */
