@@ -12,6 +12,10 @@
     color: rgb(69, 117, 119);
 }
 
+.navbar-toggler {
+    color: black;
+}
+
 .nav-link {
     color: black;
 }
