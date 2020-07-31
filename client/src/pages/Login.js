@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,9 +16,10 @@ import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js';
 import JobLoggerIcon from '../components/JobLoggerIcon';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import processServerReturn from '../utils/processServerReturn';
 
 const saveSession = (sessionID) => {
-    localStorage.session = JSON.stringify(sessionID);
+    localStorage.session = sessionID;
 };
 
 const Login = () => {
@@ -29,6 +30,7 @@ const Login = () => {
         password: '',
         showPassword: false,
     });
+    const passwordRef = useRef(null);
 
     const checkLoggedIn = async () => {
         const loggedInReturn = await API.get('/loginstatus');
@@ -50,15 +52,8 @@ const Login = () => {
     }, []);
 
     const oAuthloginComplete = (returnedData) => {
-        if (!returnedData || returnedData.error) {
-            dispatch({
-                do: 'setMessage',
-                type: 'error',
-                message: returnedData.error ? returnedData.error : "The server didn't communicate back",
-            });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
+        processServerReturn(returnedData, dispatch)
+
         localStorage.session = JSON.stringify(returnedData.session);
         dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
         dispatch({ do: 'login', userId: returnedData.db_id });
@@ -83,29 +78,35 @@ const Login = () => {
 
         const serverReturn = await API.post('/login', userData);
 
-        if (serverReturn.error || !serverReturn || !serverReturn.session) {
+        processServerReturn(serverReturn, dispatch)
+
+        if (!serverReturn.session) {
             dispatch({
                 do: 'setMessage',
                 type: 'error',
-                message: serverReturn.error ? serverReturn.error : "The server didn't communicate back",
+                message: serverReturn.error ? serverReturn.error : "The server didn't create a session",
             });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
         }
-        if (serverReturn.message) {
-            dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        }
-        console.log('SETTING SESSION', serverReturn);
         saveSession(serverReturn.session);
 
         dispatch({ do: 'login' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
     };
 
     const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
+        const permEvent = event;
+        if (permEvent.key === 'Enter' && prop === 'password') {
+            submitLogin();
+            return;
+        }
+        if (permEvent.key === 'Enter' && prop === 'email') {
+            console.log('yay');
+            passwordRef.focus();
+            return;
+        }
+        setValues({ ...values, [prop]: permEvent.target.value });
     };
 
     const handleClickShowPassword = () => {
@@ -137,6 +138,9 @@ const Login = () => {
                             className="spaceMe inputField"
                             type={values.email}
                             value={values.email}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') passwordRef.current.children[0].focus();
+                            }}
                             onChange={handleChange('email')}
                             // endAdornment={<InputAdornment position="end"></InputAdornment>}
                         />
@@ -145,9 +149,13 @@ const Login = () => {
                         <InputLabel htmlFor="password">Password</InputLabel>
                         <Input
                             id="password"
+                            ref={passwordRef}
                             className="spaceMe inputField"
                             type={values.showPassword ? 'text' : 'password'}
                             value={values.password}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') submitLogin();
+                            }}
                             onChange={handleChange('password')}
                             endAdornment={
                                 <InputAdornment position="end">

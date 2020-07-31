@@ -2,9 +2,9 @@ module.exports = {
     checkSecured: async () => {},
 
     get: (url) => {
-        return fetch(url, { headers: { Session: localStorage.session ? JSON.parse(localStorage.session) : '' } }).then((result) =>
-            result.json()
-        );
+        return fetch(url, {
+            headers: { Session: localStorage.session ? localStorage.session : '' },
+        }).then((result) => result.json());
     },
 
     post: async (url, userData) => {
@@ -20,9 +20,22 @@ module.exports = {
             .then((result) => result.json())
             .catch((err) => console.log(err));
     },
-    getUserData: async (userId) => {
-        return fetch('/api/user', {
-            headers: { Session: localStorage.session ? JSON.parse(localStorage.session) : '' },
+    put: async (url, userData) => {
+        return fetch(url, {
+            method: 'put',
+            headers: {
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+                Session: localStorage.session ? localStorage.session : '',
+            },
+            body: JSON.stringify(userData),
+        })
+            .then((result) => result.json())
+            .catch((err) => console.log(err));
+    },
+    getUserData: async () => {
+        return fetch('/api/userdata/', {
+            headers: { Session: localStorage.session ? localStorage.session : '' },
         }).then((res) => res.json());
     },
 };
