@@ -1,0 +1,23 @@
+.navbar {
+    background-color: white;
+}
+
+.navbar-brand {
+    font-family: 'Quando', serif;
+    color: cadetblue;
+    font-weight: bold;
+}
+
+.navbar-brand:hover, .nav-link:hover {
+    color: rgb(69, 117, 119);
+}
+
+.navbar-toggler {
+    color: black;
+}
+
+.nav-link {
+    color: black;
+}
+
+/* rgb(110, 129, 129); */
