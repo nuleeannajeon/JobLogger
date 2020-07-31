@@ -29,7 +29,7 @@ const Login = () => {
         password: '',
         showPassword: false,
     });
-    const passwordRef = useRef(null)
+    const passwordRef = useRef(null);
 
     const checkLoggedIn = async () => {
         const loggedInReturn = await API.get('/loginstatus');
@@ -106,16 +106,15 @@ const Login = () => {
     };
 
     const handleChange = (prop) => (event) => {
-        const permEvent = event
-        console.log("handleChange -> permEvent", permEvent)
-        if (permEvent.key === "Enter" && prop === "password"){
-            submitLogin()
-            return
+        const permEvent = event;
+        if (permEvent.key === 'Enter' && prop === 'password') {
+            submitLogin();
+            return;
         }
-        if (permEvent.key === "Enter" && prop === "email") {
-            console.log("yay")
-            passwordRef.focus()
-            return
+        if (permEvent.key === 'Enter' && prop === 'email') {
+            console.log('yay');
+            passwordRef.focus();
+            return;
         }
         setValues({ ...values, [prop]: permEvent.target.value });
     };
@@ -149,7 +148,9 @@ const Login = () => {
                             className="spaceMe inputField"
                             type={values.email}
                             value={values.email}
-                            onKeyDown={(e)=>{if (e.key === "Enter") passwordRef.current.children[0].focus()}}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') passwordRef.current.children[0].focus();
+                            }}
                             onChange={handleChange('email')}
                             // endAdornment={<InputAdornment position="end"></InputAdornment>}
                         />
@@ -162,7 +163,9 @@ const Login = () => {
                             className="spaceMe inputField"
                             type={values.showPassword ? 'text' : 'password'}
                             value={values.password}
-                            onKeyDown={(e)=>{if (e.key === "Enter") submitLogin()}}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') submitLogin();
+                            }}
                             onChange={handleChange('password')}
                             endAdornment={
                                 <InputAdornment position="end">

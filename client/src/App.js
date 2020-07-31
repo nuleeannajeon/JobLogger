@@ -37,7 +37,7 @@ function App() {
                 <PrivateRoute exact path="/home">
                     <Home />
                 </PrivateRoute>
-                <PrivateRoute exact path="/settings">
+                <PrivateRoute path="/settings">
                     <UserSettings />
                 </PrivateRoute>
             </Router>

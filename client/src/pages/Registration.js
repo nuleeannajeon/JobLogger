@@ -31,7 +31,6 @@ const Registration = (props) => {
         password: '',
         showPassword: false,
     });
-    const [validCheck, setValidCheck] = useState({ name: false, email: null, password: null });
 
     const submitRegistration = async () => {
         const userData = { name: values.name, email: values.email, password: values.password };
@@ -68,7 +67,7 @@ const Registration = (props) => {
                 message: serverReturn.error ? serverReturn.error : 'Registration failure',
             });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return; // TODO add a case for checking if duplicate entry, prompt to login
+            return;
         }
 
         dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
@@ -78,7 +77,6 @@ const Registration = (props) => {
     };
 
     const handleChange = (prop) => (event) => {
-        setValidCheck({ ...validCheck, [prop]: false });
         setValues({ ...values, [prop]: event.target.value });
     };
 

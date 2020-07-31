@@ -13,7 +13,20 @@ module.exports = {
             headers: {
                 Accept: 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                Session: localStorage.session ? localStorage.session : '',
+                Session: localStorage.session ? JSON.parse(localStorage.session) : '',
+            },
+            body: JSON.stringify(userData),
+        })
+            .then((result) => result.json())
+            .catch((err) => console.log(err));
+    },
+    put: async (url, userData) => {
+        return fetch(url, {
+            method: 'put',
+            headers: {
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+                Session: localStorage.session ? JSON.parse(localStorage.session) : '',
             },
             body: JSON.stringify(userData),
         })
