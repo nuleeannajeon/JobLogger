@@ -20,8 +20,8 @@ module.exports = {
             .then((result) => result.json())
             .catch((err) => console.log(err));
     },
-    getUserData: async (userId) => {
-        return fetch(`/api/user/${userId}`, {
+    getUserData: async () => {
+        return fetch('/api/userdata/', {
             headers: { Session: localStorage.session ? JSON.parse(localStorage.session) : '' },
         }).then((res) => res.json());
     },

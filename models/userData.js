@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserDataSchema = new Schema({
-    userLogin_id: { type: Schema.Types.ObjectId, ref: 'UserAuthentication' },
+    userLogin: { type: Schema.Types.ObjectId, ref: 'UserAuthentication' },
     school: {
         type: String,
     },
     location: {
         type: String,
     },
-    porfolioLink: {
+    portfolioLink: {
         type: String,
     },
     posts: {

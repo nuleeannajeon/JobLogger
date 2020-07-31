@@ -42,7 +42,7 @@ const userAuthenticationSchema = new Schema(
         thumbnail: String,
         name: { type: String, trim: true },
         username: { type: String, trim: true },
-        userDataId: { type: Schema.Types.ObjectId, ref: "UserData" },
+        userData: { type: Schema.Types.ObjectId, ref: "UserData" },
     },
     {
         timestamps: true,

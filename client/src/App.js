@@ -10,6 +10,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Home from './pages/Content'; // temp for testing
 import Message from './components/Message';
 import Logout from './pages/Logout'
+import UserSettings from './pages/UserSettings'
 
 // const checkLoggedState = async () => {
 //   if (!localStorage.session) {
@@ -35,6 +36,9 @@ function App() {
                 <Route exact path="/logout" component={Logout} />
                 <PrivateRoute exact path="/home">
                     <Home />
+                </PrivateRoute>
+                <PrivateRoute exact path="/settings">
+                    <UserSettings />
                 </PrivateRoute>
             </Router>
         </GlobalStore>

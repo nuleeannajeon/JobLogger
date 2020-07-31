@@ -56,8 +56,8 @@ module.exports = {
         try {
             //New user, add to DB
             newUser = await User.create(newUserData);
-            newUserDataObject = await UserData.create({userLogin_id: newUser._id})
-            await User.findByIdAndUpdate({_id: newUser._id}, {userDataId: newUserDataObject._id})
+            newUserDataObject = await UserData.create({userLogin: newUser._id})
+            await User.findByIdAndUpdate({_id: newUser._id}, {userData: newUserDataObject._id})
         } catch (err) {
             console.log('there was an error creating the new user', err);
             return { error: 'Error creating user' };

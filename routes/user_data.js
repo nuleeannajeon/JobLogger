@@ -1,20 +1,40 @@
 const secured = require('../auth');
-const UserData = require('../models/userData');
+const User = require('../models/userLogin');
 
 module.exports = (router) => {
-    router.get('/api/user/:userId', secured, async ({ params }, res) => {
-        const { userId } = params;
-        console.log("HERE",userId)
+    router.get('/api/userdata', secured, async ({ headers }, res) => {
         try {
-            const user = await UserData.findById({ _id: userId });
-            if (!user) {
-                console.log("This error shouldn't happen, but an invalid user id was recieved for a logged in user");
-                res.status(400).send({ error: 'No user with that id located' });
+            const { session } = headers;
+            const userData = await User.findOne({ session }).populate('userData').populate('posts');
+
+            if (!userData) {
+                console.log("This shouldn't happen, but an authenticated user has no data?");
+                res.status(400).send({ error: 'No user found' });
             }
-            res.status(200).send(user);
+            const { school, location, portfolioLink, posts } = userData.userData;
+            res.status(200).send({
+                school,
+                location,
+                portfolioLink,
+                posts,
+            });
         } catch (err) {
-            console.log('error inside check for user data', err);
+            console.log(err);
             res.status(500).send({ error: 'Something went wrong with the server' });
         }
     });
+
+    // ROUTES FOR CRUD
+
+    // edit school
+
+    // edit location
+
+    // edit portfolio link
+
+    // add post
+
+    // remove post
+
+    // edit post
 };
