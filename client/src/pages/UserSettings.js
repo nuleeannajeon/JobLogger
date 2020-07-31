@@ -112,6 +112,7 @@ const UserSettings = () => {
         }
 
         const serverReturn = await API.put('/api/user', { name });
+        console.log("submitNameChange -> serverReturn", serverReturn)
         processServerReturn(serverReturn, dispatch);
     };
 

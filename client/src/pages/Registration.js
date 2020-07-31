@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,8 +13,9 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import API from '../utils/API';
-import processServerReturn from '../utils/processServerReturn'
+import processServerReturn from '../utils/processServerReturn';
 import './registration.css';
+
 
 function validateEmail(email) {
     //eslint-disable-next-line
@@ -22,15 +23,35 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
+
+
 const Registration = (props) => {
     const history = useHistory();
-    const [, dispatch] = useGlobalStore();
+    const [globalStore, dispatch] = useGlobalStore();
     const [values, setValues] = useState({
         name: '',
         email: '',
         password: '',
         showPassword: false,
     });
+
+    const checkLoggedIn = async () => {
+        const loggedInReturn = await API.get('/loginstatus');
+        if (loggedInReturn.loggedIn === true) {
+            dispatch({ do: 'login', userId: loggedInReturn.db_id });
+            history.push('/home');
+        }
+    };
+
+    useEffect(() => {
+        if (globalStore.loggedIn) {
+            history.push('/home');
+        } else if (localStorage.session) {
+            checkLoggedIn();
+        }
+
+        // eslint-disable-next-line
+    }, []);
 
     const submitRegistration = async () => {
         const userData = { name: values.name, email: values.email, password: values.password };
@@ -60,7 +81,7 @@ const Registration = (props) => {
         const serverReturn = await API.post('/register', userData);
         console.log('submitRegistration -> serverReturn', serverReturn);
 
-        processServerReturn(serverReturn, dispatch)
+        processServerReturn(serverReturn, dispatch);
 
         setTimeout(() => history.push('/login'), 2000);
     };
