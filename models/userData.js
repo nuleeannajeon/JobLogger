@@ -12,10 +12,10 @@ const UserDataSchema = new Schema({
     portfolioLink: {
         type: String,
     },
-    posts: {
+    posts: [{
         type: Schema.Types.ObjectId,
         ref: 'Posts',
-    },
+    }],
 });
 
 const UserData = mongoose.model('UserData', UserDataSchema);
