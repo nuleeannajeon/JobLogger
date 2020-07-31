@@ -13,7 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import API from '../utils/API';
-
+import processServerReturn from '../utils/processServerReturn'
 import './registration.css';
 
 function validateEmail(email) {
@@ -60,18 +60,7 @@ const Registration = (props) => {
         const serverReturn = await API.post('/register', userData);
         console.log('submitRegistration -> serverReturn', serverReturn);
 
-        if (!serverReturn || serverReturn.error) {
-            dispatch({
-                do: 'setMessage',
-                type: 'error',
-                message: serverReturn.error ? serverReturn.error : 'Registration failure',
-            });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
-
-        dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+        processServerReturn(serverReturn, dispatch)
 
         setTimeout(() => history.push('/login'), 2000);
     };

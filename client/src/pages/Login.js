@@ -16,9 +16,10 @@ import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js';
 import JobLoggerIcon from '../components/JobLoggerIcon';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import processServerReturn from '../utils/processServerReturn';
 
 const saveSession = (sessionID) => {
-    localStorage.session = JSON.stringify(sessionID);
+    localStorage.session = sessionID;
 };
 
 const Login = () => {
@@ -51,15 +52,8 @@ const Login = () => {
     }, []);
 
     const oAuthloginComplete = (returnedData) => {
-        if (!returnedData || returnedData.error) {
-            dispatch({
-                do: 'setMessage',
-                type: 'error',
-                message: returnedData.error ? returnedData.error : "The server didn't communicate back",
-            });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
+        processServerReturn(returnedData, dispatch)
+
         localStorage.session = JSON.stringify(returnedData.session);
         dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
         dispatch({ do: 'login', userId: returnedData.db_id });
@@ -84,24 +78,20 @@ const Login = () => {
 
         const serverReturn = await API.post('/login', userData);
 
-        if (serverReturn.error || !serverReturn || !serverReturn.session) {
+        processServerReturn(serverReturn, dispatch)
+
+        if (!serverReturn.session) {
             dispatch({
                 do: 'setMessage',
                 type: 'error',
-                message: serverReturn.error ? serverReturn.error : "The server didn't communicate back",
+                message: serverReturn.error ? serverReturn.error : "The server didn't create a session",
             });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
         }
-        if (serverReturn.message) {
-            dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        }
-        console.log('SETTING SESSION', serverReturn);
         saveSession(serverReturn.session);
 
         dispatch({ do: 'login' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
     };
 

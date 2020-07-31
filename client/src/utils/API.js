@@ -3,7 +3,7 @@ module.exports = {
 
     get: (url) => {
         return fetch(url, {
-            headers: { Session: localStorage.session ? JSON.parse(localStorage.session) : '' },
+            headers: { Session: localStorage.session ? localStorage.session : '' },
         }).then((result) => result.json());
     },
 
@@ -13,7 +13,7 @@ module.exports = {
             headers: {
                 Accept: 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                Session: localStorage.session ? JSON.parse(localStorage.session) : '',
+                Session: localStorage.session ? localStorage.session : '',
             },
             body: JSON.stringify(userData),
         })
@@ -26,7 +26,7 @@ module.exports = {
             headers: {
                 Accept: 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                Session: localStorage.session ? JSON.parse(localStorage.session) : '',
+                Session: localStorage.session ? localStorage.session : '',
             },
             body: JSON.stringify(userData),
         })
@@ -35,7 +35,7 @@ module.exports = {
     },
     getUserData: async () => {
         return fetch('/api/userdata/', {
-            headers: { Session: localStorage.session ? JSON.parse(localStorage.session) : '' },
+            headers: { Session: localStorage.session ? localStorage.session : '' },
         }).then((res) => res.json());
     },
 };

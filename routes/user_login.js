@@ -16,6 +16,7 @@ module.exports = (router) => {
 
         const { email, currentPassword, newPassword, name } = req.body;
 
+        // USER CHANGING PASSWORD
         if (currentPassword && newPassword) {
             const validPassword = await bcrypt.compare(currentPassword, user.password);
 
@@ -29,6 +30,18 @@ module.exports = (router) => {
 
             res.status(200).send({ message: 'Password successfully updated' });
             return;
+        }
+
+        // USER CHANGING NAME
+        if (name) {
+            try {
+                await User.findByIdAndUpdate({ _id: user._id }, { name });
+                res.status(200).send({ message: 'Successfully changed name to ' + name });
+                return;
+            } catch (err) {
+                console.log('Error setting name', err);
+                res.status(400).send({ error: 'Server error' });
+            }
         }
 
         res.status(400).send({ error: 'No data sent' });

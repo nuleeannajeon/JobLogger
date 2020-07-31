@@ -2,7 +2,17 @@
 import React, { useContext, useReducer } from 'react';
 
 // default global store
-const defaultGlobalStore = { messageType: '', message: '', loggedIn: false, userId: '' };
+const defaultGlobalStore = {
+    messageType: '',
+    message: '',
+    loggedIn: false,
+    userId: '',
+    name: '',
+    school: '',
+    location: '',
+    posts: [],
+    portfolioLink: '',
+};
 
 const GlobalData = React.createContext();
 
@@ -17,26 +27,32 @@ function dispatcher(state, action) {
 
     let newState = { ...state };
     switch (action.do) {
+        case 'setUserData':
+            ['name', 'school', 'location', 'posts', 'portfolioLink'].forEach((item) => {
+                if (action[item]) {
+                    console.log('setting', item);
+                    newState[item] = action[item];
+                }
+            });
+            return newState;
         case 'setMessage':
-            console.log('new message', action.message)
             newState.messageType = action.type;
             newState.message = action.message;
             return newState;
-
         case 'clearMessage':
             newState.messageType = '';
             newState.message = '';
             return newState;
         case 'login':
             newState.loggedIn = true;
-            newState.userId = action.userId
+            newState.userId = action.userId;
             return newState;
         case 'logout':
             newState.loggedIn = false;
-            newState.userId = ''
+            newState.userId = '';
             return newState;
         default:
-            console.log(`unknown action called from GlobalStore.js: ${action.do}`);
+            console.log(`unknown action called from GlobalStore: ${action.do}`);
             break;
     }
 }

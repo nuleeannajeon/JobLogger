@@ -11,12 +11,15 @@ const Content = () => {
 
     const getUserData = async () => {
         const userData = await API.getUserData()
+        dispatch({do: "setUserData", ...userData})
+
         console.log(userData)
     }
 
 
     useEffect(() => {
         getUserData()
+        //eslint-disable-next-line
     },[])
 
     return (
