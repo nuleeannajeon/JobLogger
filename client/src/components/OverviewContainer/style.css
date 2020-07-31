@@ -1,0 +1,65 @@
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1fb;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+  
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+}
+   
+.sidebar .active {
+  background-color: cadetblue;
+  color: white;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: rgb(211, 211, 211);
+  color: white;
+}
+  
+div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+}
+
+.media{
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 80%;
+  padding: 10px;
+}
+
+.media img {
+  width: 30px;
+  height: 30px;
+  border-radius: 3rem;
+}
+
+@media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: fixed;
+      bottom: 0;
+    }
+    .sidebar a {
+      display: inline-flex;
+      width: 20%;
+      justify-content: center;
+    }
+    div.content {
+      margin-left: 0;
+    }
+    .overview-link{
+      display: none;
+    }
+}
