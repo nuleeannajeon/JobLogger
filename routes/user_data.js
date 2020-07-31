@@ -40,7 +40,7 @@ module.exports = (router) => {
 
             const { school, location, portfolioLink } = body;
             if (!(school || location || portfolioLink)) {
-                res.status(204).send({ message: 'Nothing was included to be changed' });
+                res.status(404).send({ message: 'Nothing was included to be changed' });
                 return;
             }
 
