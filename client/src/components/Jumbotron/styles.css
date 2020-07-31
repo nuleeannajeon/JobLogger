@@ -1,26 +1,43 @@
 .jumbotron {
-    background: linear-gradient( rgb(0, 0, 0), rgba(0, 0, 0, 0) ), url("./jumbotron2.jpg");
+    background: url("https://images-ext-1.discordapp.net/external/dtDWDH0uPEhIEQ-Z50oWS9sDb1hMSqsecLnb_eGwLM0/https/www.mentaldaily.com/wp-content/uploads/2020/07/5907980386511.jpg?width=800&height=534");
     background-repeat: no-repeat;
     position: relative;
     background-size: cover;
     background-position: center;
-    height: 40vh;
-    color: white;
+    background-position: 100% 20%;
+    height: 60vh;
+    /* color: white; */
+    margin-bottom: 0;
 }
 
 .container {
-    text-align: center;
-    margin-top: 8vh;
+    padding-top: 8vh;
 }
 
 .display-4 {
-    font-family: 'Orbitron', sans-serif;
-    text-shadow: 2px 2px cadetblue;
+    font-family: 'Quando', serif;
+    color: black;
 }
 
 .lead {
     color: cadetblue;
-    text-shadow: 2px 2px 10px black;
     font-weight: bold;
-    font-size: 18px;
+}
+
+.btn {
+    border: 1px solid cadetblue;
+    color: cadetblue;
+    border-radius: 2rem;
+    background: white;
+    padding: 10px;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 720px) {
+    .lead {
+        font-size: 15px;
+    }
+    .container {
+        padding-top: 15vh;
+    }
 }

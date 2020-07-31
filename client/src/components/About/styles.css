@@ -1,3 +1,11 @@
+.appFeature {
+    background: cadetblue;
+    color: white;
+    margin-top: 0;
+    padding: 1rem 10px 1rem 10px;
+    font-size: 15px;
+}
+
 .avatar {
     vertical-align: middle;
     width: 50px;
@@ -5,4 +13,8 @@
     border-radius: 50%;
     object-fit: cover;
     margin: 20px;
+}
+
+.container {
+    margin-bottom: 100px;
 }

@@ -1,8 +1,9 @@
 import React from 'react';
-import './App.css';
+// import './App.css';
 import Navbar from './components/Navbar/index';
 import Jumbotron from './components/Jumbotron/index';
 import About from './components/About/index';
+import LabelBottomNavigation from './components/BottomNav/index';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Navbar />
       <Jumbotron />
       <About />
+      <LabelBottomNavigation />
     </div>
   );
 }
