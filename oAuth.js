@@ -81,7 +81,7 @@ module.exports = (app, baseURL, createSession) => {
         async ({ user: returnedUser }, res) => {
             console.log('returned user from linkedin', returnedUser);
             const user = {
-                username: returnedUser.displayName,
+                name: returnedUser.displayName,
                 thumbnail: returnedUser.photos[0] ? returnedUser.photos[0].value : '',
                 email: returnedUser.emails[0] ? returnedUser.emails[0].value : '',
                 authId: returnedUser.id,
@@ -96,7 +96,6 @@ module.exports = (app, baseURL, createSession) => {
 
     // local user creation
     app.post('/register', async ({ body }, res) => {
-        console.log(body);
         //request needs username and password coming in to register
         const { email, password, name } = body;
         const user = {

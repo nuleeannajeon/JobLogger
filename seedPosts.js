@@ -27,14 +27,16 @@ const main = async () => {
         salary: 10,
         interviewState: 'No Interview',
     });
+    console.log('main -> post', post);
 
-    console.log(post);
     const dataRet = await UserData.findByIdAndUpdate(
-        { _id: '5f245cc938eb8859a802eb16' },
+        { _id: '5f249dcdeebfae426cfbcf74' },
         { $push: { posts: post._id } }
     );
 
     console.log(dataRet);
+    const updatedData = await UserData.findById({ _id: '5f249dcdeebfae426cfbcf74' });
+    console.log("main -> updatedData", updatedData)
 };
 
 main();

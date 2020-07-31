@@ -50,7 +50,7 @@ module.exports = {
             newUserData.authId = user.authId;
             newUserData.type = user.type;
             newUserData.thumbnail = user.thumbnail;
-            newUserData.name = user.username;
+            newUserData.name = user.name;
         }
 
         try {
