@@ -1,6 +1,7 @@
 .alertMessage {
     position: absolute;
-    top: 10;
+    top: 10px;
     left: calc(50vw - 200px);
     width: 400px;
+    z-index: 1000;
 }

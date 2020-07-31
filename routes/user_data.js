@@ -13,7 +13,6 @@ module.exports = (router) => {
                 return;
             }
             const { name } = userData;
-            console.log('userData', userData);
             const { school, location, portfolioLink, posts } = userData.userData;
             res.status(200).send({
                 school,

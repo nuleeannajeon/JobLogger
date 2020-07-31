@@ -116,7 +116,6 @@ module.exports = (app, baseURL, createSession) => {
 
     app.post('/login', async ({ body }, res) => {
         const { email, password } = body;
-        console.log('user input is', email, password);
         const user = await User.findOne({ email: email });
         if (!user) {
             res.status(403).send({ error: 'No user with that email' });
@@ -149,10 +148,7 @@ module.exports = (app, baseURL, createSession) => {
         try {
 
         const { session } = headers;
-        console.log('checking session id ', session);
         const user = await User.findOne({ session });
-        console.log('user', user);
-        console.log('session length', session.length)
 
         if (!user || session.length !== 36) {
             res.status(200).send({ loggedIn: false });

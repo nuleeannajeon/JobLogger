@@ -5,6 +5,7 @@ import './style.css'
 
 const Message = (props) => {
     const [globalData] = useGlobalStore();
+    console.log("Message -> globalData", globalData)
 
     const AlertMessage = () => <Alert className="alertMessage" elevation={6} variant="filled" severity={globalData.messageType}>{globalData.message}</Alert>
 

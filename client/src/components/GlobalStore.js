@@ -24,13 +24,11 @@ function dispatcher(state, action) {
     //     return state; //cancelling action because repeated within a second
     // }
     // lastDispatcher = { do: action.do, time: Date.now() };
-
     let newState = { ...state };
     switch (action.do) {
         case 'setUserData':
             ['name', 'school', 'location', 'posts', 'portfolioLink'].forEach((item) => {
                 if (action[item]) {
-                    console.log('setting', item);
                     newState[item] = action[item];
                 }
             });

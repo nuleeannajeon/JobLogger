@@ -79,7 +79,7 @@ const Registration = (props) => {
         }
 
         const serverReturn = await API.post('/register', userData);
-        console.log('submitRegistration -> serverReturn', serverReturn);
+        console.log("submitRegistration -> serverReturn", serverReturn)
 
         processServerReturn(serverReturn, dispatch);
 

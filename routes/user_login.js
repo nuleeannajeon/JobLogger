@@ -41,6 +41,7 @@ module.exports = (router) => {
             } catch (err) {
                 console.log('Error setting name', err);
                 res.status(400).send({ error: 'Server error' });
+                return
             }
         }
 
