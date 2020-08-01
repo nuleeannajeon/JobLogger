@@ -102,7 +102,6 @@ const Login = () => {
             return;
         }
         if (permEvent.key === 'Enter' && prop === 'email') {
-            console.log('yay');
             passwordRef.focus();
             return;
         }

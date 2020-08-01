@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link } from 'react-router-dom'
 import './styles.css';
 
 function Jumbotron() {
@@ -7,7 +8,7 @@ function Jumbotron() {
             <div className="container">
                 <h2>Welcome to <br></br> <span className="display-4"> JobLogger</span></h2>
                 <p className="lead">Sign up now for free to easily track your job hunting progress.</p>
-                <a href='/' className="btn">SIGN UP NOW</a>
+                <Link to='/register' className="btn">SIGN UP NOW</Link>
             </div>
         </div>
     )

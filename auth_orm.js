@@ -25,7 +25,7 @@ module.exports = {
             console.log('User has previously logged in, saving new session', user, existingUser);
             newUser = await User.findByIdAndUpdate({ _id: existingUser._id }, { session });
             return {
-                message: 'Welcome back',
+                message: 'Welcome back ' + existingUser.name,
                 db_id: newUser.userDataId,
                 id: newUser._id,
                 name: newUser.name,
@@ -50,7 +50,7 @@ module.exports = {
             newUserData.authId = user.authId;
             newUserData.type = user.type;
             newUserData.thumbnail = user.thumbnail;
-            newUserData.name = user.username;
+            newUserData.name = user.name;
         }
 
         try {

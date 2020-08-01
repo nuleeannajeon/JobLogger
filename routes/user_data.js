@@ -1,6 +1,6 @@
 const secured = require('../auth');
 const User = require('../models/userLogin');
-const UserData = require('../models/userLogin');
+const UserData = require('../models/userData');
 module.exports = (router) => {
     router.get('/api/userdata', secured, async ({ headers }, res) => {
         try {
@@ -27,7 +27,7 @@ module.exports = (router) => {
         }
     });
 
-    router.put('/api/userdata', async ({ body, headers }, res) => {
+    router.put('/api/userdata', secured, async ({ body, headers }, res) => {
         try {
             const { session } = headers;
             const user = await User.findOne({ session });
@@ -45,9 +45,14 @@ module.exports = (router) => {
             }
 
             newData = { school, location, portfolioLink };
+            Object.keys(newData).forEach((item) => {
+                if (!newData[item]) delete newData[item];
+            });
+            // console.log("user id should be", user.userData)
+            // console.log('yser not user', await UserData.find({}))
+
             await UserData.findByIdAndUpdate({ _id: user.userData }, newData);
-            console.log("newData", newData)
-            changedMessage = `Changed your ${Object.keys(newData).filter(item => newData[item]).join(', ')}`;
+            changedMessage = `Changed your ${Object.keys(newData).join(', ')}`;
             res.status(200).send({ message: changedMessage });
         } catch (err) {
             console.log(err);
