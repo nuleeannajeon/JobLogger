@@ -52,16 +52,40 @@ module.exports = (router) => {
         }
     });
 
-    router.put('/api/posts', secured, async ({ headers, body }, res) => {
+    router.put('/api/posts/:id', secured, async ({ headers, body, params }, res) => {
         try {
             const { session } = headers;
-            const user = await User.findOne({ session });
+            const user = await db.UserLogin.findOne({ session });
 
             if (!user) {
                 console.log("This shouldn't happen, but an authenticated user has no data?");
                 res.status(400).send({ error: 'No user found' });
                 return;
             }
+
+            const post = await db.Posts.findByIdAndUpdate({ _id: params.id }, body, {new: true});
+
+            res.status(200).send({ message: 'Successfully updated', messageData: post });
+        } catch (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Something went wrong with the server' });
+        }
+    });
+
+    router.delete('/api/posts', secured, async ({ headers, body }, res) => {
+        try {
+            const { session } = headers;
+            const user = await db.UserLogin.findOne({ session });
+
+            if (!user) {
+                console.log("This shouldn't happen, but an authenticated user has no data?");
+                res.status(400).send({ error: 'No user found' });
+                return;
+            }
+
+            // checking a valid post ID was sent
+            const post = db.Posts.findById({ _id: params.id });
+            console.log('post', post);
 
             res.status(200).send({ message: 'Route not yet implemented' });
         } catch (err) {
