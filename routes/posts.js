@@ -82,9 +82,10 @@ module.exports = (router) => {
         }
     });
 
-    router.delete('/api/posts', secured, async ({ headers, body }, res) => {
+    router.delete('/api/posts/:postId', secured, async ({ headers, params }, res) => {
         try {
             const { session } = headers;
+            const { postId } = params;
             const user = await db.UserLogin.findOne({ session });
 
             if (!user) {
@@ -93,11 +94,19 @@ module.exports = (router) => {
                 return;
             }
 
-            // checking a valid post ID was sent
-            const post = db.Posts.findById({ _id: params.id });
-            console.log('post', post);
+            // checking this post belongs to this user just in case
+            const userPosts = await db.UserData.findById({ _id: user.userData }).then((res) => res.posts);
 
-            res.status(200).send({ message: 'Route not yet implemented' });
+            if (!userPosts.includes(postId)) {
+                console.log('A request to delete a post not belonging to present user was made');
+                res.status(403).send({ error: 'Request made on post not belonging to user' });
+                return;
+            }
+
+            const post = await db.Posts.findByIdAndDelete({ _id: postId });
+            const ret = await db.UserData.findByIdAndUpdate({ _id: user.userData }, { $pull: { posts: postId } });
+
+            res.status(200).send({ message: 'Post deleted' });
         } catch (err) {
             console.log(err);
             res.status(500).send({ error: 'Something went wrong with the server' });
