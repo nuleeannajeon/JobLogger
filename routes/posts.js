@@ -52,9 +52,10 @@ module.exports = (router) => {
         }
     });
 
-    router.put('/api/posts/:id', secured, async ({ headers, body, params }, res) => {
+    router.put('/api/posts/:postId', secured, async ({ headers, body, params }, res) => {
         try {
             const { session } = headers;
+            const { postId } = params;
             const user = await db.UserLogin.findOne({ session });
 
             if (!user) {
@@ -63,7 +64,16 @@ module.exports = (router) => {
                 return;
             }
 
-            const post = await db.Posts.findByIdAndUpdate({ _id: params.id }, body, {new: true});
+            //checking this post belongs to this user just in case
+            const userPosts = await db.UserData.findById({ _id: user.userData }).then((res) => res.posts);
+
+            if (!userPosts.includes(postId)) {
+                console.log('A request to edit a post not belonging to present user was made');
+                res.status(403).send({ error: 'Request made on post not belonging to user' });
+                return;
+            }
+
+            const post = await db.Posts.findByIdAndUpdate({ _id: postId }, body, { new: true });
 
             res.status(200).send({ message: 'Successfully updated', messageData: post });
         } catch (err) {
