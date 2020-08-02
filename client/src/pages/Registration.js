@@ -11,11 +11,26 @@ import { useGlobalStore } from '../components/GlobalStore';
 import JobLoggerIcon from '../components/JobLoggerIcon';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
 import API from '../utils/API';
 import processServerReturn from '../utils/processServerReturn';
 import './registration.css';
+import ResponsiveSubmit from '../components/ResponsiveSubmit';
 
+const useStyles = makeStyles((theme) => ({
+    saveButton: {
+        margin: theme.spacing(1),
+        backgroundColor: blue[500],
+        '&:hover': {
+            backgroundColor: blue[700],
+        },
+        // margin: theme.spacing(1) + ' auto'
+    },
+}));
 
 function validateEmail(email) {
     //eslint-disable-next-line
@@ -23,16 +38,19 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-
-
 const Registration = (props) => {
     const history = useHistory();
     const [globalStore, dispatch] = useGlobalStore();
+    const classes = useStyles();
+    const [loading, setLoading] = React.useState(false);
     const [values, setValues] = useState({
         name: '',
         email: '',
         password: '',
         showPassword: false,
+        errorPassword: false,
+        errorEmail: false,
+        errorName: false,
     });
 
     const checkLoggedIn = async () => {
@@ -53,44 +71,58 @@ const Registration = (props) => {
         // eslint-disable-next-line
     }, []);
 
-    const submitRegistration = async () => {
+    const sendRegistrationToServer = async () => {
         const userData = { name: values.name, email: values.email, password: values.password };
 
         //validating
+        let message;
+        setValues({
+            ...values,
+            errorPassword: values.password.trim().length < 8,
+            errorName: values.name.trim().length === 0,
+            errorEmail: values.name.trim().length === 0,
+        });
+
+        // This ifs unfortunately can't check errorEmail etc because in this iteration they haven't changed yet.
+        if (values.password.trim().length < 8) {
+            message = 'Please enter a password of at least 8 characters';
+        }
         if (values.name.trim().length === 0) {
-            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a name' });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
+            message = 'Please enter a valid email address';
         }
-        if (values.email.trim().length === 0) {
-            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter an email address' });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
+        if (values.name.trim().length === 0) {
+            message = 'Please enter a name';
         }
-        if (!validateEmail(values.email.trim())) {
-            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a valid email' });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
-        if (values.password.trim().length === 0) {
-            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a password' });
+        if (message) {
+            dispatch({ do: 'setMessage', type: 'error', message });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
         }
 
         const serverReturn = await API.post('/register', userData);
-        console.log("submitRegistration -> serverReturn", serverReturn)
+        // console.log('submitRegistration -> serverReturn', serverReturn);
 
         processServerReturn(serverReturn, dispatch);
+        return !serverReturn.error;
+    };
 
-        setTimeout(() => history.push('/login'), 2000);
+    const submitRegistration = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const success = await sendRegistrationToServer();
+        let timer = setTimeout(() => {
+            setLoading(false);
+            clearTimeout(timer);
+        }, 500);
+        if (success) setTimeout(() => history.push('/login'), 2000);
     };
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
 
-    const handleClickShowPassword = () => {
+    const handleClickShowPassword = (event) => {
+        event.preventDefault();
         setValues({ ...values, showPassword: !values.showPassword });
     };
 
@@ -112,66 +144,90 @@ const Registration = (props) => {
                     alignItems="stretch"
                 >
                     {/* <InputLabel htmlFor="name">Name</InputLabel> */}
-                    <TextField
-                        style={{ marginTop: 10 }}
-                        id="name"
-                        label="Name"
-                        required
-                        className="inputField"
-                        value={values.name}
-                        onChange={handleChange('name')}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <AccountCircle />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    <TextField
-                        style={{ marginTop: 10 }}
-                        id="email"
-                        label="Email Address"
-                        required
-                        className="inputField"
-                        type={values.email}
-                        value={values.email}
-                        onChange={handleChange('email')}
-                        // endAdornment={<InputAdornment position="end"></InputAdornment>}
-                    />
-                    <TextField
-                        style={{ marginTop: 10, marginBottom: 15 }}
-                        id="password"
-                        label="Password"
-                        required
-                        className="inputField"
-                        type={values.showPassword ? 'text' : 'password'}
-                        value={values.password}
-                        onChange={handleChange('password')}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                    >
-                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
+                    <form noValidate={false} autoComplete="on">
+                        <TextField
+                            style={{ marginTop: 10 }}
+                            id="name"
+                            label="Name"
+                            required
+                            error={values.errorName}
+                            className="inputField"
+                            value={values.name}
+                            onChange={handleChange('name')}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <AccountCircle />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                        <TextField
+                            style={{ marginTop: 10 }}
+                            id="email"
+                            label="Email Address"
+                            required
+                            error={values.errorEmail}
+                            className="inputField"
+                            type={values.email}
+                            value={values.email}
+                            onChange={handleChange('email')}
+                            // endAdornment={<InputAdornment position="end"></InputAdornment>}
+                        />
+                        <TextField
+                            style={{ marginTop: 10, marginBottom: 15 }}
+                            id="password"
+                            label="Password"
+                            autoComplete="current-password"
+                            required
+                            error={values.errorPassword}
+                            helperText="Password must be at least 8 characters"
+                            minLength={6}
+                            className="inputField"
+                            type={values.showPassword ? 'text' : 'password'}
+                            value={values.password}
+                            onChange={handleChange('password')}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                        >
+                                            {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                        {/* <div className={classes.wrapper}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                className={classes.saveButton}
+                                startIcon={<SaveIcon />}
+                                onClick={submitRegistration}
+                                disabled={loading}
+                            >
+                                Submit
+                            </Button>
+                            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                        </div> */}
+                        <ResponsiveSubmit buttonClass={classes.saveButton} submit={submitRegistration} loading={loading} name="Submit" />
 
-                    <Button
-                        variant="contained"
-                        className="spaceMe"
-                        color="primary"
-                        style={{ marginBottom: '1em' }}
-                        onClick={submitRegistration}
-                    >
-                        Submit
-                    </Button>
+                        {/* <Button
+                            variant="contained"
+                            className={classes.saveButton}
+                            className="spaceMe"
+                            color="primary"
+                            style={{ marginBottom: '1em', width: '100%' }}
+                            onClick={submitRegistration}
+                        >
+                            Submit
+                        </Button> */}
+                    </form>
                     <Button className="spaceMe" onClick={() => history.push('/login')}>
                         I'm already registered
                     </Button>

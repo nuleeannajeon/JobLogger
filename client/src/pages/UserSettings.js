@@ -123,24 +123,24 @@ const UserSettings = () => {
                 <Grid container direction="column" justify="space-between" alignItems="stretch">
                     <Input
                         value={values.school}
-                        style={spaceMe}
                         onChange={handleChange('school')}
+                        style={spaceMe}
                         label="School"
                         className={styles.marginTop}
                         icon={<SchoolIcon />}
                     />
                     <Input
                         value={values.location}
-                        style={spaceMe}
                         onChange={handleChange('location')}
+                        style={spaceMe}
                         label="Location"
                         icon={<PersonPinIcon />}
                         className={styles.marginTop}
                     />
                     <Input
                         value={values.portfolioLink}
-                        style={spaceMe}
                         onChange={handleChange('portfolioLink')}
+                        style={spaceMe}
                         label="Portfolio Link"
                         icon={<WorkIcon />}
                         className={styles.marginTop}

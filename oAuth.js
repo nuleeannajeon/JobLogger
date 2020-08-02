@@ -115,6 +115,12 @@ module.exports = (app, baseURL, createSession) => {
 
     app.post('/login', async ({ body }, res) => {
         const { email, password } = body;
+
+        if (!(email && password)) {
+            res.status(403).send({ error: 'Email and password not included in request' });
+            return;
+        }
+
         const user = await User.findOne({ email: email });
         if (!user) {
             res.status(403).send({ error: 'No user with that email' });
@@ -139,27 +145,25 @@ module.exports = (app, baseURL, createSession) => {
             res.status(200).send(sessionData);
         } catch (err) {
             console.log('error creating session for login', user);
-            res.status(403).send({error: "Error creating new session"})
+            res.status(403).send({ error: 'Error creating new session' });
         }
     });
 
-    app.get('/loginstatus', async ({headers}, res) => {
+    app.get('/loginstatus', async ({ headers }, res) => {
         try {
+            const { session } = headers;
+            const user = await User.findOne({ session });
 
-        const { session } = headers;
-        const user = await User.findOne({ session });
+            if (!user || session.length !== 36) {
+                res.status(200).send({ loggedIn: false });
+                return;
+            }
 
-        if (!user || session.length !== 36) {
-            res.status(200).send({ loggedIn: false });
-            return;
+            res.status(200).send({ loggedIn: true, db_id: user.userDataId });
+        } catch (err) {
+            console.log('Error checking for logged in state', err);
+            res.status(500).send({ error: 'Something has gone wrong checking the login state' });
         }
-
-        res.status(200).send({loggedIn: true, db_id: user.userDataId});
-    } catch (err) {
-        console.log("Error checking for logged in state", err)
-        res.status(500).send({error: "Something has gone wrong checking the login state"})
-    }
-
     });
 
     app.post('/logout', async ({ body }, req) => {
