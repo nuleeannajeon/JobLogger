@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 const UserDataSchema = new Schema({
     userLogin: { type: Schema.Types.ObjectId, ref: 'UserAuthentication' },
+    name: {
+        type: String,
+        required: true,
+    },
     school: {
         type: String,
     },

@@ -10,24 +10,39 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 import { useGlobalStore } from '../components/GlobalStore';
 import JobLoggerIcon from '../components/JobLoggerIcon';
+import PersonIcon from '@material-ui/icons/Person';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import API from '../utils/API';
 import processServerReturn from '../utils/processServerReturn';
-import Input from '../components/Input';
 import './registration.css';
 import SchoolIcon from '@material-ui/icons/School';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import WorkIcon from '@material-ui/icons/Work';
+import { makeStyles } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
 
 import styles from './UserSettings.module.css';
+const useStyles = makeStyles((theme) => ({
+    inputField: {
+        marginTop: theme.spacing(1),
+    },
+}));
 
 const spaceMe = { marginTop: 15 };
 
 const UserSettings = () => {
+    // TODO Add responsive save button
+    // TODO show current values for fields using placeholder
+    // TODO Clean up text fields
+    // TODO overall styling
+    // TODO use makeStyle
+    // TODO refactor to use single handleSubmit function
     const [globalStore, dispatch] = useGlobalStore();
     const history = useHistory();
+    const classes = useStyles();
+    const [loading, setLoading] = useState(false);
     let { path, url } = useRouteMatch();
 
     //FIELDS
@@ -89,12 +104,12 @@ const UserSettings = () => {
 
     const submitDetailChange = async () => {
         let changedData = {};
-        ['school', 'location', 'portfolioLink'].forEach((field) => {
+        ['school', 'location', 'portfolioLink', 'name'].forEach((field) => {
             if (values[field] !== '') changedData[field] = values[field];
         });
 
         const serverReturn = await API.put('/api/userdata', changedData);
-        console.log("submitDetailChange -> serverReturn", serverReturn)
+        console.log('submitDetailChange -> serverReturn', serverReturn);
         processServerReturn(serverReturn, dispatch);
     };
 
@@ -112,38 +127,89 @@ const UserSettings = () => {
         }
 
         const serverReturn = await API.put('/api/user', { name });
-        console.log("submitNameChange -> serverReturn", serverReturn)
+        console.log('submitNameChange -> serverReturn', serverReturn);
         processServerReturn(serverReturn, dispatch);
     };
 
     return (
         <div>
             <Container maxWidth="sm">
-                <Typography variant="h4">Settings</Typography>
+                <Typography variant="h4">My profile</Typography>
                 <Grid container direction="column" justify="space-between" alignItems="stretch">
-                    <Input
+                    <TextField
+                        className={classes.inputField}
+                        placeholder=""
+                        label="Name"
+                        type="text"
+                        value={values.name}
+                        onChange={handleChange('name')}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <PersonIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        label="School"
+                        // required
+                        placeholder=""
+                        className={classes.inputField}
+                        type="text"
                         value={values.school}
                         onChange={handleChange('school')}
-                        style={spaceMe}
-                        label="School"
-                        className={styles.marginTop}
-                        icon={<SchoolIcon />}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <SchoolIcon />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                    <Input
+                    <TextField
+                        label="Location"
+                        // required
+                        placeholder=""
+                        className={classes.inputField}
+                        type="text"
                         value={values.location}
                         onChange={handleChange('location')}
-                        style={spaceMe}
-                        label="Location"
-                        icon={<PersonPinIcon />}
-                        className={styles.marginTop}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <PersonPinIcon />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                    <Input
+                    <TextField
+                        label="Portfolio Link"
+                        // required
+                        placeholder=""
+                        className={classes.inputField}
+                        type="text"
                         value={values.portfolioLink}
                         onChange={handleChange('portfolioLink')}
-                        style={spaceMe}
-                        label="Portfolio Link"
-                        icon={<WorkIcon />}
-                        className={styles.marginTop}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <WorkIcon />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </Grid>
                 <Button style={spaceMe} variant="contained" color="primary" onClick={submitDetailChange}>

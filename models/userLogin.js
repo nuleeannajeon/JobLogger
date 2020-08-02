@@ -40,7 +40,7 @@ const userAuthenticationSchema = new Schema(
         session: { type: String, default: '' },
         authId: String,
         thumbnail: String,
-        name: { type: String, trim: true },
+        // name: { type: String, trim: true },
         username: { type: String, trim: true },
         userData: { type: Schema.Types.ObjectId, ref: "UserData" },
     },
