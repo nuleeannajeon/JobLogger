@@ -17,14 +17,15 @@ const orm = require('./auth_orm')
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const baseURL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001'
+const baseURL = process.env.NODE_ENV === 'production' ? 'http://joblogger-log.herokuapp.com' : 'http://localhost:3001'
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/joblogger';
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(logger(":method :url :status :res[content-length] - :response-time ms"));
+// app.use(logger(":method :url :status :res[content-length] - :response-time ms"));
+app.use(logger('dev'))
 
 app.use(cors());
 app.use(helmet());
@@ -33,7 +34,7 @@ app.use(bodyParser.json());
 
 //AUTHENTICATION CONFIG
 const createSession = async (user) => {
-    console.log('creating session for linkedin user')
+    console.log('creating session')
     const sessionID = uuid()
     const userData = await orm.registerUser(user, sessionID)
 

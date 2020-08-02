@@ -12,9 +12,9 @@ import Message from './components/Message';
 import Logout from './pages/Logout';
 import UserSettings from './pages/UserSettings';
 import Home from './pages/Home';
-
+import './App.css';
 import Navbar from './components/Navbar';
-const NavbarWithRouter = withRouter(Navbar)
+const NavbarWithRouter = withRouter(Navbar);
 // const checkLoggedState = async () => {
 //   if (!localStorage.session) {
 //       return false;
@@ -35,16 +35,18 @@ function App() {
             <Message />
             <Router>
                 <NavbarWithRouter />
-                <Route exact path="/" component={Home} />
-                <Route exact path="/register" component={Registration} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/logout" component={Logout} />
-                <PrivateRoute exact path="/home">
-                    <Content />
-                </PrivateRoute>
-                <PrivateRoute path="/settings">
-                    <UserSettings />
-                </PrivateRoute>
+                <div>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/register" component={Registration} />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/logout" component={Logout} />
+                    <PrivateRoute exact path="/home">
+                        <Content />
+                    </PrivateRoute>
+                    <PrivateRoute path="/settings">
+                        <UserSettings />
+                    </PrivateRoute>
+                </div>
             </Router>
         </GlobalStore>
     );
