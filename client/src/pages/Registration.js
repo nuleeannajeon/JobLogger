@@ -11,10 +11,26 @@ import { useGlobalStore } from '../components/GlobalStore';
 import JobLoggerIcon from '../components/JobLoggerIcon';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
 import API from '../utils/API';
 import processServerReturn from '../utils/processServerReturn';
 import './registration.css';
+import ResponsiveSubmit from '../components/ResponsiveSubmit';
+
+const useStyles = makeStyles((theme) => ({
+    saveButton: {
+        margin: theme.spacing(1),
+        backgroundColor: blue[500],
+        '&:hover': {
+            backgroundColor: blue[700],
+        },
+        // margin: theme.spacing(1) + ' auto'
+    },
+}));
 
 function validateEmail(email) {
     //eslint-disable-next-line
@@ -25,6 +41,8 @@ function validateEmail(email) {
 const Registration = (props) => {
     const history = useHistory();
     const [globalStore, dispatch] = useGlobalStore();
+    const classes = useStyles();
+    const [loading, setLoading] = React.useState(false);
     const [values, setValues] = useState({
         name: '',
         email: '',
@@ -53,15 +71,14 @@ const Registration = (props) => {
         // eslint-disable-next-line
     }, []);
 
-    const submitRegistration =  async (event) => {
-        event.preventDefault();
+    const sendRegistrationToServer = async () => {
         const userData = { name: values.name, email: values.email, password: values.password };
 
         //validating
         let message;
         setValues({
             ...values,
-            errorPassword: (values.password.trim().length < 8),
+            errorPassword: values.password.trim().length < 8,
             errorName: values.name.trim().length === 0,
             errorEmail: values.name.trim().length === 0,
         });
@@ -86,8 +103,18 @@ const Registration = (props) => {
         // console.log('submitRegistration -> serverReturn', serverReturn);
 
         processServerReturn(serverReturn, dispatch);
+        return !serverReturn.error;
+    };
 
-        if (! serverReturn.error) setTimeout(() => history.push('/login'), 2000);
+    const submitRegistration = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const success = await sendRegistrationToServer();
+        let timer = setTimeout(() => {
+            setLoading(false);
+            clearTimeout(timer);
+        }, 500);
+        if (success) setTimeout(() => history.push('/login'), 2000);
     };
 
     const handleChange = (prop) => (event) => {
@@ -174,16 +201,32 @@ const Registration = (props) => {
                                 ),
                             }}
                         />
+                        {/* <div className={classes.wrapper}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                className={classes.saveButton}
+                                startIcon={<SaveIcon />}
+                                onClick={submitRegistration}
+                                disabled={loading}
+                            >
+                                Submit
+                            </Button>
+                            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                        </div> */}
+                        <ResponsiveSubmit buttonClass={classes.saveButton} submit={submitRegistration} loading={loading} name="Submit" />
 
-                        <Button
+                        {/* <Button
                             variant="contained"
+                            className={classes.saveButton}
                             className="spaceMe"
                             color="primary"
                             style={{ marginBottom: '1em', width: '100%' }}
                             onClick={submitRegistration}
                         >
                             Submit
-                        </Button>
+                        </Button> */}
                     </form>
                     <Button className="spaceMe" onClick={() => history.push('/login')}>
                         I'm already registered

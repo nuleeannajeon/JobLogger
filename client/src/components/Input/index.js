@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 const Input = (props) => {
     return (
         <TextField
-            style={{ marginTop: 10 }}
+            style={props.style}
             label={props.label}
             required={props.required}
             className={props.className}

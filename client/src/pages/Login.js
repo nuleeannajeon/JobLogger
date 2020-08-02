@@ -17,6 +17,32 @@ import JobLoggerIcon from '../components/JobLoggerIcon';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import processServerReturn from '../utils/processServerReturn';
+import ResponsiveSubmit from '../components/ResponsiveSubmit';
+import { makeStyles } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
+
+const useStyles = makeStyles((theme) => ({
+    loginButton: {
+        margin: theme.spacing(1),
+        backgroundColor: blue[500],
+        '&:hover': {
+            backgroundColor: blue[700],
+        },
+    },
+    buttonContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        '& > *': {
+            marginTop: theme.spacing(1),
+        },
+    },
+    inputContainer: {
+        maxWidth: 500,
+        '& > *' : {
+            marginTop: theme.spacing(2)
+        }
+    }
+}));
 
 const saveSession = (sessionID) => {
     localStorage.session = sessionID;
@@ -24,7 +50,9 @@ const saveSession = (sessionID) => {
 
 const Login = () => {
     const history = useHistory();
+    const [loading, setLoading] = React.useState(false);
     const [globalStore, dispatch] = useGlobalStore();
+    const classes = useStyles();
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -52,7 +80,7 @@ const Login = () => {
     }, []);
 
     const oAuthloginComplete = (returnedData) => {
-        processServerReturn(returnedData, dispatch)
+        processServerReturn(returnedData, dispatch);
 
         localStorage.session = JSON.stringify(returnedData.session);
         dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
@@ -61,7 +89,7 @@ const Login = () => {
         setTimeout(() => history.push('/home'), 2000);
     };
 
-    const submitLogin = async () => {
+    const sendLogin = async () => {
         const userData = { email: values.email, password: values.password };
 
         if (values.email.trim().length === 0) {
@@ -78,7 +106,7 @@ const Login = () => {
 
         const serverReturn = await API.post('/login', userData);
 
-        processServerReturn(serverReturn, dispatch)
+        processServerReturn(serverReturn, dispatch);
 
         if (!serverReturn.session) {
             dispatch({
@@ -90,9 +118,21 @@ const Login = () => {
             return;
         }
         saveSession(serverReturn.session);
+        return true;
+    };
 
-        dispatch({ do: 'login' });
-        setTimeout(() => history.push('/home'), 2000);
+    const submitLogin = async () => {
+        setLoading(true);
+
+        const success = await sendLogin();
+        const timer = setTimeout(() => {
+            setLoading(false);
+            clearTimeout(timer);
+        }, 500);
+        if (success) {
+            dispatch({ do: 'login' });
+            setTimeout(() => history.push('/home'), 2000);
+        }
     };
 
     const handleChange = (prop) => (event) => {
@@ -123,18 +163,18 @@ const Login = () => {
                     Sign In
                 </Typography>
                 <Grid
-                    style={{ maxWidth: 500 }}
                     container
                     direction="column"
                     justify="space-between"
                     alignItems="stretch"
+                    className={classes.inputContainer}
                 >
                     {/* <div className="formContainer"> */}
                     <FormControl>
                         <InputLabel htmlFor="email">Email Address</InputLabel>
                         <Input
                             id="email"
-                            className="spaceMe inputField"
+                            // className="spaceMe inputField"
                             type={values.email}
                             value={values.email}
                             onKeyDown={(e) => {
@@ -149,7 +189,7 @@ const Login = () => {
                         <Input
                             id="password"
                             ref={passwordRef}
-                            className="spaceMe inputField"
+                            // className="spaceMe inputField"
                             type={values.showPassword ? 'text' : 'password'}
                             value={values.password}
                             onKeyDown={(e) => {
@@ -169,16 +209,24 @@ const Login = () => {
                             }
                         />
                     </FormControl>
-                    <div className="buttonContainer">
-                        <Button
+
+                    <div className={classes.buttonContainer}>
+                        <ResponsiveSubmit
+                            name="Login"
+                            loading={loading}
+                            buttonClass={classes.loginButton}
+                            submit={submitLogin}
+                        />
+                        {/* <Button
                             variant="contained"
                             style={{ marginBottom: '1em' }}
                             color="primary"
                             className="spaceMe"
                             onClick={submitLogin}
+                            disabled={loading}
                         >
                             Login
-                        </Button>
+                        </Button> */}
                         <Button className="spaceMe" onClick={() => history.push('/register')}>
                             Register
                         </Button>

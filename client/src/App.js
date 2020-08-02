@@ -14,6 +14,7 @@ import UserSettings from './pages/UserSettings';
 import Home from './pages/Home';
 import './App.css';
 import Navbar from './components/Navbar';
+import PostAdd from './pages/PostAdd'
 const NavbarWithRouter = withRouter(Navbar);
 // const checkLoggedState = async () => {
 //   if (!localStorage.session) {
@@ -46,6 +47,7 @@ function App() {
                     <PrivateRoute path="/settings">
                         <UserSettings />
                     </PrivateRoute>
+                    <Route exact path='/newpost' component={PostAdd} />
                 </div>
             </Router>
         </GlobalStore>
