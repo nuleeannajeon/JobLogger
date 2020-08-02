@@ -49,6 +49,7 @@ const saveSession = (sessionID) => {
 };
 
 const Login = () => {
+    // TODO find out why the username field isn't recognized as such by password filling software
     const history = useHistory();
     const [loading, setLoading] = React.useState(false);
     const [globalStore, dispatch] = useGlobalStore();

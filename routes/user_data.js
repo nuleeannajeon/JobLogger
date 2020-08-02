@@ -12,8 +12,7 @@ module.exports = (router) => {
                 res.status(400).send({ error: 'No user found' });
                 return;
             }
-            const { name } = userData;
-            const { school, location, portfolioLink, posts } = userData.userData;
+            const { name, school, location, portfolioLink, posts } = userData.userData;
             res.status(200).send({
                 school,
                 location,
@@ -38,13 +37,13 @@ module.exports = (router) => {
                 return;
             }
 
-            const { school, location, portfolioLink } = body;
-            if (!(school || location || portfolioLink)) {
+            const { school, location, portfolioLink, name } = body;
+            if (!(school || location || portfolioLink || name)) {
                 res.status(404).send({ message: 'Nothing was included to be changed' });
                 return;
             }
 
-            newData = { school, location, portfolioLink };
+            newData = { school, location, portfolioLink, name };
             Object.keys(newData).forEach((item) => {
                 if (!newData[item]) delete newData[item];
             });

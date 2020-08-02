@@ -10,28 +10,57 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 import { useGlobalStore } from '../components/GlobalStore';
 import JobLoggerIcon from '../components/JobLoggerIcon';
+import PersonIcon from '@material-ui/icons/Person';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import API from '../utils/API';
 import processServerReturn from '../utils/processServerReturn';
-import Input from '../components/Input';
 import './registration.css';
 import SchoolIcon from '@material-ui/icons/School';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import WorkIcon from '@material-ui/icons/Work';
+import { makeStyles } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
+import ResponsiveSubmit from '../components/ResponsiveSubmit';
+import Divider from '@material-ui/core/Divider';
 
 import styles from './UserSettings.module.css';
+const useStyles = makeStyles((theme) => ({
+    inputField: {
+        marginTop: theme.spacing(1),
+    },
+    submitButton: {
+        // marginTop: theme.spacing(2),
+        backgroundColor: blue[500],
+        '&:hover': {
+            backgroundColor: blue[700],
+        },
+    },
+    title: {
+        marginTop: theme.spacing(3),
+        marginBottom: theme.spacing(3),
+    },
+    sectionDivider: {
+        marginTop: theme.spacing(5),
+        marginBottom: theme.spacing(5),
+    },
+    inputContainer: {
+        marginBottom: theme.spacing(4),
+    },
+}));
 
 const spaceMe = { marginTop: 15 };
 
 const UserSettings = () => {
     const [globalStore, dispatch] = useGlobalStore();
     const history = useHistory();
+    const classes = useStyles();
+    const [loading, setLoading] = useState(false);
     let { path, url } = useRouteMatch();
 
     //FIELDS
-    const [values, setValues] = useState({
+    const defaultValues = {
         currentPassword: '',
         newPassword1: '',
         newPassword2: '',
@@ -43,7 +72,9 @@ const UserSettings = () => {
         school: '',
         portfolioLink: '',
         location: '',
-    });
+    };
+
+    const [values, setValues] = useState(defaultValues);
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -57,7 +88,21 @@ const UserSettings = () => {
         event.preventDefault();
     };
 
+    useEffect(() => {
+        getUserData();
+        //eslint-disable-next-line
+    }, []);
+
     //FUNCTIONS
+    const getUserData = async () => {
+        const userData = await API.getUserData();
+        dispatch({ do: 'setUserData', ...userData });
+    };
+
+    const clearFields = () => {
+        setValues(defaultValues);
+    };
+
     const submitPasswordChange = async () => {
         const { currentPassword, newPassword1, newPassword2 } = values;
         //Check fields are filled
@@ -85,178 +130,225 @@ const UserSettings = () => {
         const serverReturn = await API.put('/api/user', { currentPassword, newPassword: newPassword1 });
 
         processServerReturn(serverReturn, dispatch);
+        return !serverReturn.error;
     };
 
-    const submitDetailChange = async () => {
+    const handlePasswordSubmit = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const success = submitPasswordChange();
+        let timer = setTimeout(() => {
+            setLoading(false);
+            clearFields();
+            clearTimeout(timer);
+        }, 500);
+    };
+
+    const submitDetails = async () => {
         let changedData = {};
-        ['school', 'location', 'portfolioLink'].forEach((field) => {
+        ['school', 'location', 'portfolioLink', 'name'].forEach((field) => {
             if (values[field] !== '') changedData[field] = values[field];
         });
 
         const serverReturn = await API.put('/api/userdata', changedData);
-        console.log("submitDetailChange -> serverReturn", serverReturn)
+        console.log('submitDetailChange -> serverReturn', serverReturn);
         processServerReturn(serverReturn, dispatch);
+        await getUserData();
+        return !serverReturn.error;
     };
 
-    const submitNameChange = async () => {
-        const { name } = values;
-
-        if (!name || name.length === 0) {
-            dispatch({
-                do: 'setMessage',
-                type: 'error',
-                message: 'Please enter a new name',
-            });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2500);
-            return;
-        }
-
-        const serverReturn = await API.put('/api/user', { name });
-        console.log("submitNameChange -> serverReturn", serverReturn)
-        processServerReturn(serverReturn, dispatch);
+    const handleSubmitDetails = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const success = await submitDetails();
+        let timer = setTimeout(() => {
+            setLoading(false);
+            clearFields();
+            clearTimeout(timer);
+        }, 500);
     };
 
     return (
         <div>
             <Container maxWidth="sm">
-                <Typography variant="h4">Settings</Typography>
-                <Grid container direction="column" justify="space-between" alignItems="stretch">
-                    <Input
+                <Typography className={classes.title} variant="h4">
+                    My profile
+                </Typography>
+                <Grid
+                    className={classes.inputContainer}
+                    container
+                    direction="column"
+                    justify="space-between"
+                    alignItems="stretch"
+                >
+                    <TextField
+                        className={classes.inputField}
+                        placeholder={globalStore.name}
+                        label="Name"
+                        type="text"
+                        value={values.name}
+                        onChange={handleChange('name')}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <PersonIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        label="School"
+                        // required
+                        placeholder={globalStore.school}
+                        className={classes.inputField}
+                        type="text"
                         value={values.school}
                         onChange={handleChange('school')}
-                        style={spaceMe}
-                        label="School"
-                        className={styles.marginTop}
-                        icon={<SchoolIcon />}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <SchoolIcon />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                    <Input
+                    <TextField
+                        label="Location"
+                        // required
+                        placeholder={globalStore.location}
+                        className={classes.inputField}
+                        type="text"
                         value={values.location}
                         onChange={handleChange('location')}
-                        style={spaceMe}
-                        label="Location"
-                        icon={<PersonPinIcon />}
-                        className={styles.marginTop}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <PersonPinIcon />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                    <Input
+                    <TextField
+                        label="Portfolio Link"
+                        // required
+                        placeholder={globalStore.portfolioLink}
+                        className={classes.inputField}
+                        type="text"
                         value={values.portfolioLink}
                         onChange={handleChange('portfolioLink')}
-                        style={spaceMe}
-                        label="Portfolio Link"
-                        icon={<WorkIcon />}
-                        className={styles.marginTop}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <WorkIcon />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </Grid>
-                <Button style={spaceMe} variant="contained" color="primary" onClick={submitDetailChange}>
-                    Update
-                </Button>
-                <div className={styles.container}>
-                    <Link to={`${url}/changename`}>Change Name</Link>
-                    <br />
-                    <Link to={`${url}/changepassword`}>Change Password</Link>
-                </div>
-                <Switch>
-                    <Route path={`${path}/changepassword`}>
-                        <Grid container direction="column" justify="space-between" alignItems="stretch">
-                            <TextField
-                                style={spaceMe}
-                                label="Current Password"
-                                required
-                                className={styles.marginTop}
-                                type={values.showcurrentPassword ? 'text' : 'password'}
-                                value={values.currentPassword}
-                                onChange={handleChange('currentPassword')}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword('currentPassword')}
-                                                onMouseDown={handleMouseDownPassword}
-                                            >
-                                                {values.showcurrentPassword ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                            <TextField
-                                // style={{ marginTop: 10 }}
-                                label="New Password"
-                                required
-                                style={spaceMe}
-                                className={styles.marginTop}
-                                type={values.shownewPassword1 ? 'text' : 'password'}
-                                value={values.newPassword1}
-                                onChange={handleChange('newPassword1')}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword('newPassword1')}
-                                                onMouseDown={handleMouseDownPassword}
-                                            >
-                                                {values.shownewPassword1 ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                            <TextField
-                                // style={{ marginTop: 10, marginBottom: 20 }}
-                                label="New Password"
-                                required
-                                style={spaceMe}
-                                className={styles.marginTop}
-                                type={values.shownewPassword2 ? 'text' : 'password'}
-                                value={values.newPassword2}
-                                onChange={handleChange('newPassword2')}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={handleClickShowPassword('newPassword2')}
-                                                onMouseDown={handleMouseDownPassword}
-                                            >
-                                                {values.shownewPassword2 ? <Visibility /> : <VisibilityOff />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </Grid>
-                        <Button
-                            style={spaceMe}
-                            variant="contained"
-                            color="primary"
-                            className={styles.marginTop}
-                            onClick={submitPasswordChange}
-                        >
-                            Change Password
-                        </Button>
-                    </Route>
-                    <Route path={`${path}/changename`}>
-                        <Grid container direction="column" justify="space-between" alignItems="stretch">
-                            <TextField
-                                style={spaceMe}
-                                label="Update your name"
-                                type="text"
-                                value={values.name}
-                                onChange={handleChange('name')}
-                            />
-                        </Grid>
-                        <Button
-                            style={spaceMe}
-                            variant="contained"
-                            className={styles.marginTop}
-                            color="primary"
-                            onClick={submitNameChange}
-                        >
-                            Update your name
-                        </Button>
-                    </Route>
-                </Switch>
+                <ResponsiveSubmit
+                    buttonClass={classes.submitButton}
+                    name="Save Changes"
+                    submit={handleSubmitDetails}
+                    loading={loading}
+                />
+                <Divider variant="fullWidth" className={classes.sectionDivider} />
+                <Typography className={classes.title} variant="h4">
+                    Change my password
+                </Typography>
+                <Grid
+                    className={classes.inputContainer}
+                    container
+                    direction="column"
+                    justify="space-between"
+                    alignItems="stretch"
+                >
+                    <TextField
+                        style={spaceMe}
+                        label="Current Password"
+                        required
+                        className={styles.marginTop}
+                        type={values.showcurrentPassword ? 'text' : 'password'}
+                        value={values.currentPassword}
+                        onChange={handleChange('currentPassword')}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword('currentPassword')}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {values.showcurrentPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        // style={{ marginTop: 10 }}
+                        label="New Password"
+                        required
+                        style={spaceMe}
+                        className={styles.marginTop}
+                        type={values.shownewPassword1 ? 'text' : 'password'}
+                        value={values.newPassword1}
+                        onChange={handleChange('newPassword1')}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword('newPassword1')}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {values.shownewPassword1 ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <TextField
+                        // style={{ marginTop: 10, marginBottom: 20 }}
+                        label="New Password"
+                        required
+                        style={spaceMe}
+                        className={styles.marginTop}
+                        type={values.shownewPassword2 ? 'text' : 'password'}
+                        value={values.newPassword2}
+                        onChange={handleChange('newPassword2')}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword('newPassword2')}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {values.shownewPassword2 ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </Grid>
+                <ResponsiveSubmit
+                    buttonClass={classes.submitButton}
+                    name="Save Password"
+                    submit={handlePasswordSubmit}
+                    loading={loading}
+                />
             </Container>
         </div>
     );
