@@ -3,7 +3,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles((theme) => ({
     saveButton: {
@@ -45,7 +44,7 @@ const ResponsiveSubmit = (props) => {
                 color="primary"
                 size="large"
                 className={props.buttonClass || classes.saveButton}
-                startIcon={props.icon || <SaveIcon />}
+                startIcon={props.icon}
                 onClick={props.submit}
                 disabled={props.loading}
             >

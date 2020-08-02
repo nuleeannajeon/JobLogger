@@ -79,14 +79,14 @@ const Registration = (props) => {
             ...values,
             errorPassword: values.password.trim().length < 8,
             errorName: values.name.trim().length === 0,
-            errorEmail: values.name.trim().length === 0,
+            errorEmail: values.email.trim().length === 0 || !validateEmail(values.email),
         });
 
         // This ifs unfortunately can't check errorEmail etc because in this iteration they haven't changed yet.
         if (values.password.trim().length < 8) {
             message = 'Please enter a password of at least 8 characters';
         }
-        if (values.name.trim().length === 0) {
+        if (values.email.trim().length === 0 || !validateEmail(values.email)) {
             message = 'Please enter a valid email address';
         }
         if (values.name.trim().length === 0) {
@@ -214,7 +214,12 @@ const Registration = (props) => {
                             </Button>
                             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                         </div> */}
-                        <ResponsiveSubmit buttonClass={classes.saveButton} submit={submitRegistration} loading={loading} name="Submit" />
+                        <ResponsiveSubmit
+                            buttonClass={classes.saveButton}
+                            submit={submitRegistration}
+                            loading={loading}
+                            name="Submit"
+                        />
 
                         {/* <Button
                             variant="contained"

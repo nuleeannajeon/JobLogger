@@ -38,10 +38,10 @@ const useStyles = makeStyles((theme) => ({
     },
     inputContainer: {
         maxWidth: 500,
-        '& > *' : {
-            marginTop: theme.spacing(2)
-        }
-    }
+        '& > *': {
+            marginTop: theme.spacing(2),
+        },
+    },
 }));
 
 const saveSession = (sessionID) => {
@@ -175,6 +175,7 @@ const Login = () => {
                         <InputLabel htmlFor="email">Email Address</InputLabel>
                         <Input
                             id="email"
+                            autoComplete="username"
                             // className="spaceMe inputField"
                             type={values.email}
                             value={values.email}
@@ -189,6 +190,7 @@ const Login = () => {
                         <InputLabel htmlFor="password">Password</InputLabel>
                         <Input
                             id="password"
+                            autoComplete="password"
                             ref={passwordRef}
                             // className="spaceMe inputField"
                             type={values.showPassword ? 'text' : 'password'}
