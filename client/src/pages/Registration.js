@@ -117,7 +117,6 @@ const Registration = (props) => {
                                     // endAdornment={<InputAdornment position="end"></InputAdornment>}
                                 />
                                 <TextField
-                                    style={{ marginTop: 10, marginBottom: 15 }}
                                     className={classes.input}
                                     id="password"
                                     label="Password"
@@ -156,7 +155,7 @@ const Registration = (props) => {
                             // style={{ maxWidth: 500 }}
                             container
                             direction="column"
-                            justify="space-between"
+                            // justify="space-between"
                             alignItems="stretch"
                         >
                             <form noValidate={false} autoComplete="on">
@@ -194,7 +193,7 @@ const Registration = (props) => {
                                     label="Portfolio Link"
                                     fullWidth
                                     // error={values.errorName}
-                                    className={(classes.input, classes.bottomSpace)}
+                                    className={[classes.input, classes.bottomSpace].join(' ')}
                                     value={values.portfolioLink}
                                     onChange={handleChange('portfolioLink')}
                                     InputProps={{
