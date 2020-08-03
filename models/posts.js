@@ -10,6 +10,10 @@ const postsSchema = new Schema({
         type: String,
         required: 'Please enter a name of the position!'
     },
+    postingType: {
+        type: String,
+        enum: ['wishlist', 'applied', 'interview', 'offer', 'rejected']
+    },
     salary: {
         type: Number
     },
