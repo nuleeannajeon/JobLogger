@@ -9,7 +9,7 @@ import { GlobalStore } from './components/GlobalStore';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute';
-import Content from './pages/Content'; // temp for testing
+// import Content from './pages/Content'; // temp for testing
 import Message from './components/Message';
 import Logout from './pages/Logout';
 import UserSettings from './pages/UserSettings';
@@ -60,9 +60,9 @@ function App() {
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/logout" component={Logout} />
                         {/* <Route exact path="/overview" component={Overview} /> */}
-                        <PrivateRoute exact path="/home">
+                        {/* <PrivateRoute exact path="/home">
                             <Content />
-                        </PrivateRoute>
+                        </PrivateRoute> */}
                         <PrivateRoute exact path="/overview">
                             <Overview />
                         </PrivateRoute>

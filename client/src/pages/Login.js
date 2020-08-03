@@ -81,14 +81,14 @@ const Login = () => {
         const loggedInReturn = await API.get('/loginstatus');
         if (loggedInReturn.loggedIn === true) {
             dispatch({ do: 'login', userId: loggedInReturn.db_id });
-            history.push('/home');
+            history.push('/overview');
         }
     };
 
     // checking if already logged in
     useEffect(() => {
         if (globalStore.loggedIn) {
-            history.push('/home');
+            history.push('/overview');
         } else if (localStorage.session) {
             checkLoggedIn();
         }
