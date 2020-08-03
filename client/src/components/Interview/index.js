@@ -3,7 +3,7 @@ import './style.css';
 import { Link } from "react-router-dom";
 import Posting from '../Posting/index';
 
-function OverviewContainer(){ 
+function Interview(){ 
     return(
         <div>
             <div className="sidebar">
@@ -14,23 +14,8 @@ function OverviewContainer(){
                 <Link to="/overview/reject" className={window.location.pathname === "/overview/reject" ? "active" : ""}><i class="fa fa-fw fa-thumbs-down"></i>  <span className="overview-link">Reject</span></Link>
             </div>
             <div className="content ">
-                <h2>Wishlists <button className="add-btn" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i></button></h2>
-
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add Your Wishlists</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <Posting />
-                        </div>
-                        </div>
-                    </div>
-                </div>
+                <h2>Interview</h2>
+                
                 <div className="media">
                     <div className="media-body">
                         <button className="box-delete-button"><i class="fas fa-trash-alt"></i></button>
@@ -48,4 +33,4 @@ function OverviewContainer(){
     );
 }
 
-export default OverviewContainer;
+export default Interview;
