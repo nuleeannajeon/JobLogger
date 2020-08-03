@@ -38,4 +38,9 @@ export default {
             headers: { Session: localStorage.session ? localStorage.session : '' },
         }).then((res) => res.json());
     },
+    getUserPosts: async () => {
+        return fetch('/api/posts', {
+            headers: { Session: localStorage.session ? localStorage.session : '' },
+        }).then((res) => res.json());
+    },
 };
