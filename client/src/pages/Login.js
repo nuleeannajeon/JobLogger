@@ -103,7 +103,7 @@ const Login = () => {
         dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
         dispatch({ do: 'login', userId: returnedData.db_id });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        setTimeout(() => history.push('/home'), 2000);
+        setTimeout(() => history.push('/overview'), 2000);
     };
 
     const sendLogin = async () => {
@@ -148,7 +148,7 @@ const Login = () => {
         }, 500);
         if (success) {
             dispatch({ do: 'login' });
-            setTimeout(() => history.push('/home'), 2000);
+            setTimeout(() => history.push('/overview'), 2000);
         }
     };
 
