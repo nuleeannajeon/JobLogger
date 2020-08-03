@@ -11,13 +11,14 @@
 .navbar-brand:hover, .nav-link:hover {
     color: rgb(69, 117, 119);
 }
-
 .navbar-toggler {
     color: black;
 }
-
 .nav-link {
     color: black;
+}
+.navbar-toggler-icon{
+    color: cadetblue;
 }
 
 /* rgb(110, 129, 129); */
