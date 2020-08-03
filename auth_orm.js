@@ -1,5 +1,5 @@
 const User = require('./models/userLogin');
-const UserData = require('./models/userData')
+const UserData = require('./models/userData');
 const bcrypt = require('bcrypt');
 
 module.exports = {
@@ -20,12 +20,12 @@ module.exports = {
             // local user login
             existingUser = await User.findOne({ email: user.email }).populate('userData');
         }
-        console.log("existingUser", existingUser)
+        console.log('existingUser', existingUser);
 
         if (existingUser && existingUser._id) {
             console.log('User has previously logged in, saving new session', user, existingUser);
             newUser = await User.findByIdAndUpdate({ _id: existingUser._id }, { session }).populate('userData');
-            console.log("newUser", newUser)
+            console.log('newUser', newUser);
             return {
                 message: 'Welcome back ' + existingUser.userData.name,
                 db_id: newUser.userDataId,
@@ -38,28 +38,34 @@ module.exports = {
             };
         }
 
-        newUserData = {
+        newUserLoginData = {
             email: user.email,
             session,
         };
+        newUserDataData = { name: user.name };
+        if (user.location) newUserDataData.location = user.location;
+        if (user.school) newUserDataData.school = user.school;
+        if (user.portfolioLink) newUserDataData.portfolioLink = user.portfolioLink;
 
         if (!user.type || user.type === 'local') {
-            newUserData.password = await bcrypt.hash(user.password, 10);
+            newUserLoginData.password = await bcrypt.hash(user.password, 10);
             // newUserData.name = user.name;
-            newUserData.type = 'local';
-
+            newUserLoginData.type = 'local';
         } else if (user.type === 'linkedin') {
-            newUserData.authId = user.authId;
-            newUserData.type = user.type;
-            newUserData.thumbnail = user.thumbnail;
+            newUserLoginData.authId = user.authId;
+            newUserLoginData.type = user.type;
+            newUserLoginData.thumbnail = user.thumbnail;
             // newUserData.name = user.name;
         }
 
         try {
             //New user, add to DB
-            newUser = await User.create(newUserData);
-            newUserDataObject = await UserData.create({userLogin: newUser._id, name: user.name})
-            await User.findByIdAndUpdate({_id: newUser._id}, {userData: newUserDataObject._id})
+            newUser = await User.create(newUserLoginData);
+            newUserDataObject = await UserData.create({
+                userLogin: newUser._id,
+                ...newUserDataData,
+            });
+            await User.findByIdAndUpdate({ _id: newUser._id }, { userData: newUserDataObject._id });
         } catch (err) {
             console.log('there was an error creating the new user', err);
             return { error: 'Error creating user' };
@@ -72,7 +78,6 @@ module.exports = {
             message: `Welcome ${newUserDataObject.name}!`,
             db_id: newUserDataObject._id,
             ...newUser,
-
         };
     },
 };

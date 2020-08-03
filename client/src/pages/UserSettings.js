@@ -24,6 +24,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors';
 import ResponsiveSubmit from '../components/ResponsiveSubmit';
 import Divider from '@material-ui/core/Divider';
+import SaveIcon from '@material-ui/icons/Save';
 
 import styles from './UserSettings.module.css';
 const useStyles = makeStyles((theme) => ({
@@ -32,10 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
     submitButton: {
         // marginTop: theme.spacing(2),
-        backgroundColor: blue[500],
-        '&:hover': {
-            backgroundColor: blue[700],
-        },
+        backgroundColor: theme.primary,
     },
     title: {
         marginTop: theme.spacing(3),
@@ -262,6 +260,7 @@ const UserSettings = () => {
                     name="Save Changes"
                     submit={handleSubmitDetails}
                     loading={loading}
+                    icon={<SaveIcon />}
                 />
                 <Divider variant="fullWidth" className={classes.sectionDivider} />
                 <Typography className={classes.title} variant="h4">
@@ -348,6 +347,7 @@ const UserSettings = () => {
                     name="Save Password"
                     submit={handlePasswordSubmit}
                     loading={loading}
+                    icon={<SaveIcon />}
                 />
             </Container>
         </div>
