@@ -16,9 +16,9 @@ import UserSettings from './pages/UserSettings';
 import Home from './pages/Home';
 import './App.css';
 import Navbar from './components/Navbar';
-import PostAdd from './pages/PostAdd';
+// import PostAdd from './pages/PostAdd';
+import Overview from './pages/Overview';
 const NavbarWithRouter = withRouter(Navbar);
-
 
 const theme = createMuiTheme({
     palette: {
@@ -29,27 +29,47 @@ const theme = createMuiTheme({
             main: '#605fa0',
         },
     },
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 700,
+            md: 960,
+            lg: 1280,
+            xl: 1920,
+        },
+    },
 });
 
+const useStyles = makeStyles((theme) => ({
+    paddingTop: {
+        marginTop: '4rem',
+    },
+}));
+
 function App() {
+    const classes = useStyles()
     return (
         <ThemeProvider theme={theme}>
             <GlobalStore>
                 <Message />
                 <Router>
                     <NavbarWithRouter />
-                    <div>
+                    <div className={classes.paddingTop}>
                         <Route exact path="/" component={Home} />
                         <Route exact path="/register" component={Registration} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/logout" component={Logout} />
+                        {/* <Route exact path="/overview" component={Overview} /> */}
                         <PrivateRoute exact path="/home">
                             <Content />
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/overview">
+                            <Overview />
                         </PrivateRoute>
                         <PrivateRoute path="/settings">
                             <UserSettings />
                         </PrivateRoute>
-                        <Route exact path="/newpost" component={PostAdd} />
+                        {/* <Route exact path="/newpost" component={PostAdd} /> */}
                     </div>
                 </Router>
             </GlobalStore>
