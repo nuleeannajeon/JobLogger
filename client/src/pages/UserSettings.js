@@ -16,7 +16,6 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import API from '../utils/API';
 import processServerReturn from '../utils/processServerReturn';
-import './registration.css';
 import SchoolIcon from '@material-ui/icons/School';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import WorkIcon from '@material-ui/icons/Work';
@@ -24,18 +23,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors';
 import ResponsiveSubmit from '../components/ResponsiveSubmit';
 import Divider from '@material-ui/core/Divider';
+import SaveIcon from '@material-ui/icons/Save';
 
 import styles from './UserSettings.module.css';
 const useStyles = makeStyles((theme) => ({
     inputField: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(2),
     },
     submitButton: {
         // marginTop: theme.spacing(2),
-        backgroundColor: blue[500],
-        '&:hover': {
-            backgroundColor: blue[700],
-        },
+        backgroundColor: theme.primary,
     },
     title: {
         marginTop: theme.spacing(3),
@@ -49,8 +46,6 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(4),
     },
 }));
-
-const spaceMe = { marginTop: 15 };
 
 const UserSettings = () => {
     const [globalStore, dispatch] = useGlobalStore();
@@ -262,6 +257,7 @@ const UserSettings = () => {
                     name="Save Changes"
                     submit={handleSubmitDetails}
                     loading={loading}
+                    icon={<SaveIcon />}
                 />
                 <Divider variant="fullWidth" className={classes.sectionDivider} />
                 <Typography className={classes.title} variant="h4">
@@ -275,7 +271,6 @@ const UserSettings = () => {
                     alignItems="stretch"
                 >
                     <TextField
-                        style={spaceMe}
                         label="Current Password"
                         required
                         className={styles.marginTop}
@@ -297,10 +292,8 @@ const UserSettings = () => {
                         }}
                     />
                     <TextField
-                        // style={{ marginTop: 10 }}
                         label="New Password"
                         required
-                        style={spaceMe}
                         className={styles.marginTop}
                         type={values.shownewPassword1 ? 'text' : 'password'}
                         value={values.newPassword1}
@@ -320,10 +313,8 @@ const UserSettings = () => {
                         }}
                     />
                     <TextField
-                        // style={{ marginTop: 10, marginBottom: 20 }}
                         label="New Password"
                         required
-                        style={spaceMe}
                         className={styles.marginTop}
                         type={values.shownewPassword2 ? 'text' : 'password'}
                         value={values.newPassword2}
@@ -348,6 +339,7 @@ const UserSettings = () => {
                     name="Save Password"
                     submit={handlePasswordSubmit}
                     loading={loading}
+                    icon={<SaveIcon />}
                 />
             </Container>
         </div>

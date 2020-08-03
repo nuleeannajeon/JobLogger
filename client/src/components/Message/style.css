@@ -3,5 +3,5 @@
     top: 10px;
     left: calc(50vw - 200px);
     width: 400px;
-    z-index: 1000;
+    z-index: 10000;
 }

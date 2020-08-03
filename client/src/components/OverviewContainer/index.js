@@ -1,9 +1,42 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './style.css';
 import { Link } from "react-router-dom";
 import Posting from '../Posting/index';
+import API from '../../utils/API'
+import { useGlobalStore } from '../GlobalStore';
 
 function OverviewContainer(){ 
+    const [globalStore, dispatch] = useGlobalStore();
+    const [userPosts, setUserPosts] = useState([])
+    const [wishlist, setWishlist] = useState([])
+    const [applied, setApplied] = useState([])
+    const [offer, setOffer] = useState([])
+    const [interview, setInterview] = useState([])
+    const [rejected, setRejected] = useState([])
+
+
+
+    const getUserData = async () => {
+        const userPostsData = await API.getUserPosts()
+        console.log("getUserData -> userPostsData", userPostsData)
+        // const userPosts = userPostsData.message
+
+
+        //filter for wishlist
+        // setWishlist(userPosts.filter(post => post.postingType === 'wishlist'))
+
+
+
+        // setUserPosts(userPostsData.message)
+    }
+
+
+    useEffect(()=>{
+        getUserData()
+    },[])
+    
+
+
     return(
         <div>
             <div className="sidebar">
@@ -15,7 +48,8 @@ function OverviewContainer(){
             </div>
             <div className="content ">
                 <h2>Wishlists <button className="add-btn" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i></button></h2>
-
+                {/* {wislist.map(posting => <Wishlist {...posting} />)}  <--- the spread operator will assign each value to a prop, so dateAdded would be in props.dateAdded in the component */}
+                {/* {userPosts.map(post => post.company)} */}
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -32,6 +66,7 @@ function OverviewContainer(){
                     </div>
                 </div>
                 <div className="media">
+
                     <div className="media-body">
                         <button className="box-delete-button"><i class="fas fa-trash-alt"></i></button>
                         <button className="box-view-button">View/Edit</button>
@@ -43,6 +78,7 @@ function OverviewContainer(){
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     );
