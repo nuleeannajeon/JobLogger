@@ -37,6 +37,7 @@ function Posting(){
     const [selectedDate, setSelectedDate] = React.useState(new Date(Date.now()));
     const [values, setValues] = React.useState({
         amount: '',
+        companyName: '',
     });
 
     const handleDateChange = (date) => {
@@ -46,11 +47,18 @@ function Posting(){
         setValues({ ...values, [prop]: event.target.value });
       };
 
+    const handleSubmit = (event) => {
+        event.preventDefault()
+
+        
+
+    }
+
     return(
         <Container maxWidth="sm">
             <h3 style={{textAlign: "center"}}>New Posting</h3>
             <form className={classes.root} noValidate autoComplete="off">
-                <TextField className='postingInput'id="outlined-basic" label="Company Name"/>
+                <TextField className='postingInput'id="outlined-basic" onChange={handleChange('companyName')} value={values.companyName} label="Company Name"/>
                 <TextField className='postingInput'id="outlined-basic" label="Position" />
                 <TextField className='postingInput'id="outlined-basic" label="Location" />
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
