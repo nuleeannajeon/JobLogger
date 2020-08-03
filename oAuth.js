@@ -81,7 +81,7 @@ module.exports = (app, baseURL, createSession) => {
         async ({ user: returnedUser }, res) => {
             console.log('returned user from linkedin', returnedUser);
             const user = {
-                username: returnedUser.displayName,
+                name: returnedUser.displayName,
                 thumbnail: returnedUser.photos[0] ? returnedUser.photos[0].value : '',
                 email: returnedUser.emails[0] ? returnedUser.emails[0].value : '',
                 authId: returnedUser.id,
@@ -96,7 +96,6 @@ module.exports = (app, baseURL, createSession) => {
 
     // local user creation
     app.post('/register', async ({ body }, res) => {
-        console.log(body);
         //request needs username and password coming in to register
         const { email, password, name } = body;
         const user = {
@@ -116,7 +115,12 @@ module.exports = (app, baseURL, createSession) => {
 
     app.post('/login', async ({ body }, res) => {
         const { email, password } = body;
-        console.log('user input is', email, password);
+
+        if (!(email && password)) {
+            res.status(403).send({ error: 'Email and password not included in request' });
+            return;
+        }
+
         const user = await User.findOne({ email: email });
         if (!user) {
             res.status(403).send({ error: 'No user with that email' });
@@ -141,21 +145,25 @@ module.exports = (app, baseURL, createSession) => {
             res.status(200).send(sessionData);
         } catch (err) {
             console.log('error creating session for login', user);
-            res.status(403).send({error: "Error creating new session"})
+            res.status(403).send({ error: 'Error creating new session' });
         }
     });
 
-    app.get('/loginstatus/:session', async ({ params }, res) => {
-        const { session } = params;
-        console.log('checking session id ', session);
-        const user = await User.findOne({ session });
-        console.log('user', user);
+    app.get('/loginstatus', async ({ headers }, res) => {
+        try {
+            const { session } = headers;
+            const user = await User.findOne({ session });
 
-        if (!user || session.length !== 36) {
-            res.status(403).send({ error: 'User is not logged in' });
-            return;
+            if (!user || session.length !== 36) {
+                res.status(200).send({ loggedIn: false });
+                return;
+            }
+
+            res.status(200).send({ loggedIn: true, db_id: user.userDataId });
+        } catch (err) {
+            console.log('Error checking for logged in state', err);
+            res.status(500).send({ error: 'Something has gone wrong checking the login state' });
         }
-        res.status(200).send(true);
     });
 
     app.post('/logout', async ({ body }, req) => {

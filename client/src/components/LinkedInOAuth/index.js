@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import IconButton from '@material-ui/core/IconButton';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
+import Button from '@material-ui/core/Button';
 
 const API_URL = window.location.protocol + '//' + window.location.host.replace('localhost:3000', 'localhost:3001');
 
 let oAuthWindow;
 let oAuthPending = false;
 
-function OAuth(props) {
+function OAuth({ loginComplete, ...rest }) {
     useEffect(function () {
         window.addEventListener(
             'message',
@@ -26,10 +26,11 @@ function OAuth(props) {
                 const loginData = JSON.parse(event.data);
                 console.log(`Popup window has returned`, loginData);
                 if (oAuthWindow) oAuthWindow.close();
-                if (props.loginComplete) props.loginComplete(loginData);
+                if (loginComplete) loginComplete(loginData);
             },
             false
         );
+        //eslint-disable-next-line
     }, []);
 
     function openOAuth() {
@@ -64,11 +65,10 @@ function OAuth(props) {
     }
 
     return (
-        <div>
-            <IconButton onClick={() => openOAuth()} color="primary" aria-label="login with linkedin" component="span">
-                <LinkedInIcon />
-            </IconButton>
-        </div>
+        <Button {...rest} style={{verticalAlign: "middle"}} onClick={() => openOAuth()} color="primary" aria-label="login with linkedin">
+            Sign in with LinkedIn
+            <LinkedInIcon />
+        </Button>
     );
 }
 

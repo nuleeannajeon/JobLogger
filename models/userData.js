@@ -1,27 +1,29 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const UserDataSchema = new Schema(
-  {
-    userLogin_id: {
-      type: Number,
-      // { type: Schema.Types.ObjectId, ref: 'UserLogin' }?
+const UserDataSchema = new Schema({
+    userLogin: { type: Schema.Types.ObjectId, ref: 'UserAuthentication' },
+    name: {
+        type: String,
+        required: true,
     },
     school: {
-      type: String,
+        type: String,
     },
     location: {
-      type: String
+        type: String,
     },
-    porfolioLink: {
-      type: String
+    portfolioLink: {
+        type: String,
     },
-    posts: {
-      type: Schema.Types.ObjectId, ref: 'Posts' 
-    }
-  }
-);
+    posts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Posts',
+        },
+    ],
+});
 
-const UserData = mongoose.model("UserData", UserDataSchema);
+const UserData = mongoose.model('UserData', UserDataSchema);
 
 module.exports = UserData;

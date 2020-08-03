@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,70 +12,141 @@ import Button from '@material-ui/core/Button';
 import './login.css';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
-import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js'
+import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js';
+import JobLoggerIcon from '../components/JobLoggerIcon';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import processServerReturn from '../utils/processServerReturn';
+import ResponsiveSubmit from '../components/ResponsiveSubmit';
+import { makeStyles } from '@material-ui/core/styles';
+import { blue } from '@material-ui/core/colors';
+
+const useStyles = makeStyles((theme) => ({
+    loginButton: {
+        margin: theme.spacing(1),
+        backgroundColor: blue[500],
+        '&:hover': {
+            backgroundColor: blue[700],
+        },
+    },
+    buttonContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        '& > *': {
+            marginTop: theme.spacing(1),
+        },
+    },
+    inputContainer: {
+        maxWidth: 500,
+        '& > *' : {
+            marginTop: theme.spacing(2)
+        }
+    }
+}));
 
 const saveSession = (sessionID) => {
-    localStorage.session = JSON.stringify(sessionID);
+    localStorage.session = sessionID;
 };
 
 const Login = () => {
+    // TODO find out why the username field isn't recognized as such by password filling software
     const history = useHistory();
+    const [loading, setLoading] = React.useState(false);
     const [globalStore, dispatch] = useGlobalStore();
+    const classes = useStyles();
     const [values, setValues] = useState({
         email: '',
         password: '',
         showPassword: false,
     });
+    const passwordRef = useRef(null);
 
+    const checkLoggedIn = async () => {
+        const loggedInReturn = await API.get('/loginstatus');
+        if (loggedInReturn.loggedIn === true) {
+            dispatch({ do: 'login', userId: loggedInReturn.db_id });
+            history.push('/home');
+        }
+    };
+
+    // checking if already logged in
     useEffect(() => {
         if (globalStore.loggedIn) {
             history.push('/home');
+        } else if (localStorage.session) {
+            checkLoggedIn();
         }
+
         // eslint-disable-next-line
     }, []);
 
     const oAuthloginComplete = (returnedData) => {
+        processServerReturn(returnedData, dispatch);
 
-        if (!returnedData || returnedData.error){
-            dispatch({ do: 'setMessage', type: 'error', message: returnedData.error ? returnedData.error : "The server didn't communicate back" });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            console.log("ERROR IN RETURN", returnedData)
-            return
-        }
-
-        localStorage.session = JSON.stringify(returnedData.session)
+        localStorage.session = JSON.stringify(returnedData.session);
         dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
-        dispatch({ do: 'login' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        setTimeout(() => history.push('/home'), 2000);
-    }
-
-    
-    const submitLogin = async () => {
-        const userData = { email: values.email, password: values.password };
-        console.log('submitLogin -> userData', userData);
-        const serverReturn = await API.post('/login', userData);
-
-        if (serverReturn.error || !serverReturn || !serverReturn.session) {
-            dispatch({ do: 'setMessage', type: 'error', message: serverReturn.error ? serverReturn.error : "The server didn't communicate back" });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            console.log("ERROR", serverReturn)
-            return
-        }
-        if (serverReturn.message) {
-            dispatch({ do: 'setMessage', type: 'success', message: serverReturn.message });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        }
-
-        saveSession(serverReturn.session);
-
-        dispatch({ do: 'login' });
+        dispatch({ do: 'login', userId: returnedData.db_id });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
         setTimeout(() => history.push('/home'), 2000);
     };
 
+    const sendLogin = async () => {
+        const userData = { email: values.email, password: values.password };
+
+        if (values.email.trim().length === 0) {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter an email address' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+
+        if (values.password.trim().length === 0) {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a password' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+
+        const serverReturn = await API.post('/login', userData);
+
+        processServerReturn(serverReturn, dispatch);
+
+        if (!serverReturn.session) {
+            dispatch({
+                do: 'setMessage',
+                type: 'error',
+                message: serverReturn.error ? serverReturn.error : "The server didn't create a session",
+            });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+        saveSession(serverReturn.session);
+        return true;
+    };
+
+    const submitLogin = async () => {
+        setLoading(true);
+
+        const success = await sendLogin();
+        const timer = setTimeout(() => {
+            setLoading(false);
+            clearTimeout(timer);
+        }, 500);
+        if (success) {
+            dispatch({ do: 'login' });
+            setTimeout(() => history.push('/home'), 2000);
+        }
+    };
+
     const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
+        const permEvent = event;
+        if (permEvent.key === 'Enter' && prop === 'password') {
+            submitLogin();
+            return;
+        }
+        if (permEvent.key === 'Enter' && prop === 'email') {
+            passwordRef.focus();
+            return;
+        }
+        setValues({ ...values, [prop]: permEvent.target.value });
     };
 
     const handleClickShowPassword = () => {
@@ -86,48 +157,86 @@ const Login = () => {
         event.preventDefault();
     };
     return (
-        <Container maxWidth="sm" style={{ display: 'flex', flexDirection: 'column' }}>
-            <FormControl>
-                <InputLabel htmlFor="email">email</InputLabel>
-                <Input
-                    id="email"
-                    className="inp"
-                    type={values.email}
-                    value={values.email}
-                    onChange={handleChange('email')}
-                    // endAdornment={<InputAdornment position="end"></InputAdornment>}
-                />
-            </FormControl>
-            <FormControl>
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <Input
-                    id="password"
-                    className="inp"
-                    type={values.showPassword ? 'text' : 'password'}
-                    value={values.password}
-                    onChange={handleChange('password')}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                            >
-                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                />
-            </FormControl>
+        <div className="container">
+            <Container maxWidth="sm">
+                <JobLoggerIcon className="centerMe" />
+                <Typography variant="h4" style={{ textAlign: 'center', marginTop: 40 }} gutterBottom>
+                    Sign In
+                </Typography>
+                <Grid
+                    container
+                    direction="column"
+                    justify="space-between"
+                    alignItems="stretch"
+                    className={classes.inputContainer}
+                >
+                    {/* <div className="formContainer"> */}
+                    <FormControl>
+                        <InputLabel htmlFor="email">Email Address</InputLabel>
+                        <Input
+                            id="email"
+                            // className="spaceMe inputField"
+                            type={values.email}
+                            value={values.email}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') passwordRef.current.children[0].focus();
+                            }}
+                            onChange={handleChange('email')}
+                            // endAdornment={<InputAdornment position="end"></InputAdornment>}
+                        />
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <Input
+                            id="password"
+                            ref={passwordRef}
+                            // className="spaceMe inputField"
+                            type={values.showPassword ? 'text' : 'password'}
+                            value={values.password}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') submitLogin();
+                            }}
+                            onChange={handleChange('password')}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                    </FormControl>
 
-            <Button variant="contained" color="primary" onClick={submitLogin}>
-                Login
-            </Button>
-            <Button style={{ marginTop: '1em' }} onClick={() => history.push('/register')}>
-                Register
-            </Button>
-            <LinkedInOAuthButton loginComplete={oAuthloginComplete}/>
-        </Container>
+                    <div className={classes.buttonContainer}>
+                        <ResponsiveSubmit
+                            name="Login"
+                            loading={loading}
+                            buttonClass={classes.loginButton}
+                            submit={submitLogin}
+                        />
+                        {/* <Button
+                            variant="contained"
+                            style={{ marginBottom: '1em' }}
+                            color="primary"
+                            className="spaceMe"
+                            onClick={submitLogin}
+                            disabled={loading}
+                        >
+                            Login
+                        </Button> */}
+                        <Button className="spaceMe" onClick={() => history.push('/register')}>
+                            Register
+                        </Button>
+                        <LinkedInOAuthButton className="spaceMe" loginComplete={oAuthloginComplete} />
+                    </div>
+                    {/* </div> */}
+                </Grid>
+            </Container>
+        </div>
     );
 };
 

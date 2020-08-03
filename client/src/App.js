@@ -1,16 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-// import { withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 
 import { GlobalStore } from './components/GlobalStore';
 
 import Registration from './pages/Registration';
 import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute';
-import Home from './pages/Content'; // temp for testing
+import Content from './pages/Content'; // temp for testing
 import Message from './components/Message';
-import Logout from './pages/Logout'
-
+import Logout from './pages/Logout';
+import UserSettings from './pages/UserSettings';
+import Home from './pages/Home';
+import './App.css';
+import Navbar from './components/Navbar';
+import PostAdd from './pages/PostAdd'
+const NavbarWithRouter = withRouter(Navbar);
 // const checkLoggedState = async () => {
 //   if (!localStorage.session) {
 //       return false;
@@ -30,12 +35,20 @@ function App() {
         <GlobalStore>
             <Message />
             <Router>
-                <Route exact path={['/register', '/']} component={Registration} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/logout" component={Logout} />
-                <PrivateRoute exact path="/home">
-                    <Home />
-                </PrivateRoute>
+                <NavbarWithRouter />
+                <div>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/register" component={Registration} />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/logout" component={Logout} />
+                    <PrivateRoute exact path="/home">
+                        <Content />
+                    </PrivateRoute>
+                    <PrivateRoute path="/settings">
+                        <UserSettings />
+                    </PrivateRoute>
+                    <Route exact path='/newpost' component={PostAdd} />
+                </div>
             </Router>
         </GlobalStore>
     );
