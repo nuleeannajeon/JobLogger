@@ -1,0 +1,93 @@
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1fb;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+  }
+    
+  .sidebar a {
+    display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+  }
+     
+  .sidebar .active {
+    background-color: cadetblue;
+    color: white;
+  }
+  
+  .sidebar a:hover:not(.active) {
+    background-color: rgb(211, 211, 211);
+    color: white;
+  }
+    
+  div.content {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
+  }
+  
+  .add-btn {
+    background-color: cadetblue;
+    color: white;
+    border-radius: 2rem;
+    border: none;
+  }
+  
+  .media{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 80%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+  }
+  
+  .media img {
+    width: 30px;
+    height: 30px;
+    border-radius: 3rem;
+  }
+  
+  .box-delete-button, .box-view-button {
+    float: right;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .box-delete-button {
+    background: red;
+  }
+  .box-view-button{
+    background: grey;
+  }
+  
+  @media screen and (max-width: 700px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        bottom: 0;
+      }
+      .sidebar a {
+        display: inline-flex;
+        width: 20%;
+        justify-content: center;
+      }
+      div.content {
+        margin-left: auto;
+      }
+      .overview-link{
+        display: none;
+      }
+  }
