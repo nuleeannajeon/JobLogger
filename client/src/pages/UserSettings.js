@@ -33,10 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
     submitButton: {
         // marginTop: theme.spacing(2),
-        backgroundColor: blue[500],
-        '&:hover': {
-            backgroundColor: blue[700],
-        },
+        backgroundColor: theme.primary,
     },
     title: {
         marginTop: theme.spacing(3),

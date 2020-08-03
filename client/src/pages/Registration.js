@@ -5,29 +5,56 @@ import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 import { useGlobalStore } from '../components/GlobalStore';
 import JobLoggerIcon from '../components/JobLoggerIcon';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import SaveIcon from '@material-ui/icons/Save';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { blue } from '@material-ui/core/colors';
 import API from '../utils/API';
 import processServerReturn from '../utils/processServerReturn';
-import './registration.css';
+// import './registration.css';
 import ResponsiveSubmit from '../components/ResponsiveSubmit';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
+import SchoolIcon from '@material-ui/icons/School';
+import WorkIcon from '@material-ui/icons/Work';
 
 const useStyles = makeStyles((theme) => ({
     saveButton: {
-        margin: theme.spacing(1),
-        backgroundColor: blue[500],
-        '&:hover': {
-            backgroundColor: blue[700],
-        },
-        // margin: theme.spacing(1) + ' auto'
+        // margin: theme.spacing(1),
+        // backgroundColor: theme.palette.primary,
+        // '&:hover': {
+        //     backgroundColor: blue[700],
+        // },
+    },
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    centerMe: {
+        display: 'block',
+        margin: '0 auto',
+    },
+    title: { textAlign: 'center', marginTop: 20, marginBottom: 40 },
+    spaceMe: { marginTop: 20 },
+    input: {
+        marginTop: theme.spacing(2),
+    },
+    bottomSpace: { marginBottom: theme.spacing(2) },
+    responsiveButtonWrapper: {
+        position: 'relative',
+        display: 'inline-block',
+        marginTop: 10,
+        marginLeft: 10,
     },
 }));
 
@@ -37,10 +64,159 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
+const getSteps = () => ['Create your login credentials', 'Add some optional personal information'];
+
 const Registration = (props) => {
+    const classes = useStyles();
     const history = useHistory();
     const [globalStore, dispatch] = useGlobalStore();
-    const classes = useStyles();
+    const [activeStep, setActiveStep] = useState(0);
+    const steps = getSteps();
+
+    const getStepContent = (step) => {
+        switch (step) {
+            case 0:
+                return {
+                    title: 'Step 1',
+                    content: (
+                        <Grid
+                            // style={{ maxWidth: 500 }}
+                            container
+                            direction="column"
+                            justify="space-between"
+                            alignItems="stretch"
+                        >
+                            {/* <InputLabel htmlFor="name">Name</InputLabel> */}
+                            <form noValidate={false} autoComplete="on">
+                                <TextField
+                                    id="name"
+                                    label="Name"
+                                    required
+                                    fullWidth
+                                    error={values.errorName}
+                                    className={classes.input}
+                                    value={values.name}
+                                    onChange={handleChange('name')}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <AccountCircle />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                                <TextField
+                                    id="email"
+                                    label="Email Address"
+                                    required
+                                    fullWidth
+                                    error={values.errorEmail}
+                                    className={classes.input}
+                                    type={values.email}
+                                    value={values.email}
+                                    onChange={handleChange('email')}
+                                    // endAdornment={<InputAdornment position="end"></InputAdornment>}
+                                />
+                                <TextField
+                                    style={{ marginTop: 10, marginBottom: 15 }}
+                                    className={classes.input}
+                                    id="password"
+                                    label="Password"
+                                    fullWidth
+                                    autoComplete="current-password"
+                                    required
+                                    error={values.errorPassword}
+                                    helperText="Password must be at least 8 characters"
+                                    minLength={6}
+                                    type={values.showPassword ? 'text' : 'password'}
+                                    value={values.password}
+                                    onChange={handleChange('password')}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                >
+                                                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            </form>
+                        </Grid>
+                    ),
+                };
+            case 1:
+                return {
+                    title: 'Step 2',
+                    content: (
+                        <Grid
+                            // style={{ maxWidth: 500 }}
+                            container
+                            direction="column"
+                            justify="space-between"
+                            alignItems="stretch"
+                        >
+                            <form noValidate={false} autoComplete="on">
+                                <TextField
+                                    label="Location"
+                                    fullWidth
+                                    // error={values.errorName}
+                                    className={classes.input}
+                                    value={values.location}
+                                    onChange={handleChange('location')}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <PersonPinIcon />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                                <TextField
+                                    label="Your school"
+                                    fullWidth
+                                    // error={values.errorName}
+                                    className={classes.input}
+                                    value={values.school}
+                                    onChange={handleChange('school')}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <SchoolIcon />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                                <TextField
+                                    label="Portfolio Link"
+                                    fullWidth
+                                    // error={values.errorName}
+                                    className={(classes.input, classes.bottomSpace)}
+                                    value={values.portfolioLink}
+                                    onChange={handleChange('portfolioLink')}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <WorkIcon />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            </form>
+                        </Grid>
+                    ),
+                };
+            default:
+                return {
+                    title: 'Error',
+                };
+        }
+    };
+
     const [loading, setLoading] = React.useState(false);
     const [values, setValues] = useState({
         name: '',
@@ -50,7 +226,21 @@ const Registration = (props) => {
         errorPassword: false,
         errorEmail: false,
         errorName: false,
+        errorLocation: false,
+        location: '',
+        school: '',
+        portfolioLink: '',
     });
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+    const handleReset = () => {
+        setActiveStep(0);
+    };
 
     const checkLoggedIn = async () => {
         const loggedInReturn = await API.get('/loginstatus');
@@ -71,7 +261,14 @@ const Registration = (props) => {
     }, []);
 
     const sendRegistrationToServer = async () => {
-        const userData = { name: values.name, email: values.email, password: values.password };
+        const userData = {
+            name: values.name,
+            email: values.email,
+            password: values.password,
+            location: values.location,
+            school: values.school,
+            portfolioLink: values.portfolioLink,
+        };
 
         //validating
         let message;
@@ -93,6 +290,7 @@ const Registration = (props) => {
             message = 'Please enter a name';
         }
         if (message) {
+            setActiveStep(0);
             dispatch({ do: 'setMessage', type: 'error', message });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
@@ -129,113 +327,62 @@ const Registration = (props) => {
         event.preventDefault();
     };
     return (
-        <div className="container">
+        <div className={classes.container}>
             <Container maxWidth="sm">
-                <JobLoggerIcon className="centerMe" />
-                <Typography variant="h4" style={{ textAlign: 'center', marginTop: 40 }} gutterBottom>
+                <JobLoggerIcon className={classes.centerMe} />
+                <Typography variant="h4" className={classes.title} gutterBottom>
                     Register
                 </Typography>
-                <Grid
-                    style={{ maxWidth: 500 }}
-                    container
-                    direction="column"
-                    justify="space-between"
-                    alignItems="stretch"
-                >
-                    {/* <InputLabel htmlFor="name">Name</InputLabel> */}
-                    <form noValidate={false} autoComplete="on">
-                        <TextField
-                            style={{ marginTop: 10 }}
-                            id="name"
-                            label="Name"
-                            required
-                            error={values.errorName}
-                            className="inputField"
-                            value={values.name}
-                            onChange={handleChange('name')}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <AccountCircle />
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                        <TextField
-                            style={{ marginTop: 10 }}
-                            id="email"
-                            label="Email Address"
-                            required
-                            error={values.errorEmail}
-                            className="inputField"
-                            type={values.email}
-                            value={values.email}
-                            onChange={handleChange('email')}
-                            // endAdornment={<InputAdornment position="end"></InputAdornment>}
-                        />
-                        <TextField
-                            style={{ marginTop: 10, marginBottom: 15 }}
-                            id="password"
-                            label="Password"
-                            autoComplete="current-password"
-                            required
-                            error={values.errorPassword}
-                            helperText="Password must be at least 8 characters"
-                            minLength={6}
-                            className="inputField"
-                            type={values.showPassword ? 'text' : 'password'}
-                            value={values.password}
-                            onChange={handleChange('password')}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
-                                        >
-                                            {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
-                            }}
-                        />
-                        {/* <div className={classes.wrapper}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                className={classes.saveButton}
-                                startIcon={<SaveIcon />}
-                                onClick={submitRegistration}
-                                disabled={loading}
-                            >
-                                Submit
-                            </Button>
-                            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                        </div> */}
-                        <ResponsiveSubmit
-                            buttonClass={classes.saveButton}
-                            submit={submitRegistration}
-                            loading={loading}
-                            name="Submit"
-                        />
+                <Button className={classes.spaceMe} onClick={() => history.push('/login')}>
+                    I'm already registered
+                </Button>
+                <Stepper activeStep={activeStep} orientation="vertical">
+                    {steps.map((label, index) => (
+                        <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                            <StepContent>
+                                <div>{getStepContent(index).content}</div>
+                                <div>
+                                    <Button
+                                        disabled={activeStep === 0}
+                                        onClick={handleBack}
+                                        // className={classes.button}
+                                    >
+                                        Back
+                                    </Button>
 
-                        {/* <Button
-                            variant="contained"
-                            className={classes.saveButton}
-                            className="spaceMe"
-                            color="primary"
-                            style={{ marginBottom: '1em', width: '100%' }}
-                            onClick={submitRegistration}
-                        >
-                            Submit
-                        </Button> */}
-                    </form>
-                    <Button className="spaceMe" onClick={() => history.push('/login')}>
-                        I'm already registered
-                    </Button>
-                </Grid>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleNext}
+                                        // className={classes.button}
+                                    >
+                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                    </Button>
+                                </div>
+                            </StepContent>
+                        </Step>
+                    ))}
+                </Stepper>
+                {activeStep === steps.length && (
+                    <>
+                        <Typography>You're ready to start logging those jobs!</Typography>
+                        <div className={classes.finalButtonContainer}>
+                            <Button onClick={handleReset} className={classes.button}>
+                                Reset
+                            </Button>
+                            <ResponsiveSubmit
+                                buttonClass={classes.saveButton}
+                                submit={submitRegistration}
+                                loading={loading}
+                                size="normal"
+                                colour="secondary"
+                                wrapperClass={classes.responsiveButtonWrapper}
+                                name="Submit"
+                            />
+                        </div>
+                    </>
+                )}
             </Container>
         </div>
     );

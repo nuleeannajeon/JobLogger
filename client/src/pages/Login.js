@@ -9,7 +9,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
-import './login.css';
+// import './login.css';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
 import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js';
@@ -24,10 +24,10 @@ import { blue } from '@material-ui/core/colors';
 const useStyles = makeStyles((theme) => ({
     loginButton: {
         margin: theme.spacing(1),
-        backgroundColor: blue[500],
-        '&:hover': {
-            backgroundColor: blue[700],
-        },
+        backgroundColor: theme.primary,
+        // '&:hover': {
+        //     backgroundColor: blue[700],
+        // },
     },
     buttonContainer: {
         display: 'flex',
@@ -37,11 +37,27 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     inputContainer: {
-        maxWidth: 500,
+        // maxWidth: 500,
         '& > *': {
             marginTop: theme.spacing(2),
         },
     },
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    centerMe: {
+        display: 'block',
+        margin: '0 auto',
+    },
+    title: { textAlign: 'center', marginTop: 20, marginBottom: 40 },
+    spaceMe: { marginTop: 20 },
+    input: {
+        marginTop: theme.spacing(2)
+    }
 }));
 
 const saveSession = (sessionID) => {
@@ -157,10 +173,10 @@ const Login = () => {
         event.preventDefault();
     };
     return (
-        <div className="container">
+        <div className={classes.container}>
             <Container maxWidth="sm">
-                <JobLoggerIcon className="centerMe" />
-                <Typography variant="h4" style={{ textAlign: 'center', marginTop: 40 }} gutterBottom>
+                <JobLoggerIcon className={classes.centerMe} />
+                <Typography variant="h4" className={classes.title} gutterBottom>
                     Sign In
                 </Typography>
                 <Grid
@@ -170,11 +186,11 @@ const Login = () => {
                     alignItems="stretch"
                     className={classes.inputContainer}
                 >
-                    {/* <div className="formContainer"> */}
                     <FormControl>
                         <InputLabel htmlFor="email">Email Address</InputLabel>
                         <Input
                             id="email"
+                            fullWidth
                             autoComplete="username"
                             // className="spaceMe inputField"
                             type={values.email}

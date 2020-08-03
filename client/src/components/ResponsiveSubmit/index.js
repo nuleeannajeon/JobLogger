@@ -38,11 +38,11 @@ const ResponsiveSubmit = (props) => {
     const classes = useStyles();
 
     return (
-        <div className={classes.wrapper}>
+        <div className={props.wrapperClass || classes.wrapper}>
             <Button
                 variant="contained"
-                color="primary"
-                size="large"
+                color={props.colour || 'primary'}
+                size={props.size || "large"}
                 className={props.buttonClass || classes.saveButton}
                 startIcon={props.icon}
                 onClick={props.submit}

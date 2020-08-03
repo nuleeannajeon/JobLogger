@@ -97,12 +97,15 @@ module.exports = (app, baseURL, createSession) => {
     // local user creation
     app.post('/register', async ({ body }, res) => {
         //request needs username and password coming in to register
-        const { email, password, name } = body;
+        const { email, password, name, location, school, portfolioLink } = body;
         const user = {
             email,
             password,
             name,
             type: 'local',
+            location,
+            school,
+            portfolioLink,
         };
         try {
             const sessionData = await createSession(user);
