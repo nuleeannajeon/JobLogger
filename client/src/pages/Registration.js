@@ -16,7 +16,6 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import API from '../utils/API';
 import processServerReturn from '../utils/processServerReturn';
-// import './registration.css';
 import ResponsiveSubmit from '../components/ResponsiveSubmit';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
