@@ -38,6 +38,10 @@ function Posting(){
     const [values, setValues] = React.useState({
         amount: '',
         companyName: '',
+        position: '',
+        location: '',
+        postingLink: '',
+        note: ''
     });
 
     const handleDateChange = (date) => {
@@ -58,9 +62,9 @@ function Posting(){
         <Container maxWidth="sm">
             <h3 style={{textAlign: "center"}}>New Posting</h3>
             <form className={classes.root} noValidate autoComplete="off">
-                <TextField className='postingInput'id="outlined-basic" onChange={handleChange('companyName')} value={values.companyName} label="Company Name"/>
-                <TextField className='postingInput'id="outlined-basic" label="Position" />
-                <TextField className='postingInput'id="outlined-basic" label="Location" />
+                <TextField className='postingInput' onChange={handleChange('companyName')} id="outlined-basic" label="Company Name"/>
+                <TextField className='postingInput' onChange={handleChange('companyName')} id="outlined-basic" label="Position" />
+                <TextField className='postingInput' onChange={handleChange('companyName')} id="outlined-basic" label="Location" />
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <Grid>
                     <KeyboardDatePicker
@@ -88,8 +92,8 @@ function Posting(){
                     </FormControl>
                 </Grid>
                 </MuiPickersUtilsProvider>
-                <TextField className='postingInput'id="outlined-basic" label="Posting Link" /> 
-                <TextField className='postingInput'id="outlined-multiline-static" multiline label="Notes" rows={8} variant="outlined"/>
+                <TextField className='postingInput' onChange={handleChange('companyName')} id="outlined-basic" label="Posting Link" /> 
+                <TextField className='postingInput' onChange={handleChange('companyName')} id="outlined-multiline-static" multiline label="Notes" rows={8} variant="outlined"/>
             </form>
             <Button className={classes.button} variant="contained">
                 Save

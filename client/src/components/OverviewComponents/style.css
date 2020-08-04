@@ -31,7 +31,9 @@
     height: 1000px;
   }
   
-  .add-btn {
+  .add-new-btn {
+    margin-left: 10px;
+    margin-bottom: 5px;
     background-color: cadetblue;
     color: white;
     border-radius: 2rem;
@@ -39,13 +41,14 @@
   }
   
   .media{
-    border: 1px solid black;
+    border: 1px solid rgb(192, 192, 192);
     border-radius: 10px;
     width: 80%;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 5px;
+    margin-bottom: 10px;
   }
   
   .media img {
@@ -72,6 +75,28 @@
     background: grey;
   }
   
+  /* MEDIA BACKGROUND COLOUR */
+  #red{
+    background: #FF8888;
+  }
+  #yellow{
+    background: #FFFA93;
+  }
+  #green{
+    background: #A9EEAA;
+  }
+  #blue{
+    background-color: #A9D2F3;
+  }
+  #purple {
+    background: #D2B7EF;
+  }
+  #none{
+    background: default;
+    color: default;
+  }
+
+  /* 5363A5 */
   @media screen and (max-width: 700px) {
       .sidebar {
         width: 100%;
@@ -86,6 +111,9 @@
       }
       div.content {
         margin-left: auto;
+      }
+      .media {
+        width: 100%;
       }
       .overview-link{
         display: none;
