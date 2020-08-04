@@ -15,7 +15,7 @@ import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import Overview from './pages/Overview';
 import MyJourney from './pages/MyJourney'
-
+import Testing from './pages/Testing'
 const NavbarWithRouter = withRouter(Navbar);
 
 const theme = createMuiTheme({
@@ -57,6 +57,7 @@ function App() {
                         <Route exact path="/register" component={Registration} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/logout" component={Logout} />
+                        <Route exact path="/testing" component={Testing} />
                         {/* <Route exact path="/overview" component={Overview} /> */}
                         {/* <PrivateRoute exact path="/home">
                             <Content />
