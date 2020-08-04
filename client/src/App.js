@@ -2,22 +2,20 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
-// import { purple, green } from '@material-ui/core/colors';
-
 import { GlobalStore } from './components/GlobalStore';
 
+import './App.css';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute';
-// import Content from './pages/Content'; // temp for testing
 import Message from './components/Message';
 import Logout from './pages/Logout';
 import UserSettings from './pages/UserSettings';
 import Home from './pages/Home';
-import './App.css';
 import Navbar from './components/Navbar';
-// import PostAdd from './pages/PostAdd';
 import Overview from './pages/Overview';
+import MyJourney from './pages/MyJourney'
+
 const NavbarWithRouter = withRouter(Navbar);
 
 const theme = createMuiTheme({
@@ -69,6 +67,10 @@ function App() {
                         <PrivateRoute path="/settings">
                             <UserSettings />
                         </PrivateRoute>
+                        {/* <PrivateRoute exact path="/myjourney">
+                            <MyJourney />
+                        </PrivateRoute> */}
+                        <Route exact path="/myjourney" component={MyJourney} />
                         {/* <Route exact path="/newpost" component={PostAdd} /> */}
                     </div>
                 </Router>

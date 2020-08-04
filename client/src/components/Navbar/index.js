@@ -50,8 +50,8 @@ function Navbar() {
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" href="/">
-                            The Journey
+                        <Link className="nav-link" to="/myjourney">
+                            My Journey
                         </Link>
                     </li>
                 </ul>

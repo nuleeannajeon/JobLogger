@@ -12,6 +12,8 @@ const defaultGlobalStore = {
     location: '',
     posts: [],
     portfolioLink: '',
+    totalPosts: 0,
+    createdAt: '',
 };
 
 const GlobalData = React.createContext();
@@ -27,7 +29,7 @@ function dispatcher(state, action) {
     let newState = { ...state };
     switch (action.do) {
         case 'setUserData':
-            ['name', 'school', 'location', 'posts', 'portfolioLink'].forEach((item) => {
+            ['name', 'school', 'location', 'posts', 'portfolioLink', 'totalPosts', 'createdAt'].forEach((item) => {
                 if (action[item]) {
                     newState[item] = action[item];
                 }
