@@ -104,6 +104,8 @@ const ViewPost = (props) => {
         heardBackDate: heardBackDate || new Date(),
 
         interviewState,
+
+        offerStatus: ['wishlist', 'applied', 'interview'].includes(postingType) ? '' : postingType,
     });
 
     const handlePostTypeChange = (event) => {
@@ -226,8 +228,8 @@ const ViewPost = (props) => {
                                 <FormControl component="fieldset">
                                     {/* <FormLabel component="legend">Interview State</FormLabel> */}
                                     <RadioGroup
-                                        aria-label="gender"
-                                        name="gender1"
+                                        aria-label="Interview status"
+                                        name="interviewStatus"
                                         value={values.interviewState}
                                         onChange={handleTextChange('interviewState')}
                                     >
@@ -260,6 +262,26 @@ const ViewPost = (props) => {
                                 )}
                             </Grid>
                         </Grid>
+                    </>
+                ) : (
+                    ''
+                )}
+                {(values.heardBack && (postType === 'interview' || postType === 'offer' || postType === 'rejected')) ? (
+                    <>
+                        <Typography variant="h5">Status of application</Typography>
+
+                        <FormControl component="fieldset">
+                            {/* <FormLabel component="legend">Interview State</FormLabel> */}
+                            <RadioGroup
+                                aria-label="offer status"
+                                name="offerStatus"
+                                value={values.offerStatus}
+                                onChange={handleTextChange('offerStatus')}
+                            >
+                                <FormControlLabel value="offer" control={<Radio />} label="Offered a job" />
+                                <FormControlLabel value="rejected" control={<Radio />} label="Rejected" />
+                            </RadioGroup>
+                        </FormControl>
                     </>
                 ) : (
                     ''
