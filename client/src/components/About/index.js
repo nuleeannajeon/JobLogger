@@ -1,6 +1,6 @@
 import React from 'react';
 import Anna from './asset/AnnaSelfie.jpg';
-import James from './asset/JamestheBetter.jpg';
+import James from './asset/James.jpg';
 import Haley from './asset/Haley.jpeg';
 import './styles.css';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
