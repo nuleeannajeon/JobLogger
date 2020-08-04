@@ -125,7 +125,10 @@ const main = async () => {
     users.forEach(async (user) => {
         testingPosts.forEach(async (post) => {
             let newPost = await db.Posts.create(post);
-            await db.UserData.findByIdAndUpdate({ _id: user._id }, { $push: { posts: newPost._id } });
+            await db.UserData.findByIdAndUpdate(
+                { _id: user._id },
+                { $push: { posts: newPost._id }, $inc: { totalPosts: 1 } }
+            );
         });
     });
 };

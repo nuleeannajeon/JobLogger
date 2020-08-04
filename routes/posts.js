@@ -43,7 +43,10 @@ module.exports = (router) => {
             }
 
             const newPost = await db.Posts.create(body);
-            await db.UserData.findByIdAndUpdate({ _id: user.userData }, { $push: { posts: newPost._id } });
+            await db.UserData.findByIdAndUpdate(
+                { _id: user.userData },
+                { $push: { posts: newPost._id }, $inc: { totalPosts: 1 } }
+            );
 
             res.status(200).send({ message: 'Post successfully added', messageData: newPost });
         } catch (err) {

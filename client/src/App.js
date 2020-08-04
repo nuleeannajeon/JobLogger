@@ -67,9 +67,10 @@ function App() {
                         <PrivateRoute path="/settings">
                             <UserSettings />
                         </PrivateRoute>
-                        <PrivateRoute exact path="/myjourney">
+                        {/* <PrivateRoute exact path="/myjourney">
                             <MyJourney />
-                        </PrivateRoute>
+                        </PrivateRoute> */}
+                        <Route exact path="/myjourney" component={MyJourney} />
                         {/* <Route exact path="/newpost" component={PostAdd} /> */}
                     </div>
                 </Router>
