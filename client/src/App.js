@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+
 import { GlobalStore } from './components/GlobalStore';
 
 import './App.css';
@@ -14,8 +16,9 @@ import UserSettings from './pages/UserSettings';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import Overview from './pages/Overview';
-import MyJourney from './pages/MyJourney'
-import Testing from './pages/Testing'
+import MyJourney from './pages/MyJourney';
+import Testing from './pages/Testing';
+
 const NavbarWithRouter = withRouter(Navbar);
 
 const theme = createMuiTheme({
@@ -45,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-    const classes = useStyles()
+    const classes = useStyles();
     return (
         <ThemeProvider theme={theme}>
             <GlobalStore>
