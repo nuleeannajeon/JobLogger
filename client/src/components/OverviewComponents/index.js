@@ -1,19 +1,37 @@
 import React from "react";
 import './style.css';
-// import { Link } from "react-router-dom";
 import Posting from '../Posting/index';
-// import API from '../../utils/API'
 // import { useGlobalStore } from '../GlobalStore';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import {
+    BrowserRouter as Router,
+    useParams
+} from "react-router-dom";
 
 function Wishlists(props){
-    console.log( props.data );
-    const appliedList = props.data;
+    let { topicId } = useParams();
+    
+    let dataListByType
+    if (topicId === 'wishlists'){
+        dataListByType = props.wishlists
+    }
+    else if (topicId === 'applied'){
+        dataListByType = props.applied
+    }
+    else if (topicId === 'interview'){
+        dataListByType = props.interview
+    }
+    else if (topicId === 'offer'){
+        dataListByType = props.offer
+    }
+    else if (topicId === 'reject'){
+        dataListByType = props.reject
+    }
 
     return(
         <div className="content">
-            <h2 className="overview-title">Wishlists
+            <h2 className="overview-title">{topicId.charAt(0).toUpperCase() + topicId.slice(1)}
             <button 
                 className="add-new-btn" 
                 data-toggle="modal" 
@@ -39,7 +57,7 @@ function Wishlists(props){
                 </div>
             </div> */}
 
-            {appliedList ? appliedList.map(
+            {dataListByType ? dataListByType.map(
                 posting => (
                     <div className="media" key={posting._id}>
                         <div className="media-body">
@@ -50,12 +68,12 @@ function Wishlists(props){
                             <div style={{paddingTop: "15px"}}>
                                 <h6 style={{display: "inline-block"}}>{posting.title ? posting.title : "No defined Position"}</h6>
                                 <p>{posting.location ? posting.location : 'No Location available'}, 
-                                ON ${posting.salary ? posting.salary : '....'}/monthly</p>
+                                ${posting.salary ? posting.salary : '....'}/monthly</p>
                             </div>
                         </div>
                     </div>
                 )
-            ) : "You have no applied jobs! Press add to enter them to get started!"}
+            ) : "You have no job data added in this section! Press add to enter them to get started!"}
         </div>
     );
 }

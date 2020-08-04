@@ -48,6 +48,7 @@
     padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 5px;
+    margin-bottom: 10px;
   }
   
   .media img {
@@ -88,6 +89,9 @@
       }
       div.content {
         margin-left: auto;
+      }
+      .media {
+        width: 100%;
       }
       .overview-link{
         display: none;

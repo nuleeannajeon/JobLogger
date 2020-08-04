@@ -1,23 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import Wishlists from "../components/Wishlists"
-import Applied from "../components/Applied"
-import Interview from "../components/Interview"
-import Offer from "../components/Offer"
-import Reject from "../components/Reject"
+import OverviewComponents from "../components/OverviewComponents"
 import API from '../utils/API'
 // import Posting from '../components/Posting';
 import { useGlobalStore } from '../components/GlobalStore';
 import {
     BrowserRouter as Router,
+    Switch,
     Route,
     Link,
+    NavLink,
+    useParams,
     useRouteMatch
   } from "react-router-dom";
-// import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
-
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -86,13 +83,14 @@ function Overview(){
     return(
         <div style={{marginTop: '4rem'}}>
             <div className="sidebar">
-                <Link to={`${url}/wishlists`} className={window.location.pathname === "/overview/wishlists" ? "active" : ""}><i className="fa fa-fw fa-star"></i>  <span className="overview-link">Wishlists</span></Link>
-                <Link to={`${url}/applied`} className={window.location.pathname === "/overview/applied" ? "active" : ""}><i className="fa fa-fw fa-file"></i>  <span className="overview-link">Applied</span></Link>
-                <Link to={`${url}/interview`} className={window.location.pathname === "/overview/interview" ? "active" : ""}><i className="fa fa-fw fa-user-clock"></i>  <span className="overview-link">Interview</span></Link>
-                <Link to={`${url}/offer`} className={window.location.pathname === "/overview/offer" ? "active" : ""}><i className="fa fa-fw fa-thumbs-up"></i>  <span className="overview-link">Offer</span></Link>
-                <Link to={`${url}/reject`} className={window.location.pathname === "/overview/reject" ? "active" : ""}><i className="fa fa-fw fa-thumbs-down"></i>  <span className="overview-link">Reject</span></Link>
+                <NavLink to={`${url}/wishlists`} activeClassName="active"><i className="fa fa-fw fa-star"></i>  <span className="overview-link">Wishlists</span></NavLink>
+                <NavLink to={`${url}/applied`} activeClassName="active"><i className="fa fa-fw fa-file"></i>  <span className="overview-link">Applied</span></NavLink>
+                <NavLink to={`${url}/interview`} activeClassName="active"><i className="fa fa-fw fa-user-clock"></i>  <span className="overview-link">Interview</span></NavLink>
+                <NavLink to={`${url}/offer`} activeClassName="active"><i className="fa fa-fw fa-thumbs-up"></i>  <span className="overview-link">Offer</span></NavLink>
+                <NavLink to={`${url}/reject`} activeClassName="active"><i className="fa fa-fw fa-thumbs-down"></i>  <span className="overview-link">Reject</span></NavLink>
             </div>
-            
+
+            <Switch>
                 <Route exact path={path}>
                     <div className="content">
                     <h3 className="overview-heading">Hi welcome to overview page. </h3>
@@ -101,21 +99,15 @@ function Overview(){
                     and I added top right corner for addbutton :p Just to make it visible for all pages
                     </div>
                 </Route>
-                <Route path={`${path}/wishlists`}>
-                    <Wishlists data={wishlists} />
+                <Route path={`${path}/:topicId`}>
+                    <OverviewComponents 
+                        wishlists={wishlists} 
+                        applied={applied} 
+                        interview={interview} 
+                        offer={offer} 
+                        reject={reject} />
                 </Route>
-                <Route path={`${path}/applied`}>
-                    <Applied data={applied} />
-                </Route>
-                <Route path={`${path}/interview`}>
-                    <Interview data={interview} />
-                </Route>
-                <Route path={`${path}/offer`}>
-                    <Offer data={offer} />
-                </Route>
-                <Route path={`${path}/reject`}>
-                    <Reject data={reject} />
-                </Route>
+            </Switch>
 
                 <Fab color="primary" className={classes.addButton} aria-label="add post">
                     <AddIcon />
