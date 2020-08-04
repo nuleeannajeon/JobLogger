@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Posting from '../Posting/index';
 import API from '../../utils/API'
 import { useGlobalStore } from '../GlobalStore';
+import Wishlist from "../Wishlists";
 
 function OverviewContainer(){ 
     const [globalStore, dispatch] = useGlobalStore();
@@ -17,17 +18,17 @@ function OverviewContainer(){
 
 
     const getUserData = async () => {
+
         const userPostsData = await API.getUserPosts()
         console.log("getUserData -> userPostsData", userPostsData)
-        // const userPosts = userPostsData.message
 
+        const userPosts = userPostsData.message
+        setUserPosts(userPosts)
 
-        //filter for wishlist
-        // setWishlist(userPosts.filter(post => post.postingType === 'wishlist'))
+        const filteredWishlist = userPosts.filter(post => post.postingType==='wishlist')
+        console.log( filteredWishlist )
+        setWishlist(filteredWishlist)
 
-
-
-        // setUserPosts(userPostsData.message)
     }
 
 
@@ -48,8 +49,9 @@ function OverviewContainer(){
             </div>
             <div className="content ">
                 <h2>Wishlists <button className="add-btn" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i></button></h2>
-                {/* {wislist.map(posting => <Wishlist {...posting} />)}  <--- the spread operator will assign each value to a prop, so dateAdded would be in props.dateAdded in the component */}
-                {/* {userPosts.map(post => post.company)} */}
+                {wishlist.map(posting => posting.title) }
+                {wishlist.map(posting => <Wishlist {...posting} />)} 
+                 {/* the spread operator will assign each value to a prop, so dateAdded would be in props.dateAdded in the component */}
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">

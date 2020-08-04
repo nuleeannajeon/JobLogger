@@ -63,7 +63,7 @@ function App() {
                         <PrivateRoute exact path="/home">
                             <Content />
                         </PrivateRoute>
-                        <PrivateRoute exact path="/overview">
+                        <PrivateRoute path="/overview">
                             <Overview />
                         </PrivateRoute>
                         <PrivateRoute path="/settings">

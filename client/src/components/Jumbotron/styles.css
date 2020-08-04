@@ -10,7 +10,7 @@
     margin-bottom: 0;
 }
 
-.container {
+.jumbo-container {
     padding-top: 8vh;
 }
 
@@ -19,12 +19,12 @@
     color: black;
 }
 
-.lead {
+.jumbo-description {
     color: cadetblue;
     font-weight: bold;
 }
 
-.btn {
+.signup-btn {
     border: 1px solid cadetblue;
     color: cadetblue;
     border-radius: 2rem;
@@ -34,10 +34,10 @@
 }
 
 @media screen and (max-width: 720px) {
-    .lead {
+    .jumbo-description {
         font-size: 15px;
     }
-    .container {
+    .jumbo-container {
         padding-top: 15vh;
     }
 }
