@@ -35,14 +35,15 @@ const postsSchema = new Schema({
     },
     appliedDate: {
         type: Date,
-        default: Date.now,
+        // default: Date.now,
     },
     heardBack: {
         type: Boolean,
+        default: false
     },
     heardBackDate: {
         type: Date,
-        default: Date.now,
+        // default: Date.now,
     },
     interviewState: {
         type: String,
