@@ -75,7 +75,6 @@ function Overview(){
 
     }
 
-
     useEffect(()=>{
         getUserData()
     },[])
@@ -105,7 +104,9 @@ function Overview(){
                         applied={applied} 
                         interview={interview} 
                         offer={offer} 
-                        reject={reject} />
+                        reject={reject}
+                        rerender={getUserData}
+                        />
                 </Route>
             </Switch>
 
