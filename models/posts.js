@@ -52,7 +52,7 @@ const postsSchema = new Schema({
     },
     interviewState: {
         type: String,
-        enum: ['No Interview', 'Phone Interview', 'Onsite Interview']
+        enum: ['No Interview', 'Phone Interview', 'Onsite Interview', 'Email Interview']
         // default: this.hearBack=true
     },
     interviewNote: {
