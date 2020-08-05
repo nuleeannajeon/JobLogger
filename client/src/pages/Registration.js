@@ -57,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const saveSession = (sessionID) => {
+    localStorage.session = sessionID;
+};
+
 function validateEmail(email) {
     //eslint-disable-next-line
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -297,7 +301,13 @@ const Registration = (props) => {
         const serverReturn = await API.post('/register', userData);
         // console.log('submitRegistration -> serverReturn', serverReturn);
 
+        if (serverReturn.session && !serverReturn.error) {
+            saveSession(serverReturn.session);
+        }
+
+
         processServerReturn(serverReturn, dispatch);
+        console.log("sendRegistrationToServer -> serverReturn", serverReturn)
         return !serverReturn.error;
     };
 
@@ -305,11 +315,15 @@ const Registration = (props) => {
         event.preventDefault();
         setLoading(true);
         const success = await sendRegistrationToServer();
+
         let timer = setTimeout(() => {
             setLoading(false);
             clearTimeout(timer);
         }, 500);
-        if (success) setTimeout(() => history.push('/login'), 2000);
+        if (success) {
+            dispatch({ do: 'login' });
+            setTimeout(() => history.push('/overview'), 2000);
+        }
     };
 
     const handleChange = (prop) => (event) => {
