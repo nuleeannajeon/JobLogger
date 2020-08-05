@@ -19,6 +19,7 @@ import Overview from './pages/Overview';
 import MyJourney from './pages/MyJourney';
 import Testing from './pages/Testing';
 import UserEntry from './pages/Userentry'
+import Reminders from './pages/Reminders'
 import Search from './pages/Search'
 
 const NavbarWithRouter = withRouter(Navbar);
@@ -71,14 +72,17 @@ function App() {
                         <PrivateRoute path="/overview">
                             <Overview />
                         </PrivateRoute>
-                        <PrivateRoute path="/search">
+                        {/* <PrivateRoute path="/search">
                             <Search />
-                        </PrivateRoute>
+                        </PrivateRoute> */}
                         <PrivateRoute path="/settings">
                             <UserSettings />
                         </PrivateRoute>
                         <PrivateRoute exact path="/myjourney">
                             <MyJourney />
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/reminders">
+                            <Reminders />
                         </PrivateRoute>
                         {/* <Route exact path="/myjourney" component={MyJourney} /> */}
                         {/* <Route exact path="/newpost" component={PostAdd} /> */}

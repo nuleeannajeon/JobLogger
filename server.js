@@ -17,7 +17,7 @@ const orm = require('./auth_orm');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const baseURL = process.env.NODE_ENV === 'production' ? 'http://joblogger-log.herokuapp.com' : 'http://localhost:3001';
+const baseURL = process.env.NODE_ENV === 'production' ? 'https://joblogger-log.herokuapp.com' : 'http://localhost:3001';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/joblogger';
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });

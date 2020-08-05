@@ -8,7 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import NewPostModal from '../components/Modal/NewPostModal.js';
-
+import ReminderMessage from '../components/ReminderMessage'
 const useStyles = makeStyles((theme) => ({
     addButton: {
         [theme.breakpoints.down('xs')]: {
@@ -70,6 +70,7 @@ function Overview() {
 
     return (
         <div style={{ marginTop: '4rem', borderTop: '1px solid #f1f1f1fb' }}>
+            <ReminderMessage />
             <div className="sidebar">
                 <NavLink to={`${url}/wishlists`} activeClassName="active">
                     <i className="fa fa-fw fa-star"></i> <span className="overview-link">Wishlists</span>

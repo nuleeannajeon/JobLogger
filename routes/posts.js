@@ -85,6 +85,39 @@ module.exports = (router) => {
         }
     });
 
+    router.put('/api/postreminders/:postId', secured, async ({ headers, body, params }, res) => {
+        try {
+            const { session } = headers;
+            const { postId } = params;
+            const user = await db.UserLogin.findOne({ session });
+
+            if (!user) {
+                console.log("This shouldn't happen, but an authenticated user has no data?");
+                res.status(400).send({ error: 'No user found' });
+                return;
+            }
+
+            //checking this post belongs to this user just in case
+            const userPosts = await db.UserData.findById({ _id: user.userData }).then((res) => res.posts);
+
+            if (!userPosts.includes(postId)) {
+                console.log('A request to edit a post not belonging to present user was made');
+                res.status(403).send({ error: 'Request made on post not belonging to user' });
+                return;
+            }
+
+            if (body.reminder === 'unset'){
+                await db.Posts.findByIdAndUpdate({ _id: postId }, {$unset: {reminder: ''}}, { new: true });
+            }
+
+
+            res.status(200).send({ message: 'Successfully updated' });
+        } catch (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Something went wrong with the server' });
+        }
+    });
+
     router.delete('/api/posts/:postId', secured, async ({ headers, params }, res) => {
         try {
             const { session } = headers;
