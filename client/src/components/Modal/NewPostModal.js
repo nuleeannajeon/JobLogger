@@ -28,7 +28,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { useGlobalStore } from '../GlobalStore';
 import API from '../../utils/API';
 import processServerReturn from '../../utils/processServerReturn';
-import ResponsiveSubmit from '../ResponsiveSubmit'
+import ResponsiveSubmit from '../ResponsiveSubmit';
+import Input from '@material-ui/core/Input';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,27 +53,29 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function SimpleModal() {
+export default function SimpleModal(props) {
   const [globalStore, dispatch] = useGlobalStore();
   const [loading, setLoading] = useState(false);
 
   const [values, setValues] = React.useState({
-    color: color || '',
-    company: company,
-    postingType: postingType,
-    title : title || '',
-    location : location || '',
-    salary: salary || '',
-    notes : notes || '',
-    postLink : postLink || '',
-    applied: applied || false,
-    appliedDate: appliedDate || '',
-    heardBack: heardBack || false,
-    heardBackDate: heardBackDate || '',
-    interviewState: interviewState || '',
-    interviewNote: interviewNote || '',
-    companyContact: companyContact || '',
+    color: '',
+    company: '',
+    postingType: '',
+    title : '',
+    location : '',
+    salary: '',
+    notes : '',
+    postLink : '',
+    applied: false,
+    appliedDate: '',
+    heardBack: false,
+    heardBackDate: '',
+    interviewState: '',
+    interviewNote: '',
+    companyContact: '',
   });
+
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState('paper');
@@ -106,6 +109,23 @@ export default function SimpleModal() {
     if (success){
       setOpen(false)
       props.rerender()
+      setValues({...values,
+        color: '',
+        company: '',
+        postingType: '',
+        title : '',
+        location : '',
+        salary: '',
+        notes : '',
+        postLink : '',
+        applied: false,
+        appliedDate: '',
+        heardBack: false,
+        heardBackDate: '',
+        interviewState: '',
+        interviewNote: '',
+        companyContact: '',
+      })
     }
   }
 
@@ -115,45 +135,58 @@ export default function SimpleModal() {
 
     //company can't be empty
     if (values.company === ''){
-      dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty' });
+      dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty.' });
       setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
       return
     }
 
     //title can't be empty
     if (values.title === ''){
-      dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty' });
+      dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty.' });
+      setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+      return
+    }
+
+    if (!values.postingType){
+      dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
       setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
       return
     }
 
     //postLink has to be a valid URL
     // TODO add in regex to check if valid URL string
-    if(false){
-      dispatch({ do: 'setMessage', type: 'error', message: 'The posting link is not a valid URL' });
-      setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-      return
-    }
+    // if (values.postLink){
+    //   if (values.postLink.substring(0,4) != 'http') {
+    //     dispatch({ do: 'setMessage', type: 'error', message: 'The posting link is not a valid URL' });
+    //     setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+    //     return
+    //   }
+    // }
 
     //Salary must be a number
+    if (values.salary){
+      if (isNaN(values.salary)){
+        dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a valid number for your salary.' });
+        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+        return
+      }
+    }
 
     //removing any empty fields from the put statement
     let newBody = values
-    Object.keys(newBody).forEach((key) => {
-      if (!newBody[key]){
-        delete newBody[key]
-      }
+      Object.keys(newBody).forEach((key) => {
+        if (!newBody[key]){
+          delete newBody[key]
+        }
     })
     
-    const serverResponse = await API.put(`/api/posts/${_id}`, values)
+    const serverResponse = await API.post('/api/posts/', values)
 
     processServerReturn(serverResponse, dispatch)
 
     return !serverResponse.error
-    
-
   }
-  
+
   const body = (
     <Grid container direction='column' className={classes.root}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -207,11 +240,12 @@ export default function SimpleModal() {
                         id: 'PostingType',
                     }}
                     >
-                    <option value='wishlist'>Wishlists</option>
+                    <option value=''></option>
+                    <option value='wishlists'>Wishlists</option>
                     <option value='applied'>Applied</option>
                     <option value='interview'>Interview</option>
                     <option value='offer'>Offer</option>
-                    <option value='rejected'>Reject</option>
+                    <option value='reject'>Reject</option>
                     </Select>
                 </FormControl>
             </Grid>
@@ -226,7 +260,7 @@ export default function SimpleModal() {
             </Grid>
             <Grid item md={4} xs={12}>
                 <FormControl className={classes.changeWidth}>
-                    <InputLabel htmlFor="salary">Salary</InputLabel>
+                    <InputLabel htmlFor="salary">Monthly Average Salary</InputLabel>
                     <Input
                         id="salary"
                         value={values.salary}
@@ -334,8 +368,8 @@ export default function SimpleModal() {
 
   return (
     <div>
-        <button className="box-view-button" type="button" onClick={handleOpen}>
-            View/Edit
+        <button className="create-button" type="button" onClick={handleOpen}>
+          Create New Post
         </button>
 
         <Dialog
@@ -352,7 +386,7 @@ export default function SimpleModal() {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="secondary">
-                    Cancel
+                    Close
                 </Button>
                 <ResponsiveSubmit 
                     submit={handleSubmit} 

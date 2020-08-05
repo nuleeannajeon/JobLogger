@@ -37,12 +37,7 @@ function Wishlists(props){
     return(
         <div className="content">
             <h2 className="overview-title">{topicId.charAt(0).toUpperCase() + topicId.slice(1)}
-            <button 
-                className="add-new-btn" 
-                data-toggle="modal" 
-                data-target="#exampleModal">
-                <i className="fas fa-plus"></i>
-            </button>
+                {/* <NewPostModal rerender={props.rerender}/> */}
             </h2>
              
             {dataListByType ? dataListByType.map(

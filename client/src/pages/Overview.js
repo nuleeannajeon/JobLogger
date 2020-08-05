@@ -16,6 +16,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import NewPostModal from "../components/Modal/NewPostModal.js";
 
 const useStyles = makeStyles((theme) => ({
 
@@ -62,17 +63,19 @@ function Overview(){
     const getUserData = async () => {
 
         const userPostsData = await API.getUserPosts()
-        console.log("getUserData -> userPostsData", userPostsData)
+        // console.log("getUserData -> userPostsData", userPostsData)
 
         const userPosts = userPostsData.message
         setUserPosts(userPosts)
+        console.log( userPosts )
 
-        setWishlists(userPosts.filter(post => post.postingType==='wishlist'))
-        setApplied(userPosts.filter(post => post.postingType==='applied'))
-        setInterview(userPosts.filter(post => post.postingType==='interview'))
-        setOffer(userPosts.filter(post => post.postingType==='offer'))
-        setReject(userPosts.filter(post => post.postingType==='rejected'))
-
+        if (userPosts.length > 0){
+            setWishlists(userPosts.filter(post => post.postingType==='wishlists'))
+            setApplied(userPosts.filter(post => post.postingType==='applied'))
+            setInterview(userPosts.filter(post => post.postingType==='interview'))
+            setOffer(userPosts.filter(post => post.postingType==='offer'))
+            setReject(userPosts.filter(post => post.postingType==='reject'))
+        }
     }
 
     useEffect(()=>{
@@ -80,7 +83,7 @@ function Overview(){
     },[])
 
     return(
-        <div style={{marginTop: '4rem'}}>
+        <div style={{marginTop: '4rem', borderTop: '1px solid #f1f1f1fb'}}>
             <div className="sidebar">
                 <NavLink to={`${url}/wishlists`} activeClassName="active"><i className="fa fa-fw fa-star"></i>  <span className="overview-link">Wishlists</span></NavLink>
                 <NavLink to={`${url}/applied`} activeClassName="active"><i className="fa fa-fw fa-file"></i>  <span className="overview-link">Applied</span></NavLink>
@@ -88,7 +91,7 @@ function Overview(){
                 <NavLink to={`${url}/offer`} activeClassName="active"><i className="fa fa-fw fa-thumbs-up"></i>  <span className="overview-link">Offer</span></NavLink>
                 <NavLink to={`${url}/reject`} activeClassName="active"><i className="fa fa-fw fa-thumbs-down"></i>  <span className="overview-link">Reject</span></NavLink>
             </div>
-
+            <NewPostModal rerender={getUserData}/>
             <Switch>
                 <Route exact path={path}>
                     <div className="content">
@@ -113,9 +116,6 @@ function Overview(){
                 <Fab color="primary" className={classes.addButton} aria-label="add post">
                     <AddIcon />
                 </Fab>
-                <Button className={classes.desktopAdd} component={Link} to="/newpost">
-                Add a post
-                </Button>
         </div>
     );
 }

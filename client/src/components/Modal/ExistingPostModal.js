@@ -93,7 +93,7 @@ export default function SimpleModal(props) {
         heardBackDate: heardBackDate || '',
         interviewState: interviewState || '',
         interviewNote: interviewNote || '',
-        companyContact: companyContact || ''
+        companyContact: companyContact || '',
     });
 
     const submitChange = async () => {
@@ -123,6 +123,13 @@ export default function SimpleModal(props) {
       }
 
       //Salary must be a number
+      if (values.salary){
+        if (isNaN(values.salary)){
+          dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a valid number for your salary.' });
+          setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+          return
+        }
+      }
 
       //removing any empty fields from the put statement
       let newBody = values
@@ -231,11 +238,11 @@ export default function SimpleModal(props) {
                             id: 'PostingType',
                         }}
                         >
-                        <option value='wishlist'>Wishlists</option>
+                        <option value='wishlists'>Wishlists</option>
                         <option value='applied'>Applied</option>
                         <option value='interview'>Interview</option>
                         <option value='offer'>Offer</option>
-                        <option value='rejected'>Reject</option>
+                        <option value='reject'>Reject</option>
                         </Select>
                     </FormControl>
                 </Grid>
