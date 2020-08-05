@@ -2,6 +2,7 @@ import React from 'react';
 import './styles.css';
 
 function SearchForm(props) {
+
     return(
         <div className="jumbotron jumbotron-fluid">
             <div className="container">
@@ -9,8 +10,8 @@ function SearchForm(props) {
                 <form>
                     <div className="input-group">
                         <input
-                            value={props.jobTitle}
-                            name="jobTitle"
+                            value={props.value}
+                            name="search"
                             onChange={props.handleInputChange}
                             type="text"
                             placeholder="Enter the job position"

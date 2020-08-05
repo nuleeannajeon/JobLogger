@@ -1,0 +1,9 @@
+.company-logo {
+    height: 70px;
+    size: cover;
+}
+
+.add-btn {
+    background-color: cadetblue;
+    color: white;
+}
