@@ -8,6 +8,7 @@ import {
 import ExistingPostModal from "../Modal/ExistingPostModal.js";
 import processServerReturn from '../../utils/processServerReturn';
 import { useGlobalStore } from '../GlobalStore';
+import companyLogo from './location-symbol2.png'
 
 function Wishlists(props){
     const [globalStore, dispatch] = useGlobalStore();
@@ -50,7 +51,7 @@ function Wishlists(props){
                         <div className="media-body">
                             <button className="box-delete-button" onClick={() => handleDelete(posting._id)}><i className="fas fa-trash-alt"></i></button>
                             <ExistingPostModal data={posting} rerender={props.rerender} />
-                            <img src="https://image.flaticon.com/teams/slug/google.jpg" alt=""/>
+                            <img src={posting.companyLogoImage ? posting.companyLogoImage : companyLogo} alt={posting.compnay ? posting.company : ''}/>
                             <span>{posting.company ? posting.company : 'No defined company'}</span>
                             <div style={{paddingTop: "15px"}}>
                                 <h6 style={{display: "inline-block"}}>{posting.title ? posting.title : "No defined Position"}</h6>

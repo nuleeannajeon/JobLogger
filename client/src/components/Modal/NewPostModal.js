@@ -30,6 +30,8 @@ import API from '../../utils/API';
 import processServerReturn from '../../utils/processServerReturn';
 import ResponsiveSubmit from '../ResponsiveSubmit';
 import Input from '@material-ui/core/Input';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +51,17 @@ const useStyles = makeStyles((theme) => ({
   changeWidth: {
     width: "90%",
     marginBottom: theme.spacing(2),
-  }
+  },
+  addButton: {
+    [theme.breakpoints.down('xs')]: {
+        position: 'fixed',
+        bottom: theme.spacing(8),
+        right: theme.spacing(2),
+    },
+    [theme.breakpoints.up('sm')]: {
+        display: 'none',
+    },
+},
 
 }));
 
@@ -371,6 +383,9 @@ export default function SimpleModal(props) {
         <button className="create-button" type="button" onClick={handleOpen}>
           Create New Post
         </button>
+        <Fab color="primary" className={classes.addButton} aria-label="add post" onClick={handleOpen}>
+            <AddIcon />
+        </Fab>
 
         <Dialog
             open={open}

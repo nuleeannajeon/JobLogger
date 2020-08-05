@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
     addButton: {
         [theme.breakpoints.down('xs')]: {
-            position: 'absolute',
+            position: 'fixed',
             bottom: theme.spacing(8),
             right: theme.spacing(2),
         },
@@ -68,13 +68,13 @@ function Overview(){
         setUserPosts(userPosts)
         console.log( userPosts )
 
-        if (userPosts.length > 0){
+        // if (userPosts.length > 0){
             setWishlists(userPosts.filter(post => post.postingType==='wishlists'))
             setApplied(userPosts.filter(post => post.postingType==='applied'))
             setInterview(userPosts.filter(post => post.postingType==='interview'))
             setOffer(userPosts.filter(post => post.postingType==='offer'))
             setReject(userPosts.filter(post => post.postingType==='reject'))
-        }
+        // }
     }
 
     useEffect(()=>{
@@ -84,11 +84,11 @@ function Overview(){
     return(
         <div style={{marginTop: '4rem', borderTop: '1px solid #f1f1f1fb'}}>
             <div className="sidebar">
-                <NavLink to={`${url}/wishlists`} activeClassName="active"><i className="fa fa-fw fa-star"></i>  <span className="overview-link">Wishlists</span></NavLink>
-                <NavLink to={`${url}/applied`} activeClassName="active"><i className="fa fa-fw fa-file"></i>  <span className="overview-link">Applied</span></NavLink>
-                <NavLink to={`${url}/interview`} activeClassName="active"><i className="fa fa-fw fa-user-clock"></i>  <span className="overview-link">Interview</span></NavLink>
-                <NavLink to={`${url}/offer`} activeClassName="active"><i className="fa fa-fw fa-thumbs-up"></i>  <span className="overview-link">Offer</span></NavLink>
-                <NavLink to={`${url}/reject`} activeClassName="active"><i className="fa fa-fw fa-thumbs-down"></i>  <span className="overview-link">Reject</span></NavLink>
+                <NavLink to={`${url}/wishlists`} activeClassName="active"><i className="fa fa-fw fa-star"></i><span className="overview-link">Wishlists</span></NavLink>
+                <NavLink to={`${url}/applied`} activeClassName="active"><i className="fa fa-fw fa-file"></i><span className="overview-link">Applied</span></NavLink>
+                <NavLink to={`${url}/interview`} activeClassName="active"><i className="fa fa-fw fa-user-clock"></i><span className="overview-link">Interview</span></NavLink>
+                <NavLink to={`${url}/offer`} activeClassName="active"><i className="fa fa-fw fa-thumbs-up"></i><span className="overview-link">Offer</span></NavLink>
+                <NavLink to={`${url}/reject`} activeClassName="active"><i className="fa fa-fw fa-thumbs-down"></i><span className="overview-link">Reject</span></NavLink>
             </div>
             <NewPostModal rerender={getUserData}/>
             <Switch>
@@ -112,9 +112,7 @@ function Overview(){
                 </Route>
             </Switch>
 
-                <Fab color="primary" className={classes.addButton} aria-label="add post">
-                    <AddIcon />
-                </Fab>
+            
         </div>
     );
 }

@@ -4,12 +4,15 @@ const Schema = mongoose.Schema;
 const postsSchema = new Schema({
     color: {
         type: String,
-        enum: ['red', 'yellow', 'green', 'blue', 'purple', 'none']
-        // TESTING COLORED BACKGROUND
+        enum: ['red', 'yellow', 'green', 'blue', 'purple', 'none'],
+        default: 'none'
     },
     company: {
         type: String,
         required: 'Please enter a name of the company!'
+    },
+    companyLogoImage: {
+        type: String,
     },
     title: {
         type: String,
@@ -56,8 +59,6 @@ const postsSchema = new Schema({
     },
     interviewNote: {
         type: String
-        // (This should be something we can add multiples of for levels of interview)
-        //need help
     },
     companyContact: [
         { name: String },
