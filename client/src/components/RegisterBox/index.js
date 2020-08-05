@@ -270,7 +270,7 @@ const RegisterBox = (props) => {
     const sendRegistrationToServer = async () => {
         const userData = {
             name: values.name,
-            email: values.email,
+            email: values.email.trim().toLowerCase(),
             password: values.password,
             location: values.location,
             school: values.school,

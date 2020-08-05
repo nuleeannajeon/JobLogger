@@ -111,7 +111,7 @@ const LoginBox = () => {
     };
 
     const sendLogin = async () => {
-        const userData = { email: values.email, password: values.password };
+        const userData = { email: values.email.trim().toLowerCase(), password: values.password };
 
         if (values.email.trim().length === 0) {
             dispatch({ do: 'setMessage', type: 'error', message: 'Please enter an email address' });
