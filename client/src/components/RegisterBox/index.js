@@ -8,15 +8,14 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
-import { useGlobalStore } from '../components/GlobalStore';
-import JobLoggerIcon from '../components/JobLoggerIcon';
+import { useGlobalStore } from '../GlobalStore';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import API from '../utils/API';
-import processServerReturn from '../utils/processServerReturn';
-import ResponsiveSubmit from '../components/ResponsiveSubmit';
+import API from '../../utils/API';
+import processServerReturn from '../../utils/processServerReturn';
+import ResponsiveSubmit from '../ResponsiveSubmit';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -69,7 +68,7 @@ function validateEmail(email) {
 
 const getSteps = () => ['Create your login credentials', 'Add some optional personal information'];
 
-const Registration = (props) => {
+const RegisterBox = (props) => {
     const classes = useStyles();
     const history = useHistory();
     const [globalStore, dispatch] = useGlobalStore();
@@ -95,6 +94,7 @@ const Registration = (props) => {
                                     id="name"
                                     label="Name"
                                     required
+                                    variant='outlined'
                                     fullWidth
                                     error={values.errorName}
                                     className={classes.input}
@@ -112,6 +112,7 @@ const Registration = (props) => {
                                     id="email"
                                     label="Email Address"
                                     required
+                                    variant='outlined'
                                     fullWidth
                                     error={values.errorEmail}
                                     className={classes.input}
@@ -125,6 +126,7 @@ const Registration = (props) => {
                                     id="password"
                                     label="Password"
                                     fullWidth
+                                    variant='outlined'
                                     autoComplete="current-password"
                                     required
                                     error={values.errorPassword}
@@ -166,6 +168,7 @@ const Registration = (props) => {
                                 <TextField
                                     label="Location"
                                     fullWidth
+                                    variant='outlined'
                                     // error={values.errorName}
                                     className={classes.input}
                                     value={values.location}
@@ -181,6 +184,7 @@ const Registration = (props) => {
                                 <TextField
                                     label="Your school"
                                     fullWidth
+                                    variant='outlined'
                                     // error={values.errorName}
                                     className={classes.input}
                                     value={values.school}
@@ -196,6 +200,7 @@ const Registration = (props) => {
                                 <TextField
                                     label="Portfolio Link"
                                     fullWidth
+                                    variant='outlined'
                                     // error={values.errorName}
                                     className={[classes.input, classes.bottomSpace].join(' ')}
                                     value={values.portfolioLink}
@@ -305,9 +310,8 @@ const Registration = (props) => {
             saveSession(serverReturn.session);
         }
 
-
         processServerReturn(serverReturn, dispatch);
-        console.log("sendRegistrationToServer -> serverReturn", serverReturn)
+        console.log('sendRegistrationToServer -> serverReturn', serverReturn);
         return !serverReturn.error;
     };
 
@@ -339,65 +343,56 @@ const Registration = (props) => {
         event.preventDefault();
     };
     return (
-        <div className={classes.container}>
-            <Container maxWidth="sm">
-                <JobLoggerIcon className={classes.centerMe} />
-                <Typography variant="h4" className={classes.title} gutterBottom>
-                    Register
-                </Typography>
-                <Button className={classes.spaceMe} onClick={() => history.push('/entry')}>
-                    I'm already registered
-                </Button>
-                <Stepper activeStep={activeStep} orientation="vertical">
-                    {steps.map((label, index) => (
-                        <Step key={label}>
-                            <StepLabel>{label}</StepLabel>
-                            <StepContent>
-                                <div>{getStepContent(index).content}</div>
-                                <div>
-                                    <Button
-                                        disabled={activeStep === 0}
-                                        onClick={handleBack}
-                                        // className={classes.button}
-                                    >
-                                        Back
-                                    </Button>
+        <div>
+            <Stepper activeStep={activeStep} orientation="vertical">
+                {steps.map((label, index) => (
+                    <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                        <StepContent>
+                            <div>{getStepContent(index).content}</div>
+                            <div>
+                                <Button
+                                    disabled={activeStep === 0}
+                                    onClick={handleBack}
+                                    // className={classes.button}
+                                >
+                                    Back
+                                </Button>
 
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={handleNext}
-                                        // className={classes.button}
-                                    >
-                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                    </Button>
-                                </div>
-                            </StepContent>
-                        </Step>
-                    ))}
-                </Stepper>
-                {activeStep === steps.length && (
-                    <>
-                        <Typography>You're ready to start logging those jobs!</Typography>
-                        <div className={classes.finalButtonContainer}>
-                            <Button onClick={handleReset} className={classes.button}>
-                                Reset
-                            </Button>
-                            <ResponsiveSubmit
-                                buttonClass={classes.saveButton}
-                                submit={submitRegistration}
-                                loading={loading}
-                                size="normal"
-                                colour="secondary"
-                                wrapperClass={classes.responsiveButtonWrapper}
-                                name="Submit"
-                            />
-                        </div>
-                    </>
-                )}
-            </Container>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleNext}
+                                    // className={classes.button}
+                                >
+                                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                </Button>
+                            </div>
+                        </StepContent>
+                    </Step>
+                ))}
+            </Stepper>
+            {activeStep === steps.length && (
+                <div style={{padding:'0 2em'}}>
+                    <Typography>You're ready to start logging those jobs!</Typography>
+                    <div className={classes.finalButtonContainer}>
+                        <Button onClick={handleReset} className={classes.button}>
+                            Reset
+                        </Button>
+                        <ResponsiveSubmit
+                            buttonClass={classes.saveButton}
+                            submit={submitRegistration}
+                            loading={loading}
+                            size="normal"
+                            colour="secondary"
+                            wrapperClass={classes.responsiveButtonWrapper}
+                            name="Submit"
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
-export default Registration;
+export default RegisterBox;

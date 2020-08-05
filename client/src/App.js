@@ -18,6 +18,7 @@ import Navbar from './components/Navbar';
 import Overview from './pages/Overview';
 import MyJourney from './pages/MyJourney';
 import Testing from './pages/Testing';
+import UserEntry from './pages/Userentry'
 
 const NavbarWithRouter = withRouter(Navbar);
 
@@ -57,6 +58,7 @@ function App() {
                     <NavbarWithRouter />
                     <div className={classes.paddingTop}>
                         <Route exact path="/" component={Home} />
+                        <Route exact path="/entry" component={UserEntry} />
                         <Route exact path="/register" component={Registration} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/logout" component={Logout} />

@@ -8,17 +8,19 @@ import React, { useEffect } from 'react';
 
 const Home = () => {
     const [globalStore, dispatch] = useGlobalStore();
+    
     const checkLoggedIn = async () => {
-        const loggedInReturn = await API.get('/loginstatus');
+        const loggedInReturn = await API.getLoggedState();
         console.log("checkLoggedIn -> loggedInReturn", loggedInReturn)
-        if (loggedInReturn.loggedIn === true) {
-            dispatch({ do: 'login', userId: loggedInReturn.db_id });
+        if (loggedInReturn === true) {
+            dispatch({ do: 'login'});
             getUserData()
         }
     };
 
     const getUserData = async () => {
         const userData = await API.getUserData();
+        console.log("getUserData -> userData", userData)
         dispatch({ do: 'setUserData', ...userData });
     };
 
