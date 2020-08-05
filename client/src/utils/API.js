@@ -2,7 +2,7 @@ const axios = require('axios');
 
 export default {
     checkSecured: async () => {},
-    
+
     // SAMPLE INDEED API
     // getJobData: (query, location)=>{
     //     return axios({
@@ -26,9 +26,9 @@ export default {
     //         .catch((error)=>{
     //           console.log(error)
     //         })
-    // }, 
+    // },
     get: (url) => {
-        console.log(localStorage)
+        console.log(localStorage);
         return fetch(url, {
             headers: { Session: localStorage.session ? localStorage.session : '' },
         }).then((result) => result.json());
@@ -69,5 +69,12 @@ export default {
         return fetch('/api/posts', {
             headers: { Session: localStorage.session ? localStorage.session : '' },
         }).then((res) => res.json());
+    },
+    getLoggedState: async () => {
+        return fetch('/loginstatus', {
+            headers: { Session: localStorage.session ? localStorage.session : '' },
+        })
+            .then((res) => res.json())
+            .then((res) => (res.error ? false : res.loggedIn));
     },
 };

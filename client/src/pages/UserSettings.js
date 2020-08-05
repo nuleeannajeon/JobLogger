@@ -56,6 +56,11 @@ const useStyles = makeStyles((theme) => ({
     heroIcon: {
         fontSize: '3em',
     },
+    personImage: {
+        borderRadius: '25px',
+        width: '150px'
+        
+    },
 }));
 
 const UserSettings = () => {
@@ -177,7 +182,13 @@ const UserSettings = () => {
     return (
         <div>
             <div className={classes.hero}>
-                <Typography variant="h2"><PersonIcon className={classes.heroIcon} /></Typography>
+                <Typography variant="h2">
+                    {globalStore.thumbnail ? (
+                        <img className={classes.personImage} src={globalStore.thumbnail} alt="UserIcon" />
+                    ) : (
+                        <PersonIcon className={classes.heroIcon} />
+                    )}
+                </Typography>
             </div>
             <Container maxWidth="sm">
                 <Typography className={classes.title} variant="h4">

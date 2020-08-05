@@ -13,7 +13,8 @@ module.exports = (router) => {
                 return;
             }
             const { name, school, location, portfolioLink, posts, totalPosts, createdAt } = userData.userData;
-            console.log("userData being sent", userData)
+            const { thumbnail } = userData;
+            console.log('userData being sent', userData);
             res.status(200).send({
                 school,
                 location,
@@ -22,6 +23,7 @@ module.exports = (router) => {
                 name,
                 totalPosts,
                 createdAt,
+                thumbnail,
             });
         } catch (err) {
             console.log(err);
