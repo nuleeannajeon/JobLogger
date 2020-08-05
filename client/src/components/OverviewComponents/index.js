@@ -32,10 +32,10 @@ function Wishlists(props){
 
     async function handleDelete(id){
         const serverResponse = await API.delete(`/api/posts/${id}`);
+        processServerReturn(serverResponse, dispatch)
         setTimeout( function(){
             props.rerender()
         }, 1000)
-        processServerReturn(serverResponse, dispatch)
         return !serverResponse.error
     }
 
