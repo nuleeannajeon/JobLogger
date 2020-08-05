@@ -6,10 +6,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-
-import RegisterBox from '../components/RegisterBox'
-import LoginBox from '../components/LoginBox'
-
+import './UserEntry.css'
+import RegisterBox from '../components/RegisterBox';
+import LoginBox from '../components/LoginBox';
 
 const useStyles = makeStyles((theme) => ({
     tab: {
@@ -25,21 +24,49 @@ const useStyles = makeStyles((theme) => ({
         height: '90vh',
     },
     box: {
-        maxWidth: '80vw',
-        minWidth: '60vw',
-        minHeight: '50vh'
+        // maxWidth: '80vw',
+        // minWidth: '60vw',
+        width: '80ch',
+        height: '80ch',
+        position: 'relative',
+        // minHeight: '50vh',
+        padding: '0 2em',
+        // '&::before': {
+        //     content: ' ',
+        //     position: 'absolute',
+        //     backgroundColor: 'rgba(0, 0, 0, 0.25)',
+        //     top: '0px',
+        //     left: '0px',
+        //     right: '0px',
+        //     bottom: '0px',
+        //     // opacity: 0.5,
+        // },
+        [theme.breakpoints.down('sm')]: {
+            width: 'auto',
+            marginTop: '8em',
+            padding: '0',
+            width: '100%',
+            height: '60ch',
+        },
         //PUT IN MEDIA QUERY TO SERVE FULL WIDTH, USE FIXED SIZES
         //ADD BACKGROUND
+    },
+    tabContainer: {
+        paddingTop: '5em',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        // justifyContent: 'center',
+        // outline: '1px solid red',
+        height: '100%',
     },
 }));
 
 const TabItem = (props) => {
+    if (props.tab !== props.currentTab) return '';
 
-    if (props.tab !== props.currentTab) return ''
-
-    return <>{props.children}</>
-    
-}
+    return <div>{props.children}</div>;
+};
 
 const CoolTabs = withStyles({
     indicator: {
@@ -65,8 +92,9 @@ const UserEntry = () => {
     return (
         <Container maxWidth="lg">
             <Grid className={classes.container} container direction="column" justify="center" alignItems="center">
-                <Paper elevation={3} className={classes.box}>
+                <Paper elevation={3} className={[classes.box, 'bg'].join(' ')}>
                     <CoolTabs
+                        centered
                         className={classes.tabs}
                         value={tab}
                         onChange={handleTabChange}
@@ -76,12 +104,14 @@ const UserEntry = () => {
                         <Tab disableRipple className={classes.tab} label="Log in" />
                         <Tab disableRipple className={classes.tab} label="Register" />
                     </CoolTabs>
-                    <TabItem tab={0} currentTab={tab}>
-                        <LoginBox />
-                    </TabItem>
-                    <TabItem tab={1} currentTab={tab}>
-                        <RegisterBox />
-                    </TabItem>
+                    <div className={classes.tabContainer}>
+                        <TabItem tab={0} currentTab={tab}>
+                            <LoginBox />
+                        </TabItem>
+                        <TabItem tab={1} currentTab={tab}>
+                            <RegisterBox />
+                        </TabItem>
+                    </div>
                 </Paper>
             </Grid>
         </Container>

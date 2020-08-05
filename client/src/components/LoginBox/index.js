@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import processServerReturn from '../../utils/processServerReturn';
 import ResponsiveSubmit from '../ResponsiveSubmit';
 import { makeStyles } from '@material-ui/core/styles';
+import LockIcon from '@material-ui/icons/Lock';
 
 const useStyles = makeStyles((theme) => ({
     loginButton: {
@@ -34,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
         '& > *': {
             marginTop: theme.spacing(2),
         },
+        height: '100%',
+        // outline: '1px solid red'
     },
     container: {
         display: 'flex',
@@ -50,6 +53,13 @@ const useStyles = makeStyles((theme) => ({
     spaceMe: { marginTop: 20 },
     input: {
         marginTop: theme.spacing(2),
+    },
+    mainContainer: {
+        height: '100%',
+        padding: '1em 2em',
+        // [theme.breakpoints.down('sm')]: {
+        //     padding: '1em 1em',
+        // },
     },
 }));
 
@@ -166,14 +176,11 @@ const LoginBox = () => {
         event.preventDefault();
     };
     return (
-        <div>
-            <Grid
-                container
-                direction="column"
-                justify="space-between"
-                alignItems="stretch"
-                className={classes.inputContainer}
-            >
+        <div className={classes.mainContainer}>
+            <Typography variant="subtitle2">
+                <LockIcon style={{ color: 'cadetblue' }} /> Enter your login credentials
+            </Typography>
+            <Grid container direction="column" justify="center" alignItems="stretch" className={classes.inputContainer}>
                 <FormControl>
                     <InputLabel htmlFor="email">Email Address</InputLabel>
                     <Input
@@ -221,9 +228,7 @@ const LoginBox = () => {
                         buttonClass={classes.loginButton}
                         submit={submitLogin}
                     />
-                    <Button className="spaceMe" onClick={() => history.push('/register')}>
-                        Register
-                    </Button>
+                   
                     <LinkedInOAuthButton className="spaceMe" loginComplete={oAuthloginComplete} />
                 </div>
             </Grid>

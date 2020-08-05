@@ -367,7 +367,7 @@ const RegisterBox = (props) => {
                 ))}
             </Stepper>
             {activeStep === steps.length && (
-                <>
+                <div style={{padding:'0 2em'}}>
                     <Typography>You're ready to start logging those jobs!</Typography>
                     <div className={classes.finalButtonContainer}>
                         <Button onClick={handleReset} className={classes.button}>
@@ -383,7 +383,7 @@ const RegisterBox = (props) => {
                             name="Submit"
                         />
                     </div>
-                </>
+                </div>
             )}
         </div>
     );
