@@ -38,23 +38,23 @@ const postsSchema = new Schema({
     location: {
         type: String
     },
-    applied: {
-        type: Boolean
-    },
+    // applied: {
+    //     type: Boolean
+    // },
     appliedDate: {
         type: Date,
         default: Date.now
     },
-    heardBack: {
-        type: Boolean
-    },
+    // heardBack: {
+    //     type: Boolean
+    // },
     heardBackDate: {
         type: Date,
         default: Date.now
     },
     interviewState: {
         type: String,
-        enum: ['No Interview', 'Phone Interview', 'Onsite Interview']
+        enum: ['emailInterview', 'phoneInterview', 'onsiteInterview']
         // default: this.hearBack=true
     },
     interviewNote: {

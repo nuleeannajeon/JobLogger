@@ -18,7 +18,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 // import PostAdd from './pages/PostAdd';
 import Overview from './pages/Overview';
-import Search from "./pages/Search";
+// import Search from "./pages/Search";
 const NavbarWithRouter = withRouter(Navbar);
 
 const theme = createMuiTheme({
@@ -60,7 +60,6 @@ function App() {
                         <Route exact path="/register" component={Registration} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/logout" component={Logout} />
-                        <Route exact path="/search" component={Search} />
                         {/* <Route exact path="/overview" component={Overview} /> */}
                         <PrivateRoute exact path="/home">
                             <Content />
