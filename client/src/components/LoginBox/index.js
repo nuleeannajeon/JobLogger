@@ -18,6 +18,7 @@ import processServerReturn from '../../utils/processServerReturn';
 import ResponsiveSubmit from '../ResponsiveSubmit';
 import { makeStyles } from '@material-ui/core/styles';
 import LockIcon from '@material-ui/icons/Lock';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 const useStyles = makeStyles((theme) => ({
     loginButton: {
@@ -181,10 +182,11 @@ const LoginBox = () => {
                 <LockIcon style={{ color: 'cadetblue' }} /> Enter your login credentials
             </Typography>
             <Grid container direction="column" justify="center" alignItems="stretch" className={classes.inputContainer}>
-                <FormControl>
+                <FormControl variant="outlined">
                     <InputLabel htmlFor="email">Email Address</InputLabel>
-                    <Input
+                    <OutlinedInput
                         id="email"
+                        label="Email Address"
                         fullWidth
                         autoComplete="username"
                         type={values.email}
@@ -195,10 +197,11 @@ const LoginBox = () => {
                         onChange={handleChange('email')}
                     />
                 </FormControl>
-                <FormControl>
+                <FormControl variant="outlined">
                     <InputLabel htmlFor="password">Password</InputLabel>
-                    <Input
+                    <OutlinedInput
                         id="password"
+                        label="Password"
                         autoComplete="password"
                         ref={passwordRef}
                         type={values.showPassword ? 'text' : 'password'}
@@ -228,7 +231,7 @@ const LoginBox = () => {
                         buttonClass={classes.loginButton}
                         submit={submitLogin}
                     />
-                   
+
                     <LinkedInOAuthButton className="spaceMe" loginComplete={oAuthloginComplete} />
                 </div>
             </Grid>

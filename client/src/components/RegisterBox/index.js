@@ -94,6 +94,7 @@ const RegisterBox = (props) => {
                                     id="name"
                                     label="Name"
                                     required
+                                    variant='outlined'
                                     fullWidth
                                     error={values.errorName}
                                     className={classes.input}
@@ -111,6 +112,7 @@ const RegisterBox = (props) => {
                                     id="email"
                                     label="Email Address"
                                     required
+                                    variant='outlined'
                                     fullWidth
                                     error={values.errorEmail}
                                     className={classes.input}
@@ -124,6 +126,7 @@ const RegisterBox = (props) => {
                                     id="password"
                                     label="Password"
                                     fullWidth
+                                    variant='outlined'
                                     autoComplete="current-password"
                                     required
                                     error={values.errorPassword}
@@ -165,6 +168,7 @@ const RegisterBox = (props) => {
                                 <TextField
                                     label="Location"
                                     fullWidth
+                                    variant='outlined'
                                     // error={values.errorName}
                                     className={classes.input}
                                     value={values.location}
@@ -180,6 +184,7 @@ const RegisterBox = (props) => {
                                 <TextField
                                     label="Your school"
                                     fullWidth
+                                    variant='outlined'
                                     // error={values.errorName}
                                     className={classes.input}
                                     value={values.school}
@@ -195,6 +200,7 @@ const RegisterBox = (props) => {
                                 <TextField
                                     label="Portfolio Link"
                                     fullWidth
+                                    variant='outlined'
                                     // error={values.errorName}
                                     className={[classes.input, classes.bottomSpace].join(' ')}
                                     value={values.portfolioLink}
