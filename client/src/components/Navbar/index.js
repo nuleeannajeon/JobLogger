@@ -45,6 +45,11 @@ function Navbar() {
                             My Journey
                         </Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" href="/search">
+                            Search
+                        </Link>
+                    </li>
                 </ul>
                 <form className="form-inline my-2 my-lg-0">
                     <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />

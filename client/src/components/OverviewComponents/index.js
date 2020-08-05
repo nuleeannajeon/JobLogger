@@ -1,20 +1,16 @@
 import React from "react";
 import './style.css';
-import Posting from '../Posting/index';
-// import { useGlobalStore } from '../GlobalStore';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import API from '../../utils/API';
 import {
     BrowserRouter as Router,
     useParams
 } from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import TextField from '@material-ui/core/TextField';
 import ExistingPostModal from "../Modal/ExistingPostModal.js";
-import NewPostModal from "../Modal/NewPostModal.js"
+import processServerReturn from '../../utils/processServerReturn';
+import { useGlobalStore } from '../GlobalStore';
 
 function Wishlists(props){
+    const [globalStore, dispatch] = useGlobalStore();
     let { topicId } = useParams();
     
     let dataListByType
@@ -34,22 +30,25 @@ function Wishlists(props){
         dataListByType = props.reject
     }
 
+    async function handleDelete(id){
+        const serverResponse = await API.delete(`/api/posts/${id}`);
+        setTimeout( function(){
+            props.rerender()
+        }, 1000)
+        processServerReturn(serverResponse, dispatch)
+        return !serverResponse.error
+    }
+
     return(
         <div className="content">
             <h2 className="overview-title">{topicId.charAt(0).toUpperCase() + topicId.slice(1)}
-            <button 
-                className="add-new-btn" 
-                data-toggle="modal" 
-                data-target="#exampleModal">
-                <i className="fas fa-plus"></i>
-            </button>
             </h2>
              
             {dataListByType ? dataListByType.map(
                 posting => (
                     <div className='media' key={posting._id} id={posting.color}>
                         <div className="media-body">
-                            <button className="box-delete-button"><i className="fas fa-trash-alt"></i></button>
+                            <button className="box-delete-button" onClick={() => handleDelete(posting._id)}><i className="fas fa-trash-alt"></i></button>
                             <ExistingPostModal data={posting} rerender={props.rerender} />
                             <img src="https://image.flaticon.com/teams/slug/google.jpg" alt=""/>
                             <span>{posting.company ? posting.company : 'No defined company'}</span>

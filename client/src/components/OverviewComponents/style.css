@@ -19,7 +19,7 @@
     background-color: cadetblue;
     color: white;
   }
-  
+
   .sidebar a:hover:not(.active) {
     background-color: rgb(211, 211, 211);
     color: white;
@@ -74,7 +74,20 @@
   .box-view-button{
     background: grey;
   }
-  
+  .create-button{
+    float: right;
+    border: 2px solid rgb(55, 92, 94);
+    border-radius: 10px;
+    background: white;
+    color: rgb(55, 92, 94);
+    font-weight: bold;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
   /* MEDIA BACKGROUND COLOUR */
   #red{
     background: #FF8888;
@@ -116,6 +129,9 @@
         width: 100%;
       }
       .overview-link{
+        display: none;
+      }
+      .create-button {
         display: none;
       }
   }

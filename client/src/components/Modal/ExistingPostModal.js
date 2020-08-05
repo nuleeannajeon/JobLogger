@@ -1,20 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
-import Container from '@material-ui/core/Container';
+// import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+// import Checkbox from '@material-ui/core/Checkbox';
 import Switch from '@material-ui/core/Switch';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -23,7 +22,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useGlobalStore } from '../GlobalStore';
 import API from '../../utils/API';
@@ -93,7 +92,7 @@ export default function SimpleModal(props) {
         heardBackDate: heardBackDate || '',
         interviewState: interviewState || '',
         interviewNote: interviewNote || '',
-        companyContact: companyContact || ''
+        companyContact: companyContact || '',
     });
 
     const submitChange = async () => {
@@ -123,6 +122,13 @@ export default function SimpleModal(props) {
       }
 
       //Salary must be a number
+      if (values.salary){
+        if (isNaN(values.salary)){
+          dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a valid number for your salary.' });
+          setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+          return
+        }
+      }
 
       //removing any empty fields from the put statement
       let newBody = values
@@ -231,11 +237,11 @@ export default function SimpleModal(props) {
                             id: 'PostingType',
                         }}
                         >
-                        <option value='wishlist'>Wishlists</option>
+                        <option value='wishlists'>Wishlists</option>
                         <option value='applied'>Applied</option>
                         <option value='interview'>Interview</option>
                         <option value='offer'>Offer</option>
-                        <option value='rejected'>Reject</option>
+                        <option value='reject'>Reject</option>
                         </Select>
                     </FormControl>
                 </Grid>

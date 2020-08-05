@@ -17,7 +17,7 @@ const postsSchema = new Schema({
     },
     postingType: {
         type: String,
-        enum: ['wishlist', 'applied', 'interview', 'offer', 'rejected'],
+        enum: ['wishlists', 'applied', 'interview', 'offer', 'reject']
     },
     salary: {
         type: Number,
@@ -52,10 +52,8 @@ const postsSchema = new Schema({
     },
     interviewState: {
         type: String,
-        enum: ['No Interview', 'Phone Interview', 'Onsite Interview'],
-        required: function () {
-            return (this.heardBack = true);
-        },
+        enum: ['No Interview', 'Phone Interview', 'Onsite Interview']
+        // default: this.hearBack=true
     },
     interviewNote: {
         type: String,
