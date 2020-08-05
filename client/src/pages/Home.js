@@ -10,6 +10,7 @@ const Home = () => {
     const [globalStore, dispatch] = useGlobalStore();
     const checkLoggedIn = async () => {
         const loggedInReturn = await API.get('/loginstatus');
+        console.log("checkLoggedIn -> loggedInReturn", loggedInReturn)
         if (loggedInReturn.loggedIn === true) {
             dispatch({ do: 'login', userId: loggedInReturn.db_id });
             getUserData()

@@ -28,6 +28,7 @@ export default {
     //         })
     // }, 
     get: (url) => {
+        console.log(localStorage)
         return fetch(url, {
             headers: { Session: localStorage.session ? localStorage.session : '' },
         }).then((result) => result.json());

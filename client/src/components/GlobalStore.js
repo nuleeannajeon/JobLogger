@@ -21,6 +21,7 @@ const GlobalData = React.createContext();
 // let lastDispatcher = { do: '', time: 0 };
 
 function dispatcher(state, action) {
+    console.log('GlobalDispatcher ', action, state)
     // if (action.do === lastDispatcher.do && Date.now() - lastDispatcher.time < 1000) {
     //     console.log('Cancelling action')
     //     return state; //cancelling action because repeated within a second

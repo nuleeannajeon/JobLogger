@@ -153,6 +153,7 @@ module.exports = (app, baseURL, createSession) => {
     });
 
     app.get('/loginstatus', async ({ headers }, res) => {
+    console.log("headers", headers)
         try {
             const { session } = headers;
             const user = await User.findOne({ session });

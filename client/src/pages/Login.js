@@ -50,8 +50,8 @@ const useStyles = makeStyles((theme) => ({
     title: { textAlign: 'center', marginTop: 20, marginBottom: 40 },
     spaceMe: { marginTop: 20 },
     input: {
-        marginTop: theme.spacing(2)
-    }
+        marginTop: theme.spacing(2),
+    },
 }));
 
 const saveSession = (sessionID) => {
@@ -93,7 +93,7 @@ const Login = () => {
     const oAuthloginComplete = (returnedData) => {
         processServerReturn(returnedData, dispatch);
 
-        localStorage.session = JSON.stringify(returnedData.session);
+        localStorage.session = returnedData.session;
         dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
         dispatch({ do: 'login', userId: returnedData.db_id });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
