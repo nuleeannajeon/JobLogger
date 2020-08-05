@@ -19,6 +19,7 @@ import Overview from './pages/Overview';
 import MyJourney from './pages/MyJourney';
 import Testing from './pages/Testing';
 import UserEntry from './pages/Userentry'
+import Search from './pages/Search'
 
 const NavbarWithRouter = withRouter(Navbar);
 
@@ -69,6 +70,9 @@ function App() {
                         </PrivateRoute> */}
                         <PrivateRoute path="/overview">
                             <Overview />
+                        </PrivateRoute>
+                        <PrivateRoute path="/search">
+                            <Search />
                         </PrivateRoute>
                         <PrivateRoute path="/settings">
                             <UserSettings />
