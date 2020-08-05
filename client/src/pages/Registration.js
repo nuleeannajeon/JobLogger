@@ -345,7 +345,7 @@ const Registration = (props) => {
                 <Typography variant="h4" className={classes.title} gutterBottom>
                     Register
                 </Typography>
-                <Button className={classes.spaceMe} onClick={() => history.push('/login')}>
+                <Button className={classes.spaceMe} onClick={() => history.push('/entry')}>
                     I'm already registered
                 </Button>
                 <Stepper activeStep={activeStep} orientation="vertical">

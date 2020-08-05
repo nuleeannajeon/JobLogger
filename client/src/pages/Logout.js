@@ -14,7 +14,7 @@ const Logout = (props) => {
         const serverReturn = await API.post('/logout', {});
         console.log('logoutUser -> serverReturn', serverReturn);
         dispatch({ do: 'logout' });
-        history.push('/login')
+        history.push('/entry')
     };
 
     useEffect(() => {

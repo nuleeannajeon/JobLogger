@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import { useGlobalStore } from '../GlobalStore'
 import './styles.css';
 
-const LoginButton = () => <Link to="/login" className="btn btn-outline-dark my-2 my-sm-0" type="submit">Login</Link>
+const LoginButton = () => <Link to="/entry" className="btn btn-outline-dark my-2 my-sm-0" type="submit">Login</Link>
 const LogoffButton = () => <Link to="/logout" className="btn btn-outline-dark my-2 my-sm-0" type="submit">Logout</Link>
 
 function Navbar() {
