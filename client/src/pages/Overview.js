@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import OverviewComponents from "../components/OverviewComponents"
 import API from '../utils/API'
-// import Posting from '../components/Posting';
 import { useGlobalStore } from '../components/GlobalStore';
 import {
     BrowserRouter as Router,
@@ -61,7 +60,7 @@ function Overview(){
 
 
     const getUserData = async () => {
-
+        console.log( `getUserData called!!!!!!!!!!!`);
         const userPostsData = await API.getUserPosts()
         // console.log("getUserData -> userPostsData", userPostsData)
 

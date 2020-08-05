@@ -1,32 +1,9 @@
+require( 'dotenv' ).config();
 const axios = require('axios');
 
 export default {
     checkSecured: async () => {},
-    
-    // SAMPLE INDEED API
-    // getJobData: (query, location)=>{
-    //     return axios({
-    //         "method":"GET",
-    //         "url":"https://indeed-com.p.rapidapi.com/search/jobs",
-    //         "headers":{
-    //         "content-type":"application/octet-stream",
-    //         "x-rapidapi-host":"indeed-com.p.rapidapi.com",
-    //         "x-rapidapi-key":
-    //         "useQueryString":true
-    //         },"params":{
-    //         "sort": "relevance",
-    //         "country": "ca",
-    //         "query":query,
-    //         "location":location
-    //         }
-    //         })
-    //         .then((response)=>{
-    //           console.log(response)
-    //         })
-    //         .catch((error)=>{
-    //           console.log(error)
-    //         })
-    // }, 
+
     get: (url) => {
         return fetch(url, {
             headers: { Session: localStorage.session ? localStorage.session : '' },
@@ -55,6 +32,14 @@ export default {
                 Session: localStorage.session ? localStorage.session : '',
             },
             body: JSON.stringify(userData),
+        })
+            .then((result) => result.json())
+            .catch((err) => console.log(err));
+    },
+    delete: async (url) => {
+        return fetch(url, {
+            method: 'delete',
+            headers: { Session: localStorage.session ? localStorage.session : '' },
         })
             .then((result) => result.json())
             .catch((err) => console.log(err));
