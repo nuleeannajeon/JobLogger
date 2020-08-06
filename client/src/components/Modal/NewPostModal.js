@@ -83,11 +83,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleModal(props) {
-    const [globalStore, dispatch] = useGlobalStore();
+    const [, dispatch] = useGlobalStore();
     const [loading, setLoading] = useState(false);
     const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
 
-    const [values, setValues] = React.useState({
+    const defaultValues = {
         color: '',
         company: '',
         companyLogoImage: '',
@@ -99,14 +99,17 @@ export default function SimpleModal(props) {
         postLink: '',
         appliedDate: Date.now(),
         heardBackDate: Date.now(),
-        interviewState: '',
+        interviewState: null,
         interviewNote: '',
         companyContact: '',
-    });
+    }
+
+
+    const [values, setValues] = useState(defaultValues);
 
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const [scroll, setScroll] = React.useState('paper');
+    const [open, setOpen] = useState(false);
+    const [scroll, setScroll] = useState('paper');
 
     const handleOpen = () => {
         setOpen(true);
@@ -130,72 +133,41 @@ export default function SimpleModal(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log('here')
         setLoading(true);
         const success = await submitChange();
         setTimeout(() => setLoading(false), 500);
 
-        if (success) {
-            setOpen(false);
-            props.rerender();
-            setValues({
-                ...values,
-                color: '',
-                company: '',
-                companyLogoImage: '',
-                postingType: '',
-                title: '',
-                location: '',
-                salary: '',
-                notes: '',
-                postLink: '',
-                appliedDate: Date.now(),
-                heardBackDate: Date.now(),
-                interviewState: '',
-                interviewNote: '',
-                companyContact: '',
-                reminder: '',
-            });
-        }
+        // if (success) {
+        //     setOpen(false);
+        //     props.rerender();
+        //     setValues(defaultValues);
+        // }
     };
     const handleReset = async (event) => {
         event.preventDefault();
-        setValues({
-            ...values,
-            color: '',
-            company: '',
-            companyLogoImage: '',
-            postingType: '',
-            title: '',
-            location: '',
-            salary: '',
-            notes: '',
-            postLink: '',
-            appliedDate: Date.now(),
-            heardBackDate: Date.now(),
-            interviewState: '',
-            interviewNote: '',
-            companyContact: '',
-        });
+        setValues(defaultValues);
     };
 
     const submitChange = async () => {
-        let serverMessage = values;
+        let serverMessage = {...values};
+
         //Validate the fields are valid for the DB
         //company can't be empty
-        if (values.company === '') {
+        if (serverMessage.company === '') {
             dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty.' });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
         }
 
         //title can't be empty
-        if (values.title === '') {
+        if (serverMessage.title === '') {
             dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty.' });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
         }
 
-        if (values.postingType === '') {
+        if (serverMessage.postingType === '') {
             dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
@@ -213,8 +185,8 @@ export default function SimpleModal(props) {
             }
             return false;
         };
-        if (values.postLink !== '') {
-            const validurl = verifyURL(values.postLink);
+        if (serverMessage.postLink.trim() !== '') {
+            const validurl = verifyURL(serverMessage.postLink.trim());
             if (validurl === false) {
                 dispatch({ do: 'setMessage', type: 'error', message: 'Not a valid url.' });
                 setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
@@ -223,34 +195,23 @@ export default function SimpleModal(props) {
             serverMessage.postLink = validurl;
         }
 
-        //Salary must be a number
-        if (values.salary) {
-            if (isNaN(values.salary)) {
-                dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a valid number for your salary.' });
-                setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-                return;
-            }
+        if (!['applied', 'interview', 'offer', 'reject'].includes(serverMessage.postingType)){
+            delete serverMessage.appliedDate
         }
 
+        if (! ['interview', 'offer', 'reject'].includes(serverMessage.postingType)){
+            delete serverMessage.heardBackDate
+        }
         //removing any empty fields from the put statement
-        let newBody = values;
-        Object.keys(newBody).forEach((key) => {
-            if (!newBody[key]) {
-                delete newBody[key];
+        Object.keys(serverMessage).forEach((key) => {
+            if (!serverMessage[key]) {
+                delete serverMessage[key];
             }
         });
-
-        // if (!newBody.heardBack) {
-        //   delete newBody.heardBackDate;
-        //   }
-        //   if (!newBody.applied) {
-        //       delete newBody.appliedDate;
-        //   }
 
         const serverResponse = await API.post('/api/posts/', serverMessage);
 
         processServerReturn(serverResponse, dispatch);
-
         return !serverResponse.error;
     };
 
@@ -274,7 +235,7 @@ export default function SimpleModal(props) {
                             margin="normal"
                             id="date-picker-inline"
                             label="Date Added"
-                            value={values.dateAdded}
+                            value={new Date()}
                             onChange={() => {
                                 console.log('no');
                             }}
@@ -307,13 +268,13 @@ export default function SimpleModal(props) {
             </FormControl>
 
             <TextField
-                id="standard-helperText"
+                id="company-text"
                 label="Company"
                 value={values.company}
                 onChange={handleChange('company')}
             />
 
-            <TextField id="standard-helperText" label="Title" value={values.title} onChange={handleChange('title')} />
+            <TextField id="title-text" label="Title" value={values.title} onChange={handleChange('title')} />
 
             <Grid container alignItems="flex-end">
                 <Grid item md={4} xs={12}>
