@@ -6,7 +6,7 @@ import './styles.css';
 function Jumbotron() {
     const [globalStore] = useGlobalStore();
     return (
-        <div className="jumbotron jumbotron-fluid">
+        <div className="jumbotron jumbotron-fluid main-jumbotron">
             <div className="container jumbo-container">
                 <h2>
                     Welcome to <br></br> <span className="display-4"> JobLogger</span>
