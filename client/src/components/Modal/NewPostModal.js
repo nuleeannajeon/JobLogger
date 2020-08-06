@@ -320,6 +320,7 @@ export default function SimpleModal(props) {
                         <InputLabel htmlFor="salary">Monthly Salary</InputLabel>
                         <Input
                             id="salary"
+                            type="number"
                             value={values.salary}
                             onChange={handleChange('salary')}
                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
