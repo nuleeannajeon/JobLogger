@@ -1,26 +1,51 @@
 .appFeature {
     background: cadetblue;
     color: white;
-    margin-top: 0;
-    padding: 1rem 10px 1rem 10px;
+    padding: 1rem 5px 1rem 5px;
     font-size: 15px;
+    text-align: center;
+    margin: auto;
+    display: flex;
+}
+.feature-text{
+    padding: 0;
 }
 
 .avatar {
     vertical-align: middle;
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     object-fit: cover;
-    margin: 20px;
+    margin: 30px;
+    border: 1px solid rgb(68, 112, 114);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
 }
 
 .about-us {
     padding:50px;
-    background-color: lightgray;
+    background-color: rgba(228, 235, 226, 0.5);
     color: rgb(71, 71, 71);
+    font-size: 18px;
 }
 
 .avatar-container {
     padding: 50px;
+}
+
+@media screen and (max-width: 700px){
+    .appFeature{
+        text-align: left;
+    }
+    .about-us{
+        padding: 25px;
+    }
+    .avatar-container {
+        padding: 20px;
+    }
+    .avatar{
+        width: 70px;
+        height: 70px;
+        margin: 10px;
+    }
 }
