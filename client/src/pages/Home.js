@@ -1,6 +1,5 @@
 import Jumbotron from '../components/Jumbotron/index';
 import About from '../components/About/index';
-import LabelBottomNavigation from '../components/BottomNav/index';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
 
@@ -32,7 +31,6 @@ const Home = () => {
         <div>
             <Jumbotron />
             <About />
-            <LabelBottomNavigation />
         </div>
     );
 };

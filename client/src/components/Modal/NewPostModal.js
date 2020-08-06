@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
+// import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
-import Container from '@material-ui/core/Container';
+// import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Switch from '@material-ui/core/Switch';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import Switch from '@material-ui/core/Switch';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -23,13 +25,20 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useGlobalStore } from '../GlobalStore';
 import API from '../../utils/API';
 import processServerReturn from '../../utils/processServerReturn';
 import ResponsiveSubmit from '../ResponsiveSubmit';
 import Input from '@material-ui/core/Input';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import Slide from '@material-ui/core/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,8 +48,10 @@ const useStyles = makeStyles((theme) => ({
     },
     modal: {
         maxWidth: '100vw',
-        '& .MuiDialog-paper': {
-            margin: '10px',
+        [theme.breakpoints.down('sm')]: {
+            '& .MuiDialog-paper': {
+                margin: '10px',
+            },
         },
     },
     responsiveWrapper: {
@@ -48,7 +59,23 @@ const useStyles = makeStyles((theme) => ({
     },
     changeWidth: {
         width: '90%',
-        marginBottom: theme.spacing(2),
+        marginTop: theme.spacing(2),
+    },
+    addButton: {
+        [theme.breakpoints.down('xs')]: {
+            position: 'fixed',
+            bottom: theme.spacing(8),
+            right: theme.spacing(2),
+        },
+        [theme.breakpoints.up('sm')]: {
+            display: 'none',
+        },
+        green: {
+            color: green[400],
+            '&$checked': {
+                color: green[600],
+            },
+        },
     },
 }));
 
@@ -59,19 +86,20 @@ export default function SimpleModal(props) {
     const [values, setValues] = React.useState({
         color: '',
         company: '',
+        companyLogoImage: '',
         postingType: '',
         title: '',
         location: '',
         salary: '',
         notes: '',
         postLink: '',
-        applied: false,
-        appliedDate: new Date(),
-        heardBack: false,
-        heardBackDate: new Date(),
+        appliedDate: Date.now(),
+        heardBackDate: Date.now(),
         interviewState: '',
         interviewNote: '',
         companyContact: '',
+        reminderBool: false,
+        reminder: new Date(),
     });
 
     const classes = useStyles();
@@ -124,6 +152,7 @@ export default function SimpleModal(props) {
                 interviewState: '',
                 interviewNote: '',
                 companyContact: '',
+                reminder: new Date(),
             });
         }
     };
@@ -178,11 +207,11 @@ export default function SimpleModal(props) {
             }
         });
 
-        if (!newBody.heardBack){
-            delete newBody.heardBackDate
+        if (!newBody.heardBack) {
+            delete newBody.heardBackDate;
         }
-        if (!newBody.applied){
-            delete newBody.appliedDate
+        if (!newBody.applied) {
+            delete newBody.appliedDate;
         }
 
         const serverResponse = await API.post('/api/posts/', values);
@@ -210,27 +239,31 @@ export default function SimpleModal(props) {
                     />
                 </Grid>
             </MuiPickersUtilsProvider>
+
             <FormControl component="fieldset">
-                <FormLabel component="legend">Interview State</FormLabel>
-                <RadioGroup aria-label="color" name="color" value={values.color} onChange={handleChange('color')}>
-                    <FormControlLabel value="red" control={<Radio />} label="Red" />
-                    <FormControlLabel value="yellow" control={<Radio />} label="Yellow" />
-                    <FormControlLabel value="green" control={<Radio />} label="green" />
-                    <FormControlLabel value="blue" control={<Radio />} label="blue" />
-                    <FormControlLabel value="purple" control={<Radio />} label="purple" />
-                    <FormControlLabel value="none" control={<Radio />} label="None" />
+                <FormLabel component="legend">Box Color</FormLabel>
+                <RadioGroup row aria-label="color" name="color" value={values.color} onChange={handleChange('color')}>
+                    <FormControlLabel value="red" control={<Radio />} label="Red" labelPlacement="bottom" />
+                    <FormControlLabel value="yellow" control={<Radio />} label="Yellow" labelPlacement="bottom" />
+                    <FormControlLabel value="green" control={<Radio />} label="Green" labelPlacement="bottom" />
+                    <FormControlLabel value="blue" control={<Radio />} label="Blue" labelPlacement="bottom" />
+                    <FormControlLabel value="purple" control={<Radio />} label="Purple" labelPlacement="bottom" />
+                    <FormControlLabel value="none" control={<Radio />} label="None" labelPlacement="bottom" />
                 </RadioGroup>
             </FormControl>
+
             <TextField
                 id="standard-helperText"
                 label="Company"
                 value={values.company}
                 onChange={handleChange('company')}
             />
+
             <TextField id="standard-helperText" label="Title" value={values.title} onChange={handleChange('title')} />
+
             <Grid container alignItems="flex-end">
                 <Grid item md={4} xs={12}>
-                    <FormControl className={classes.changeWidth}>
+                    <FormControl style={{ width: '90%' }}>
                         <InputLabel htmlFor="PostingType">Posting Type</InputLabel>
                         <Select
                             native
@@ -250,18 +283,20 @@ export default function SimpleModal(props) {
                         </Select>
                     </FormControl>
                 </Grid>
+
                 <Grid item md={4} xs={12}>
                     <TextField
-                        className={classes.changeWidth}
                         id="location"
                         label="Location"
                         value={values.location}
                         onChange={handleChange('location')}
+                        className={classes.changeWidth}
                     />
                 </Grid>
+
                 <Grid item md={4} xs={12}>
                     <FormControl className={classes.changeWidth}>
-                        <InputLabel htmlFor="salary">Monthly Average Salary</InputLabel>
+                        <InputLabel htmlFor="salary">Monthly Salary</InputLabel>
                         <Input
                             id="salary"
                             value={values.salary}
@@ -270,65 +305,37 @@ export default function SimpleModal(props) {
                         />
                     </FormControl>
                 </Grid>
-            </Grid>
-            <TextField id="postLink" label="Post Link" value={values.postLink} onChange={handleChange('postLink')} />
-            <TextField
-                onChange={handleChange('notes')}
-                id="outlined-multiline-static"
-                multiline
-                label="Notes"
-                rows={8}
-                variant="outlined"
-                value={values.notes}
-            />
-            <Typography variant="h5">Applied</Typography>
-            <Grid container alignItems="flex-end">
-                <Grid item xs={6}>
-                    <Switch
-                        checked={values.applied}
-                        onChange={handleCheckChange('applied')}
-                        color="primary"
-                        name="applied"
-                        inputProps={{ 'aria-label': 'Applied' }}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    {values.applied ? (
+
+                <Grid item xs={12}>
+                    {(values.postingType === 'applied' ||
+                        values.postingType === 'interview' ||
+                        values.postingType === 'offer' ||
+                        values.postingType === 'reject') && (
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
+                                label="Applied Date"
                                 disableToolbar
                                 variant="inline"
                                 format="MM/dd/yyyy"
                                 margin="normal"
-                                id="dateChooser"
-                                value={values.appliedDate}
+                                id="date-picker-inline"
+                                value={values.dateAdded}
                                 onChange={handleDateChange('appliedDate')}
                                 KeyboardButtonProps={{
                                     'aria-label': 'change date',
                                 }}
                             />
                         </MuiPickersUtilsProvider>
-                    ) : (
-                        ''
                     )}
                 </Grid>
-            </Grid>
 
-            <Typography variant="h5">Heard back?</Typography>
-            <Grid container alignItems="flex-end">
-                <Grid item xs={6}>
-                    <Switch
-                        checked={values.heardBack}
-                        onChange={handleCheckChange('heardBack')}
-                        color="primary"
-                        name="heardBack"
-                        inputProps={{ 'aria-label': 'Heard back?' }}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    {values.heardBack ? (
+                {values.postingType === 'interview' ||
+                values.postingType === 'offer' ||
+                values.postingType === 'reject' ? (
+                    <Grid item xs={12} md={5}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
+                                label="Interviewed Date"
                                 disableToolbar
                                 variant="inline"
                                 format="MM/dd/yyyy"
@@ -341,40 +348,108 @@ export default function SimpleModal(props) {
                                 }}
                             />
                         </MuiPickersUtilsProvider>
-                    ) : (
-                        ''
-                    )}
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Interview State</FormLabel>
-                        <RadioGroup
-                            aria-label="interviewState"
-                            name="interviewState"
-                            value={values.interviewState}
-                            onChange={handleChange('interviewState')}
-                        >
-                            <FormControlLabel value="No Interview" control={<Radio />} label="No Interview" />
-                            <FormControlLabel value="Email Interview" control={<Radio />} label="Email" />
-                            <FormControlLabel value="Phone Interview" control={<Radio />} label="Phone Interview" />
-                            <FormControlLabel value="Onsite Interview" control={<Radio />} label="Onsite Interview" />
-                        </RadioGroup>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        className="interviewNote"
-                        value={values.interviewNote}
-                        onChange={handleChange('interviewNote')}
-                        id="outlined-multiline-static"
-                        multiline
-                        label="Interview Notes"
-                        rows={6}
-                        variant="outlined"
-                        style={{ width: '100%' }}
-                    />
-                </Grid>
+                    </Grid>
+                ) : (
+                    ''
+                )}
+
+                {values.postingType === 'interview' ||
+                values.postingType === 'offer' ||
+                values.postingType === 'reject' ? (
+                    <Grid item xs={12} md={7}>
+                        <FormControl component="fieldset">
+                            <FormLabel component="legend">Interview State</FormLabel>
+                            <RadioGroup
+                                row
+                                aria-label="interviewState"
+                                name="interviewState"
+                                value={values.interviewState}
+                                onChange={handleChange('interviewState')}
+                            >
+                                <FormControlLabel
+                                    value="emailInterview"
+                                    control={<Radio />}
+                                    label="Email"
+                                    labelPlacement="bottom"
+                                />
+                                <FormControlLabel
+                                    value="phoneInterview"
+                                    control={<Radio />}
+                                    label="Phone"
+                                    labelPlacement="bottom"
+                                />
+                                <FormControlLabel
+                                    value="onsiteInterview"
+                                    control={<Radio />}
+                                    label="Onsite"
+                                    labelPlacement="bottom"
+                                />
+                                <FormControlLabel value="" control={<Radio />} label="None" labelPlacement="bottom" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Grid>
+                ) : (
+                    ''
+                )}
+
+                {values.postingType === 'interview' ||
+                values.postingType === 'offer' ||
+                values.postingType === 'reject' ? (
+                    <Grid item xs={12}>
+                        <TextField
+                            className="interviewNote"
+                            value={values.interviewNote}
+                            onChange={handleChange('interviewNote')}
+                            id="outlined-multiline-static"
+                            multiline
+                            label="Interview Notes"
+                            rows={6}
+                            variant="outlined"
+                            style={{ width: '100%' }}
+                        />
+                    </Grid>
+                ) : (
+                    ''
+                )}
             </Grid>
+
+            <TextField id="postLink" label="Post Link" value={values.postLink} onChange={handleChange('postLink')} />
+
+            <TextField
+                id="companyLogoImage"
+                label="Company Logo Image URL"
+                value={values.companyLogoImage}
+                onChange={handleChange('companyLogoImage')}
+                helperText="Optional: Add Employer Logo image url"
+            />
+
+            <TextField
+                onChange={handleChange('notes')}
+                id="outlined-multiline-static"
+                multiline
+                label="Notes"
+                rows={8}
+                variant="outlined"
+                value={values.notes}
+            />
+            {/* <Grid container>
+                <Typography>Set a reminder?</Typography> 
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                label="Reminder Date"
+                                disableToolbar
+                                variant="inline"
+                                format="MM/dd/yyyy"
+                                margin="normal"
+                                id="reminderDateChooser"
+                                value={values.reminder}
+                                onChange={handleDateChange('reminder')}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change reminder date',
+                                }}
+                            />
+                        </MuiPickersUtilsProvider>
+            </Grid> */}
         </Grid>
     );
 
@@ -383,6 +458,9 @@ export default function SimpleModal(props) {
             <button className="create-button" type="button" onClick={handleOpen}>
                 Create New Post
             </button>
+            <Fab color="primary" className={classes.addButton} aria-label="add post" onClick={handleOpen}>
+                <AddIcon />
+            </Fab>
 
             <Dialog
                 open={open}
@@ -391,6 +469,7 @@ export default function SimpleModal(props) {
                 scroll={scroll}
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
+                TransitionComponent={Transition}
             >
                 <DialogTitle id="scroll-dialog-title">Post</DialogTitle>
                 <DialogContent dividers={scroll === 'paper'} style={{ margin: '0' }}>
@@ -405,7 +484,7 @@ export default function SimpleModal(props) {
                         loading={loading}
                         name="Save"
                         wrapperClass={classes.responsiveWrapper}
-                        size="normal"
+                        size="small"
                     />
                 </DialogActions>
             </Dialog>

@@ -4,12 +4,15 @@ const Schema = mongoose.Schema;
 const postsSchema = new Schema({
     color: {
         type: String,
-        enum: ['red', 'yellow', 'green', 'blue', 'purple', 'none']
-        // TESTING COLORED BACKGROUND
+        enum: ['red', 'yellow', 'green', 'blue', 'purple', 'none'],
+        default: 'none'
     },
     company: {
         type: String,
         required: 'Please enter a name of the company!',
+    },
+    companyLogoImage: {
+        type: String,
     },
     title: {
         type: String,
@@ -35,30 +38,27 @@ const postsSchema = new Schema({
     location: {
         type: String,
     },
-    applied: {
-        type: Boolean,
-    },
+    // applied: {
+    //     type: Boolean
+    // },
     appliedDate: {
         type: Date,
         // default: Date.now,
     },
-    heardBack: {
-        type: Boolean,
-        default: false
-    },
+    // heardBack: {
+    //     type: Boolean
+    // },
     heardBackDate: {
         type: Date,
         // default: Date.now,
     },
     interviewState: {
         type: String,
-        enum: ['No Interview', 'Phone Interview', 'Onsite Interview', 'Email Interview']
+        enum: ['emailInterview', 'phoneInterview', 'onsiteInterview']
         // default: this.hearBack=true
     },
     interviewNote: {
-        type: String,
-        // (This should be something we can add multiples of for levels of interview)
-        //need help
+        type: String
     },
     companyContact: [{ name: String, email: String, phone: String, position: String }],
     savedApiLink: {

@@ -12,7 +12,7 @@ import ReminderMessage from '../components/ReminderMessage';
 const useStyles = makeStyles((theme) => ({
     addButton: {
         [theme.breakpoints.down('xs')]: {
-            position: 'absolute',
+            position: 'fixed',
             bottom: theme.spacing(8),
             right: theme.spacing(2),
         },
@@ -110,9 +110,7 @@ function Overview() {
                 </Route>
             </Switch>
 
-            <Fab color="primary" className={classes.addButton} aria-label="add post">
-                <AddIcon />
-            </Fab>
+            
         </div>
     );
 }
