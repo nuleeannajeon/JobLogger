@@ -65,7 +65,7 @@
     margin-right: 5px;
   }
   
-  .box-delete-button, .box-view-button {
+  .box-delete-button {
     float: right;
     border: none;
     border-radius: 5px;
@@ -85,15 +85,7 @@
     color: red;
     background: white;
   }
-  .box-view-button{
-    background: grey;
-    border: 1px solid grey;
-    transition: 0.4s;
-  }
-  .box-view-button:hover{
-    color: grey;
-    background-color: white;
-  }
+
   .create-button{
     float: right;
     border: 2px solid rgb(55, 92, 94);
