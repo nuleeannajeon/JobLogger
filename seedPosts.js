@@ -8,7 +8,7 @@ const testingPosts = [
         company: 'Google',
         title: 'Junior Dev',
         postingType: 'wishlists',
-        salary: 100000,
+        salary: 10000,
         notes: 'They reached out to me',
         postLink: 'www.google.ca',
         location: 'Toronto, ON',
@@ -31,7 +31,7 @@ const testingPosts = [
         postLink: 'www.google.ca',
         location: 'Toronto, ON',
         applied: false,
-        reminder: new Date(2020, 8, 9, 0, 0, 0, 0),
+        reminder: new Date(2019, 6, 9, 0, 0, 0, 0),
         // appliedData: 'none',
         heardBack: false,
         // heardBackDate: 'none'

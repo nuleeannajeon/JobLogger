@@ -1,10 +1,20 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
-import { useGlobalStore } from '../GlobalStore'
+import { NavLink, Link } from 'react-router-dom';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import { useGlobalStore } from '../GlobalStore';
 import './styles.css';
 
-const LoginButton = () => <Link to="/entry" className="btn btn-outline-dark my-2 my-sm-0" type="submit">Login</Link>
-const LogoffButton = () => <Link to="/logout" className="btn btn-outline-dark my-2 my-sm-0" type="submit">Logout</Link>
+const LoginButton = () => (
+    <Link to="/entry" className="btn btn-outline-dark my-2 my-sm-0" type="submit">
+        Login
+    </Link>
+);
+const LogoffButton = () => (
+    <Link to="/logout" className="btn btn-outline-dark my-2 my-sm-0" type="submit">
+        Logout
+    </Link>
+);
 
 function Navbar() {
     const [globalStore] = useGlobalStore();
@@ -40,24 +50,28 @@ function Navbar() {
                             My Account
                         </Link>
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <Link className="nav-link" to="/myjourney">
                             My Journey
                         </Link>
-                    </li>
+                    </li> */}
                     <li className="nav-item">
                         <Link className="nav-link" to="/search">
                             Search
                         </Link>
                     </li>
                 </ul>
-                <form className="form-inline my-2 my-lg-0">
+                {/* <form className="form-inline my-2 my-lg-0">
                     <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
                     <button className="btn btn-outline-dark my-2 my-sm-0 mr-2" type="submit">
                         Search
                     </button>
-                    {globalStore.loggedIn ? <LogoffButton /> : <LoginButton />}
-                </form>
+                </form> */}
+
+                <NavLink className="nav-link" activeClassName="active" to="/reminders">
+                    {globalStore.reminders ? <NotificationsActiveIcon /> : <NotificationsIcon />}
+                </NavLink>
+                {globalStore.loggedIn ? <LogoffButton /> : <LoginButton />}
             </div>
         </nav>
     );
