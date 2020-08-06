@@ -20,7 +20,7 @@ function Navbar() {
     const [globalStore] = useGlobalStore();
 
     return (
-        <nav className="navbar navbar-expand-lg fixed-top">
+        <nav className="navbar navbar-expand-sm fixed-top">
             <Link className="navbar-brand" to="/">
                 JobLogger
             </Link>
