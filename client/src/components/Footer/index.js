@@ -16,8 +16,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Footer = () => {
+const Footer = (props) => {
     const classes = useStyles();
+
+    const location = String(props.location.pathname)
+    console.log("Footer -> location", location, props.location)
+
+    if (String(location).includes('overview')) return ''
+
     return <div className={classes.footer}>&copy; 2020 League of Coders</div>;
 };
 

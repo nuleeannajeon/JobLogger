@@ -228,7 +228,7 @@ export default function SimpleModal(props) {
         const verifyURL = (url) => {
             var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
             if (re.test(url)) {
-                if (!url.includes('http://') && url.includes('www.')) {
+                if (!url.includes('http://') && !url.includes('https://') && url.includes('www.')) {
                     return 'http://' + url;
                 } else {
                     return url;
@@ -362,9 +362,10 @@ export default function SimpleModal(props) {
 
                 <Grid item md={4} xs={12}>
                     <FormControl className={classes.changeWidth}>
-                        <InputLabel htmlFor="salary">Monthly Salary</InputLabel>
+                        <InputLabel htmlFor="salasalary">Monthly Salary</InputLabel>
                         <Input
                             id="salary"
+                            type="number"
                             value={values.salary}
                             onChange={handleChange('salary')}
                             startAdornment={<InputAdornment position="start">$</InputAdornment>}

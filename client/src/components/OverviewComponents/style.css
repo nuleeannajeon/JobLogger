@@ -135,6 +135,8 @@
         position: fixed;
         bottom: 0;
         background-color: #e2e2e2fb;
+        /* z-index: 10000000; */
+        z-index: 2;
       }
       .sidebar a {
         display: inline-flex;
