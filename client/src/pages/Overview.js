@@ -8,7 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import NewPostModal from '../components/Modal/NewPostModal.js';
-import ReminderMessage from '../components/ReminderMessage'
+import ReminderMessage from '../components/ReminderMessage';
 const useStyles = makeStyles((theme) => ({
     addButton: {
         [theme.breakpoints.down('xs')]: {
@@ -49,19 +49,19 @@ function Overview() {
     const [reject, setReject] = useState([]);
 
     const getUserData = async () => {
-        console.log(`getUserData called!!!!!!!!!!!`);
         const userPostsData = await API.getUserPosts();
-        console.log('getUserData -> userPostsData', userPostsData);
-
         const userPosts = userPostsData.message;
+
         setUserPosts(userPosts);
-        console.log(userPosts);
 
         setWishlists(userPosts.filter((post) => post.postingType === 'wishlists'));
         setApplied(userPosts.filter((post) => post.postingType === 'applied'));
         setInterview(userPosts.filter((post) => post.postingType === 'interview'));
         setOffer(userPosts.filter((post) => post.postingType === 'offer'));
         setReject(userPosts.filter((post) => post.postingType === 'reject'));
+
+        const userData = await API.getUserData();
+        dispatch({ do: 'setUserData', ...userData });
     };
 
     useEffect(() => {

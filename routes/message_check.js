@@ -32,15 +32,21 @@ module.exports = (router) => {
                 .filter((post) => post.reminder)
                 .filter((post) => {
                     const date = new Date(post.reminder);
+                    console.log('date', date.getTime(), today.getTime(), date.getTime() < today.getTime());
                     // return (date.getFullYear() <= today.getFullYear() && date.getMonth() <= today.getMonth() && date.getDate() <= today.getDate()) //I'm an idiot
                     return (
-                        date.getDate() < today.getDate() ||
+                        date.getTime() < today.getTime() ||
                         (date.getFullYear() === today.getFullYear() &&
                             date.getMonth() === today.getMonth() &&
                             date.getDate() === today.getDate())
                     );
-                });
+                })
+                .sort((a, b) => new Date(a.reminder).getTime() - new Date(b.reminder).getTime());
 
+            console.log(
+                'reminders',
+                reminders.map((i) => new Date(i.reminder).getTime())
+            );
             res.status(200).send(reminders);
         } catch (err) {
             console.log(err);

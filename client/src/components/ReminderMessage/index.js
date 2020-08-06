@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ReminderMessage = () => {
+    const [globalStore, dispatch] = useGlobalStore()
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState(null);
     const history = useHistory();
@@ -23,8 +24,10 @@ const ReminderMessage = () => {
 
     const checkForMessages = async () => {
         const reminders = await API.get('/api/reminders');
+        console.log("checkForMessages -> reminders", reminders)
+        dispatch({ do: 'setUserData', reminders: reminders.length > 0 });
 
-        if (!reminders) {
+        if (reminders.length === 0) {
             return;
         }
 

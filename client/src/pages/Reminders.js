@@ -17,6 +17,17 @@ import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles((theme) => ({}));
 
+const EmptyRemindersContent = () => {
+    return (
+        <p style={{marginTop: '4em'}}>
+            <Typography variant='subtitle1'>You don't have any reminders set!</Typography>
+            <Typography variant='subtitle1'>Go into the Overview page, and add some by editing a job.</Typography>
+        </p>
+    )
+}
+
+
+
 const ConfirmationDialog = (props) => {
     return (
         <Dialog
@@ -49,9 +60,11 @@ const Reminders = () => {
 
     const checkForMessages = async () => {
         const reminders = await API.get('/api/reminders');
-        if (!reminders) {
-            return;
-        }
+        console.log("checkForMessages -> reminders", reminders)
+        // if (!reminders) {
+        //     return;
+        // }
+        dispatch({ do: 'setUserData', reminders: reminders.length > 0 });
         setPosts(reminders);
     };
 
@@ -88,8 +101,10 @@ const Reminders = () => {
                         deleteText="Remove Reminder"
                         rerender={checkForMessages}
                         handleDelete={removeReminder}
+                        key={reminder._id}
                     />
                 ))}
+                {posts.length === 0 && <EmptyRemindersContent />}
             </Grid>
         </Container>
     );
