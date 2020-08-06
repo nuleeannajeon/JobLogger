@@ -14,6 +14,10 @@ module.exports = (router) => {
             }
             const { name, school, location, portfolioLink, posts, totalPosts, createdAt } = userData.userData;
             const { thumbnail } = userData;
+            console.log("userData", userData)
+            const linkedinUser = Boolean(userData.authId)
+            console.log("linkedinUser", linkedinUser)
+
             console.log('userData being sent', userData);
             res.status(200).send({
                 school,
@@ -24,6 +28,7 @@ module.exports = (router) => {
                 totalPosts,
                 createdAt,
                 thumbnail,
+                linkedinUser
             });
         } catch (err) {
             console.log(err);
