@@ -284,6 +284,8 @@ const UserSettings = () => {
                     loading={loading}
                     icon={<SaveIcon />}
                 />
+                {! globalStore.linkedinUser && (
+                <>
                 <Divider variant="fullWidth" className={classes.sectionDivider} />
                 <Typography className={classes.title} variant="h4">
                     Change my password
@@ -366,6 +368,8 @@ const UserSettings = () => {
                     loading={loading}
                     icon={<SaveIcon />}
                 />
+                </>
+                )}
             </Container>
         </div>
     );
