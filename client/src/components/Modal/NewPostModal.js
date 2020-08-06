@@ -138,11 +138,11 @@ export default function SimpleModal(props) {
         const success = await submitChange();
         setTimeout(() => setLoading(false), 500);
 
-        // if (success) {
-        //     setOpen(false);
-        //     props.rerender();
-        //     setValues(defaultValues);
-        // }
+        if (success) {
+            setOpen(false);
+            props.rerender();
+            setValues(defaultValues);
+        }
     };
     const handleReset = async (event) => {
         event.preventDefault();

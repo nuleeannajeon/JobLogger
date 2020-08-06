@@ -1,7 +1,7 @@
 .bg::before {
     content: ' ';
     position: absolute;
-    background-image: url(/assets/craig-garner-YoadQb46v6k-unsplash.jpg);
+    background-image: url(/assets/resizedloginspash.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
