@@ -20,6 +20,7 @@ import MyJourney from './pages/MyJourney';
 import Testing from './pages/Testing';
 import UserEntry from './pages/Userentry'
 import Reminders from './pages/Reminders'
+import Search from './pages/Search'
 const NavbarWithRouter = withRouter(Navbar);
 
 const theme = createMuiTheme({
@@ -70,9 +71,9 @@ function App() {
                         <PrivateRoute path="/overview">
                             <Overview />
                         </PrivateRoute>
-                        {/* <PrivateRoute path="/search">
+                        <PrivateRoute path="/search">
                             <Search />
-                        </PrivateRoute> */}
+                        </PrivateRoute>
                         <PrivateRoute path="/settings">
                             <UserSettings />
                         </PrivateRoute>
