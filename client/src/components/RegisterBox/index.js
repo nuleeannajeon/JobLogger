@@ -383,7 +383,7 @@ const RegisterBox = (props) => {
                             buttonClass={classes.saveButton}
                             submit={submitRegistration}
                             loading={loading}
-                            size="normal"
+                            size="medium"
                             colour="secondary"
                             wrapperClass={classes.responsiveButtonWrapper}
                             name="Submit"

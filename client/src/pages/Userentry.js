@@ -6,7 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import './UserEntry.css'
+import './UserEntry.css';
 import RegisterBox from '../components/RegisterBox';
 import LoginBox from '../components/LoginBox';
 
@@ -20,8 +20,11 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
         },
     },
+    outerContainer: {
+        paddingTop: '4em',
+    },
     container: {
-        height: '90vh',
+        // height: '90vh',
     },
     box: {
         // maxWidth: '80vw',
@@ -41,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         //     bottom: '0px',
         //     // opacity: 0.5,
         // },
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('xs')]: {
             width: 'auto',
             marginTop: '2em',
             padding: '0',
@@ -90,7 +93,7 @@ const UserEntry = () => {
     };
 
     return (
-        <Container maxWidth="lg">
+        <Container className={classes.outerContainer} maxWidth="lg">
             <Grid className={classes.container} container direction="column" justify="center" alignItems="center">
                 <Paper elevation={3} className={[classes.box, 'bg'].join(' ')}>
                     <CoolTabs
