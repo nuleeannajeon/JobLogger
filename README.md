@@ -12,7 +12,7 @@
 
 ## Demo
 ### Heroku URL
-[Click Here to checkout a deployed application](https://sheltered-mountain-51090.herokuapp.com/)
+[Click Here to checkout a deployed application](https://joblogger-loc.herokuapp.com/)
 
 ### Screenshots
 ![JobLogger](image)
@@ -22,7 +22,7 @@
 ## Usage
 
 ## License
-![License](https://joblogger-loc.herokuapp.com/)
+![License](https://img.shields.io/badge/License-MIT%20License-blue)
 - **[MIT License](https://opensource.org/licenses/MIT)** 
 - 2020 League of Coders
 
