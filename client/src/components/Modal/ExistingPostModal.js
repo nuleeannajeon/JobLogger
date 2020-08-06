@@ -65,6 +65,7 @@ export default function SimpleModal(props) {
     const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
 
     const datalist = props.data;
+    console.log('SimpleModal -> datalist', datalist);
 
     const {
         _id,
@@ -82,6 +83,7 @@ export default function SimpleModal(props) {
         interviewState,
         interviewNote,
         companyContact,
+        companyLogoImage,
         reminder,
     } = datalist;
 
@@ -94,62 +96,73 @@ export default function SimpleModal(props) {
         salary: salary || '',
         notes: notes || '',
         postLink: postLink || '',
-        appliedDate: appliedDate || '',
-        heardBackDate: heardBackDate || '',
+        appliedDate: appliedDate || new Date(),
+        heardBackDate: heardBackDate || new Date(),
         interviewState: interviewState || '',
         interviewNote: interviewNote || '',
         companyContact: companyContact || '',
         reminder: reminder || '',
+        companyLogoImage: companyLogoImage || '',
     });
 
     const submitChange = async () => {
-        let serverMessage = values;
-      //Validate the fields are valid for the DB
+        let serverMessage = { ...values };
+        //Validate the fields are valid for the DB
 
-      //company can't be empty
-      if (values.company === ''){
-        dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        return
-      }
+        //company can't be empty
+        if (serverMessage.company === '') {
+            dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
 
-      //title can't be empty
-      if (values.title === ''){
-        dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        return
-      }
+        //title can't be empty
+        if (serverMessage.title === '') {
+            dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
 
-      //posting Type cant't be empty
-      if (values.postingType === ''){
-        dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        return
-      }
+        //posting Type cant't be empty
+        if (serverMessage.postingType === '') {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
 
-      //postLink has to be a valid URL
-      // TODO add in regex to check if valid URL string
-      const verifyURL = (url) => {
-        var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
-        if (re.test(url)){
-            if (! url.includes('http://') && url.includes('www.')){
-                return 'http://' + url
-            } else {
-                return url
+        //postLink has to be a valid URL
+        // TODO add in regex to check if valid URL string
+        const verifyURL = (url) => {
+            var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+            if (re.test(url)) {
+                if (!url.includes('http://') && url.includes('www.')) {
+                    return 'http://' + url;
+                } else {
+                    return url;
+                }
             }
+            return false;
+        };
+        if (serverMessage.postLink !== '') {
+            const validurl = verifyURL(serverMessage.postLink);
+            console.log('submitChange -> validurl', validurl);
+            if (validurl === false) {
+                dispatch({ do: 'setMessage', type: 'error', message: 'The Post Link has be a valid url.' });
+                setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+                return;
+            }
+            serverMessage.postLink = validurl;
+            values.postLink = validurl;
         }
-        return false
-      }
-      if( values.postLink !== '' ){
-        const validurl = verifyURL(values.postLink)
-        if (validurl === false){
-          dispatch({ do: 'setMessage', type: 'error', message: 'The Post Link has be a valid url.' });
-          setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-          return
+
+        if (!['applied', 'interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
+            delete serverMessage.appliedDate;
         }
-        serverMessage.postLink = validurl
-      }
-    
+
+        if (!['interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
+            delete serverMessage.heardBackDate;
+        }
+
         //removing any empty fields from the put statement
         Object.keys(serverMessage).forEach((key) => {
             if (!serverMessage[key]) {
@@ -219,7 +232,7 @@ export default function SimpleModal(props) {
                         margin="normal"
                         id="date-picker-inline"
                         label="Date Added"
-                        value={values.dateAdded}
+                        value={dateAdded}
                         onChange={() => {
                             console.log('no');
                         }}
@@ -251,14 +264,9 @@ export default function SimpleModal(props) {
                 </RadioGroup>
             </FormControl>
 
-            <TextField
-                id="standard-helperText"
-                label="Company"
-                value={values.company}
-                onChange={handleChange('company')}
-            />
+            <TextField id="company-text" label="Company" value={values.company} onChange={handleChange('company')} />
 
-            <TextField id="standard-helperText" label="Title" value={values.title} onChange={handleChange('title')} />
+            <TextField id="title-text" label="Title" value={values.title} onChange={handleChange('title')} />
 
             <Grid container alignItems="flex-end">
                 <Grid item md={4} xs={12}>
@@ -437,7 +445,9 @@ export default function SimpleModal(props) {
 
     return (
         <div>
-            <Button onClick={handleOpen} style={{float: "right"}}>View/Edit</Button>
+            <Button onClick={handleOpen} style={{ float: 'right' }}>
+                View/Edit
+            </Button>
             {/* <button className="box-view-button" type="button" onClick={handleOpen}>
                 View/Edit
             </button> */}
