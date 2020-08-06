@@ -18,8 +18,10 @@ import Navbar from './components/Navbar';
 import Overview from './pages/Overview';
 import MyJourney from './pages/MyJourney';
 import Testing from './pages/Testing';
-import UserEntry from './pages/Userentry'
-import Reminders from './pages/Reminders'
+import UserEntry from './pages/Userentry';
+import Reminders from './pages/Reminders';
+import Search from './pages/Search';
+import Footer from './components/Footer';
 const NavbarWithRouter = withRouter(Navbar);
 
 const theme = createMuiTheme({
@@ -40,12 +42,19 @@ const theme = createMuiTheme({
             xl: 1920,
         },
     },
+    mainAppContainer: {
+        minHeight: 'calc(100vh - 4em)',
+        height: '100%',
+        position: 'relative',
+        paddingBottom: '4em',
+    },
 });
 
 const useStyles = makeStyles((theme) => ({
     paddingTop: {
         marginTop: '4rem',
     },
+    
 }));
 
 function App() {
@@ -55,35 +64,38 @@ function App() {
             <GlobalStore>
                 <Message />
                 <Router>
-                    <NavbarWithRouter />
-                    <div className={classes.paddingTop}>
-                        <Route exact path="/" component={Home} />
-                        <Route exact path="/entry" component={UserEntry} />
-                        <Route exact path="/register" component={Registration} />
-                        <Route exact path="/login" component={Login} />
-                        <Route exact path="/logout" component={Logout} />
-                        <Route exact path="/testing" component={Testing} />
-                        {/* <Route exact path="/overview" component={Overview} /> */}
-                        {/* <PrivateRoute exact path="/home">
+                    <div className='main-app-container'>
+                        <NavbarWithRouter />
+                        <div className={classes.paddingTop}>
+                            <Route exact path="/" component={Home} />
+                            <Route exact path="/entry" component={UserEntry} />
+                            <Route exact path="/register" component={Registration} />
+                            <Route exact path="/login" component={Login} />
+                            <Route exact path="/logout" component={Logout} />
+                            <Route exact path="/testing" component={Testing} />
+                            {/* <Route exact path="/overview" component={Overview} /> */}
+                            {/* <PrivateRoute exact path="/home">
                             <Content />
                         </PrivateRoute> */}
-                        <PrivateRoute path="/overview">
-                            <Overview />
-                        </PrivateRoute>
-                        {/* <PrivateRoute path="/search">
-                            <Search />
-                        </PrivateRoute> */}
-                        <PrivateRoute path="/settings">
-                            <UserSettings />
-                        </PrivateRoute>
-                        <PrivateRoute exact path="/myjourney">
-                            <MyJourney />
-                        </PrivateRoute>
-                        <PrivateRoute exact path="/reminders">
-                            <Reminders />
-                        </PrivateRoute>
-                        {/* <Route exact path="/myjourney" component={MyJourney} /> */}
-                        {/* <Route exact path="/newpost" component={PostAdd} /> */}
+                            <PrivateRoute path="/overview">
+                                <Overview />
+                            </PrivateRoute>
+                            <PrivateRoute path="/search">
+                                <Search />
+                            </PrivateRoute>
+                            <PrivateRoute path="/settings">
+                                <UserSettings />
+                            </PrivateRoute>
+                            <PrivateRoute exact path="/myjourney">
+                                <MyJourney />
+                            </PrivateRoute>
+                            <PrivateRoute exact path="/reminders">
+                                <Reminders />
+                            </PrivateRoute>
+                            {/* <Route exact path="/myjourney" component={MyJourney} /> */}
+                            {/* <Route exact path="/newpost" component={PostAdd} /> */}
+                        </div>
+                        <Footer />
                     </div>
                 </Router>
             </GlobalStore>

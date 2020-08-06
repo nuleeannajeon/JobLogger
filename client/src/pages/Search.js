@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Navbar from '../components/Navbar/index';
 import SearchForm from '../components/SearchForm/index';
-import API from '../utils/searchAPI';
+// import API from '../utils/searchAPI';
+import API from '../utils/API'
 import Container from '../components/Container/index';
 
 
@@ -15,10 +15,22 @@ class Search extends Component {
         this.searchJobs();
     };
 
-    searchJobs = query => {
-        API.searchJob(query)
-            .then(res => this.setState({ results: res.data}))
-            .catch(err => console.log(err));
+    searchJobs = (query) => {
+        // API.searchJob(query)
+        //     .then(res => this.setState({ results: res.data}))
+        //     .catch(err => console.log(err));
+        if (!query){
+            return
+        }
+        API.get(`/api/jobsearch/${query}`)
+            .then(res => {
+                if (res.error){
+                    console.log(res.error)
+                    return
+                }
+                this.setState({results: res.data})
+            })
+            .catch(err => console.log('err'))
     }
 
     handleInputChange = event => {
@@ -37,7 +49,6 @@ class Search extends Component {
     render() {
         return (
             <div>
-                <Navbar />
                 <SearchForm 
                     value={this.state.search}
                     handleInputChange={this.handleInputChange}

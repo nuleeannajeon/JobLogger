@@ -1,0 +1,6 @@
+.main-app-container {
+    min-height: calc(100vh - 4em);
+    /* min-height: 100vh; */
+    position: relative;
+    padding-bottom: 4em;
+}

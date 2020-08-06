@@ -15,6 +15,12 @@
     margin: 20px;
 }
 
-/* .container {
-    margin-bottom: 100px;
-} */
+.about-us {
+    padding:50px;
+    background-color: lightgray;
+    color: rgb(71, 71, 71);
+}
+
+.avatar-container {
+    padding: 50px;
+}

@@ -1,4 +1,4 @@
-.jumbotron {
+.main-jumbotron {
     background: url("https://images-ext-1.discordapp.net/external/dtDWDH0uPEhIEQ-Z50oWS9sDb1hMSqsecLnb_eGwLM0/https/www.mentaldaily.com/wp-content/uploads/2020/07/5907980386511.jpg?width=800&height=534");
     background-repeat: no-repeat;
     position: relative;
@@ -8,6 +8,7 @@
     height: 60vh;
     /* color: white; */
     margin-bottom: 0;
+    min-height: 350px;
 }
 
 .jumbo-container {
