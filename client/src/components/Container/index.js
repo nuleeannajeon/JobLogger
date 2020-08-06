@@ -31,13 +31,13 @@ const Result= (props) => {
     return (
         <div className="card my-2" key={id}>
             <div className="row">
-                <div className="col-sm-12 col-md-3 text-center">
+                <div className="col-sm-12 col-md-3 text-center left-col">
                     <img className="company-logo" src={company_logo} />
                     <br></br>
                     <br />
                     <button onClick={() => {sendMePlease()}} className="btn add-btn">Add to My Wishlist</button>
                 </div>
-                <div className="col-sm-12 col-md-9">
+                <div className="col-sm-12 col-md-9 right-col">
                     <h1><strong>{company}</strong></h1>
                     <h4>{title}</h4>
                     <div dangerouslySetInnerHTML={{ __html: description }}></div>

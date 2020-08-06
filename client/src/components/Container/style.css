@@ -1,8 +1,17 @@
 .company-logo {
-    height: 70px;
+    width: 150px;
+    size: cover;
 }
 
 .add-btn {
     background-color: cadetblue;
     color: white;
+}
+
+.left-col{
+    margin-top: 50px;
+}
+
+.right-col {
+    margin-top: 50px;
 }
