@@ -216,7 +216,9 @@ export default function SimpleModal(props) {
                         id="date-picker-inline"
                         label="Date Added"
                         value={values.dateAdded}
-                        onChange={() => {console.log('no')}}
+                        onChange={() => {
+                            console.log('no');
+                        }}
                         KeyboardButtonProps={{
                             'aria-label': 'change date',
                         }}
@@ -292,6 +294,7 @@ export default function SimpleModal(props) {
                         <InputLabel htmlFor="salary">Monthly Salary</InputLabel>
                         <Input
                             id="salary"
+                            type="number"
                             value={values.salary}
                             onChange={handleChange('salary')}
                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
