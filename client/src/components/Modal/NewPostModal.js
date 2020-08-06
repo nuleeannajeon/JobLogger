@@ -84,8 +84,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleModal(props) {
     const [globalStore, dispatch] = useGlobalStore();
-    const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
+
     const [values, setValues] = React.useState({
         color: '',
         company: '',
@@ -101,7 +102,6 @@ export default function SimpleModal(props) {
         interviewState: '',
         interviewNote: '',
         companyContact: '',
-        reminder: '',
     });
 
     const classes = useStyles();
@@ -120,9 +120,9 @@ export default function SimpleModal(props) {
         setValues({ ...values, [prop]: event.target.value });
     };
 
-    const handleCheckChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.checked });
-    };
+    // const handleCheckChange = (prop) => (event) => {
+    //     setValues({...values, [prop]: event.target.checked})
+    // }
 
     const handleDateChange = (prop) => (date) => {
         setValues({ ...values, [prop]: date });
@@ -141,16 +141,15 @@ export default function SimpleModal(props) {
                 ...values,
                 color: '',
                 company: '',
+                companyLogoImage: '',
                 postingType: '',
                 title: '',
                 location: '',
                 salary: '',
                 notes: '',
                 postLink: '',
-                applied: false,
-                appliedDate: '',
-                heardBack: false,
-                heardBackDate: '',
+                appliedDate: Date.now(),
+                heardBackDate: Date.now(),
                 interviewState: '',
                 interviewNote: '',
                 companyContact: '',
@@ -158,10 +157,30 @@ export default function SimpleModal(props) {
             });
         }
     };
+    const handleReset = async (event) => {
+        event.preventDefault();
+        setValues({
+            ...values,
+            color: '',
+            company: '',
+            companyLogoImage: '',
+            postingType: '',
+            title: '',
+            location: '',
+            salary: '',
+            notes: '',
+            postLink: '',
+            appliedDate: Date.now(),
+            heardBackDate: Date.now(),
+            interviewState: '',
+            interviewNote: '',
+            companyContact: '',
+        });
+    };
 
     const submitChange = async () => {
+        let serverMessage = values;
         //Validate the fields are valid for the DB
-
         //company can't be empty
         if (values.company === '') {
             dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty.' });
@@ -176,21 +195,33 @@ export default function SimpleModal(props) {
             return;
         }
 
-        if (!values.postingType) {
+        if (values.postingType === '') {
             dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
             return;
         }
 
         //postLink has to be a valid URL
-        // TODO add in regex to check if valid URL string
-        // if (values.postLink){
-        //   if (values.postLink.substring(0,4) != 'http') {
-        //     dispatch({ do: 'setMessage', type: 'error', message: 'The posting link is not a valid URL' });
-        //     setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        //     return
-        //   }
-        // }
+        const verifyURL = (url) => {
+            var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+            if (re.test(url)) {
+                if (!url.includes('http://') && url.includes('www.')) {
+                    return 'http://' + url;
+                } else {
+                    return url;
+                }
+            }
+            return false;
+        };
+        if (values.postLink !== '') {
+            const validurl = verifyURL(values.postLink);
+            if (validurl === false) {
+                dispatch({ do: 'setMessage', type: 'error', message: 'Not a valid url.' });
+                setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+                return;
+            }
+            serverMessage.postLink = validurl;
+        }
 
         //Salary must be a number
         if (values.salary) {
@@ -209,14 +240,14 @@ export default function SimpleModal(props) {
             }
         });
 
-        if (!newBody.heardBack) {
-            delete newBody.heardBackDate;
-        }
-        if (!newBody.applied) {
-            delete newBody.appliedDate;
-        }
+        // if (!newBody.heardBack) {
+        //   delete newBody.heardBackDate;
+        //   }
+        //   if (!newBody.applied) {
+        //       delete newBody.appliedDate;
+        //   }
 
-        const serverResponse = await API.post('/api/posts/', values);
+        const serverResponse = await API.post('/api/posts/', serverMessage);
 
         processServerReturn(serverResponse, dispatch);
 
@@ -235,21 +266,24 @@ export default function SimpleModal(props) {
         <Grid container direction="column" className={classes.root}>
             <Grid container direction="row" justify="space-between">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                        disableToolbar
-                        variant="inline"
-                        format="MM/dd/yyyy"
-                        margin="normal"
-                        id="date-picker-inline"
-                        label="Date Added"
-                        value={values.dateAdded}
-                        onChange={() => console.log('no')}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
+                    {/* <Grid container alignItems="flex-end"> */}
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="MM/dd/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="Date Added"
+                            value={values.dateAdded}
+                            onChange={() => {
+                                console.log('no');
+                            }}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                    {/* </Grid> */}
                 </MuiPickersUtilsProvider>
-
                 <Tooltip title="Reminder">
                     <Button
                         onClick={() => {
@@ -260,7 +294,6 @@ export default function SimpleModal(props) {
                     </Button>
                 </Tooltip>
             </Grid>
-
             <FormControl component="fieldset">
                 <FormLabel component="legend">Box Color</FormLabel>
                 <RadioGroup row aria-label="color" name="color" value={values.color} onChange={handleChange('color')}>
@@ -320,7 +353,6 @@ export default function SimpleModal(props) {
                         <InputLabel htmlFor="salary">Monthly Salary</InputLabel>
                         <Input
                             id="salary"
-                            type="number"
                             value={values.salary}
                             onChange={handleChange('salary')}
                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
@@ -340,8 +372,8 @@ export default function SimpleModal(props) {
                                 variant="inline"
                                 format="MM/dd/yyyy"
                                 margin="normal"
-                                id="date-picker-inline"
-                                value={values.dateAdded}
+                                id="dateChooser"
+                                value={values.appliedDate}
                                 onChange={handleDateChange('appliedDate')}
                                 KeyboardButtonProps={{
                                     'aria-label': 'change date',
@@ -454,24 +486,6 @@ export default function SimpleModal(props) {
                 variant="outlined"
                 value={values.notes}
             />
-            {/* <Grid container>
-                <Typography>Set a reminder?</Typography> 
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                label="Reminder Date"
-                                disableToolbar
-                                variant="inline"
-                                format="MM/dd/yyyy"
-                                margin="normal"
-                                id="reminderDateChooser"
-                                value={values.reminder}
-                                onChange={handleDateChange('reminder')}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change reminder date',
-                                }}
-                            />
-                        </MuiPickersUtilsProvider>
-            </Grid> */}
         </Grid>
     );
 
@@ -483,13 +497,11 @@ export default function SimpleModal(props) {
             <Fab color="primary" className={classes.addButton} aria-label="add post" onClick={handleOpen}>
                 <AddIcon />
             </Fab>
-
             <ReminderDialog
                 open={reminderDialogOpen}
                 handleOk={addReminder}
                 handleCancel={() => setReminderDialogOpen(false)}
             />
-
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -504,6 +516,7 @@ export default function SimpleModal(props) {
                     {body}
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleReset}>Reset</Button>
                     <Button onClick={handleClose} color="secondary">
                         Close
                     </Button>

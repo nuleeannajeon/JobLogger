@@ -103,57 +103,61 @@ export default function SimpleModal(props) {
     });
 
     const submitChange = async () => {
-        //Validate the fields are valid for the DB
+        let serverMessage = values;
+      //Validate the fields are valid for the DB
 
-        //company can't be empty
-        if (values.company === '') {
-            dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty' });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
+      //company can't be empty
+      if (values.company === ''){
+        dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty' });
+        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+        return
+      }
 
-        //title can't be empty
-        if (values.title === '') {
-            dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty' });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
+      //title can't be empty
+      if (values.title === ''){
+        dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty' });
+        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+        return
+      }
 
-        //posting Type cant't be empty
-        if (values.postingType === '') {
-            dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
+      //posting Type cant't be empty
+      if (values.postingType === ''){
+        dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
+        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+        return
+      }
 
-        //postLink has to be a valid URL
-        // TODO add in regex to check if valid URL string
-        // if (values.postLink){
-        //   if (values.postLink.substring(0,4) != 'http') {
-        //     dispatch({ do: 'setMessage', type: 'error', message: 'The posting link is not a valid URL' });
-        //     setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        //     return
-        //   }
-        // }
-
-        //Salary must be a number
-        if (values.salary) {
-            if (isNaN(values.salary)) {
-                dispatch({ do: 'setMessage', type: 'error', message: 'Please enter a valid number for your salary.' });
-                setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-                return;
+      //postLink has to be a valid URL
+      // TODO add in regex to check if valid URL string
+      const verifyURL = (url) => {
+        var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
+        if (re.test(url)){
+            if (! url.includes('http://') && url.includes('www.')){
+                return 'http://' + url
+            } else {
+                return url
             }
         }
-
+        return false
+      }
+      if( values.postLink !== '' ){
+        const validurl = verifyURL(values.postLink)
+        if (validurl === false){
+          dispatch({ do: 'setMessage', type: 'error', message: 'The Post Link has be a valid url.' });
+          setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+          return
+        }
+        serverMessage.postLink = validurl
+      }
+    
         //removing any empty fields from the put statement
-        let newBody = values;
-        Object.keys(newBody).forEach((key) => {
-            if (!newBody[key]) {
-                delete newBody[key];
+        Object.keys(serverMessage).forEach((key) => {
+            if (!serverMessage[key]) {
+                delete serverMessage[key];
             }
         });
 
-        const serverResponse = await API.put(`/api/posts/${_id}`, values);
+        const serverResponse = await API.put(`/api/posts/${_id}`, serverMessage);
 
         processServerReturn(serverResponse, dispatch);
 
@@ -433,9 +437,10 @@ export default function SimpleModal(props) {
 
     return (
         <div>
-            <button className="box-view-button" type="button" onClick={handleOpen}>
+            <Button onClick={handleOpen} style={{float: "right"}}>View/Edit</Button>
+            {/* <button className="box-view-button" type="button" onClick={handleOpen}>
                 View/Edit
-            </button>
+            </button> */}
 
             <ReminderDialog
                 open={reminderDialogOpen}

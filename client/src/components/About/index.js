@@ -14,9 +14,10 @@ function About() {
             <div className="col-xs-6 col-md-3"><CheckCircleOutlineIcon /> SAVE AND KEEP TRACK OF YOUR JOB JOURNEY</div>
             <div className="col-xs-6 col-md-3"><CheckCircleOutlineIcon /> REMINDER FOR UPCOMING INTERVIEWS</div>
           </div>
-          <div className="container text-center">
-              <h1>About Us</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+          <div className="text-center about-us">
+              <p>Service and maintenance companies typically process a high volume of low-value jobs. Without dedicated job management software it’s really difficult to keep track of jobs. Jobs might be logged manually or using spreadsheets. This doesn’t lend itself to sharing information, so in a busy environment, jobs get lost in the process. Joblogic helpdesk software allows multiple people to log and view jobs at the same time. You can see the status of each job in real time as it progresses from creation to completion. Keeping both customers and management informed of jobs is easy and will give you the confidence to grow your service operation without having to take on more administration costs.</p>
+          </div>
+          <div className="container text-center avatar-container">
               <img className="avatar" src={Haley} alt="Card image cap" />
               <img className="avatar" src={James} alt="Card image cap" />
               <img className="avatar" src={Anna} alt="Card image cap" />
