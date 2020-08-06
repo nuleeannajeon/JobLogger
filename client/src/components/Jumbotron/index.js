@@ -18,7 +18,7 @@ function Jumbotron() {
                         <p className="lead jumbo-description">
                             Sign up now for free to easily track your job hunting progress.
                         </p>
-                        <Link to="/register" className="signup-btn">
+                        <Link to="/entry" className="signup-btn">
                             SIGN UP NOW
                         </Link>
                     </>
