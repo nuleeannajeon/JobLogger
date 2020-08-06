@@ -38,10 +38,61 @@ import Slide from '@material-ui/core/Slide';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ReminderDialog from '../ReminderDialog';
 import Tooltip from '@material-ui/core/Tooltip';
+import { withStyles } from '@material-ui/core/styles';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+const RedRadio = withStyles({
+    root: {
+      color: "red",
+      '&$checked': {
+        color: "red",
+      },
+    },
+    checked: {},
+})((props) => <Radio color="default" {...props} />);
+
+const YellowRadio = withStyles({
+    root: {
+      color: "yellow",
+      '&$checked': {
+        color: "yellow",
+      },
+    },
+    checked: {},
+})((props) => <Radio color="default" {...props} />);
+
+const GreenRadio = withStyles({
+    root: {
+      color: "green",
+      '&$checked': {
+        color: "green",
+      },
+    },
+    checked: {},
+})((props) => <Radio color="default" {...props} />);
+
+const BlueRadio = withStyles({
+    root: {
+      color: "blue",
+      '&$checked': {
+        color: "blue",
+      },
+    },
+    checked: {},
+})((props) => <Radio color="default" {...props} />);
+
+const PurpleRadio = withStyles({
+    root: {
+      color: "purple",
+      '&$checked': {
+        color: "purple",
+      },
+    },
+    checked: {},
+})((props) => <Radio color="default" {...props} />);
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -258,11 +309,11 @@ export default function SimpleModal(props) {
             <FormControl component="fieldset">
                 <FormLabel component="legend">Box Color</FormLabel>
                 <RadioGroup row aria-label="color" name="color" value={values.color} onChange={handleChange('color')}>
-                    <FormControlLabel value="red" control={<Radio />} label="Red" labelPlacement="bottom" />
-                    <FormControlLabel value="yellow" control={<Radio />} label="Yellow" labelPlacement="bottom" />
-                    <FormControlLabel value="green" control={<Radio />} label="Green" labelPlacement="bottom" />
-                    <FormControlLabel value="blue" control={<Radio />} label="Blue" labelPlacement="bottom" />
-                    <FormControlLabel value="purple" control={<Radio />} label="Purple" labelPlacement="bottom" />
+                    <FormControlLabel value="red" control={<RedRadio />} label="Red" labelPlacement="bottom" />
+                    <FormControlLabel value="yellow" control={<YellowRadio />} label="Yellow" labelPlacement="bottom" />
+                    <FormControlLabel value="green" control={<GreenRadio />} label="Green" labelPlacement="bottom" />
+                    <FormControlLabel value="blue" control={<BlueRadio />} label="Blue" labelPlacement="bottom" />
+                    <FormControlLabel value="purple" control={<PurpleRadio />} label="Purple" labelPlacement="bottom" />
                     <FormControlLabel value="none" control={<Radio />} label="None" labelPlacement="bottom" />
                 </RadioGroup>
             </FormControl>
