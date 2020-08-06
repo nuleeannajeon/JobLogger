@@ -97,7 +97,7 @@ export default function SimpleModal(props) {
     });
 
     const submitChange = async () => {
-
+        let serverMessage = values;
       //Validate the fields are valid for the DB
 
       //company can't be empty
@@ -123,13 +123,26 @@ export default function SimpleModal(props) {
 
       //postLink has to be a valid URL
       // TODO add in regex to check if valid URL string
-      // if (values.postLink){
-    //   if (values.postLink.substring(0,4) != 'http') {
-    //     dispatch({ do: 'setMessage', type: 'error', message: 'The posting link is not a valid URL' });
-    //     setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-    //     return
-    //   }
-    // }
+      const verifyURL = (url) => {
+        var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
+        if (re.test(url)){
+            if (! url.includes('http://') && url.includes('www.')){
+                return 'http://' + url
+            } else {
+                return url
+            }
+        }
+        return false
+      }
+      if( values.postLink !== '' ){
+        const validurl = verifyURL(values.postLink)
+        if (validurl === false){
+          dispatch({ do: 'setMessage', type: 'error', message: 'The Post Link has be a valid url.' });
+          setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+          return
+        }
+        serverMessage.postLink = validurl
+      }
 
       //Salary must be a number
       if (values.salary){
@@ -147,6 +160,14 @@ export default function SimpleModal(props) {
           delete newBody[key]
         }
       })
+
+        // if (!newBody.heardBack) {
+        // delete newBody.heardBackDate;
+        // }
+        // if (!newBody.applied) {
+        //     delete newBody.appliedDate;
+        // }
+
       
       const serverResponse = await API.put(`/api/posts/${_id}`, values)
 
@@ -375,9 +396,10 @@ export default function SimpleModal(props) {
 
     return (
         <div>
-            <button className="box-view-button" type="button" onClick={handleOpen}>
+            <Button onClick={handleOpen} style={{float: "right"}}>View/Edit</Button>
+            {/* <button className="box-view-button" type="button" onClick={handleOpen}>
                 View/Edit
-            </button>
+            </button> */}
 
             <Dialog
                 open={open}
