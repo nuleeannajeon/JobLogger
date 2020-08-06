@@ -35,6 +35,9 @@ import Input from '@material-ui/core/Input';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Slide from '@material-ui/core/Slide';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import ReminderDialog from '../ReminderDialog';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -81,8 +84,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleModal(props) {
     const [globalStore, dispatch] = useGlobalStore();
+    const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-
     const [values, setValues] = React.useState({
         color: '',
         company: '',
@@ -98,8 +101,7 @@ export default function SimpleModal(props) {
         interviewState: '',
         interviewNote: '',
         companyContact: '',
-        reminderBool: false,
-        reminder: new Date(),
+        reminder: '',
     });
 
     const classes = useStyles();
@@ -152,7 +154,7 @@ export default function SimpleModal(props) {
                 interviewState: '',
                 interviewNote: '',
                 companyContact: '',
-                reminder: new Date(),
+                reminder: '',
             });
         }
     };
@@ -221,10 +223,18 @@ export default function SimpleModal(props) {
         return !serverResponse.error;
     };
 
+    //Reminder adding modal stuff
+    const addReminder = (reminderDate) => {
+        //when okay is clicked in reminder dialog, add to the values
+        setValues({ ...values, reminder: reminderDate });
+        console.log('addReminder -> reminderDate', reminderDate);
+        setReminderDialogOpen(false);
+    };
+
     const body = (
         <Grid container direction="column" className={classes.root}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <Grid container alignItems="flex-end">
+            <Grid container direction="row" justify="space-between">
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
                         disableToolbar
                         variant="inline"
@@ -233,12 +243,23 @@ export default function SimpleModal(props) {
                         id="date-picker-inline"
                         label="Date Added"
                         value={values.dateAdded}
+                        onChange={() => console.log('no')}
                         KeyboardButtonProps={{
                             'aria-label': 'change date',
                         }}
                     />
-                </Grid>
-            </MuiPickersUtilsProvider>
+                </MuiPickersUtilsProvider>
+
+                <Tooltip title="Reminder">
+                    <Button
+                        onClick={() => {
+                            setReminderDialogOpen(true);
+                        }}
+                    >
+                        <NotificationsIcon />
+                    </Button>
+                </Tooltip>
+            </Grid>
 
             <FormControl component="fieldset">
                 <FormLabel component="legend">Box Color</FormLabel>
@@ -461,6 +482,12 @@ export default function SimpleModal(props) {
             <Fab color="primary" className={classes.addButton} aria-label="add post" onClick={handleOpen}>
                 <AddIcon />
             </Fab>
+
+            <ReminderDialog
+                open={reminderDialogOpen}
+                handleOk={addReminder}
+                handleCancel={() => setReminderDialogOpen(false)}
+            />
 
             <Dialog
                 open={open}
