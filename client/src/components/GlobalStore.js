@@ -53,9 +53,7 @@ function dispatcher(state, action) {
             newState.loggedIn = true;
             return newState;
         case 'logout':
-            newState.loggedIn = false;
-            newState.userId = '';
-            return newState;
+            return defaultGlobalStore;
         default:
             console.log(`unknown action called from GlobalStore: ${action.do}`);
             break;
