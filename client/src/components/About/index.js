@@ -8,11 +8,11 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 function About() {
     return(
       <div>
-          <div className="row appFeature text-center">
-            <div className="col-xs-6 col-md-3"><CheckCircleOutlineIcon /> FAST AND EASY JOB SEARCH</div>
-            <div className="col-xs-6 col-md-3"><CheckCircleOutlineIcon /> OVERVIEW YOUR JOB PROGRESS BY STATUS</div>
-            <div className="col-xs-6 col-md-3"><CheckCircleOutlineIcon /> SAVE AND KEEP TRACK OF YOUR JOB JOURNEY</div>
-            <div className="col-xs-6 col-md-3"><CheckCircleOutlineIcon /> REMINDER FOR UPCOMING INTERVIEWS</div>
+          <div className="row appFeature">
+            <div className="col-xs-12 col-md-3 pull-right feature-text"><CheckCircleOutlineIcon /> FAST AND EASY JOB SEARCH</div>
+            <div className="col-xs-12 col-md-3 feature-text"><CheckCircleOutlineIcon /> OVERVIEW YOUR JOB PROGRESS BY STATUS</div>
+            <div className="col-xs-12 col-md-3 feature-text"><CheckCircleOutlineIcon /> SAVE &amp; KEEP TRACK OF YOUR JOB JOURNEY</div>
+            <div className="col-xs-12 col-md-3 feature-text"><CheckCircleOutlineIcon /> REMINDER FOR UPCOMING INTERVIEWS</div>
           </div>
           <div className="text-center about-us">
               <p>Service and maintenance companies typically process a high volume of low-value jobs. Without dedicated job management software it’s really difficult to keep track of jobs. Jobs might be logged manually or using spreadsheets. This doesn’t lend itself to sharing information, so in a busy environment, jobs get lost in the process. JobLogger software allows multiple people to log and view jobs at the same time. You can see the status of each job in real time as it progresses from creation to completion. Keeping both customers and management informed of jobs is easy and will give you the confidence to grow your service operation without having to take on more administration costs.</p>
