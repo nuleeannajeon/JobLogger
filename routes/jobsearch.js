@@ -20,9 +20,11 @@ module.exports = (router) => {
                 res.status(500).send({ error: 'Server error: Missing associated data to user' });
                 return;
             }
-            console.log('query is ', query)
-            const jobResults = await axios(`https://jobs.github.com/positions.json?page=1&search=${query}`).then(res => res.data);
-            console.log("jobResults", jobResults)
+            console.log('query is ', query);
+            const jobResults = await axios(`https://jobs.github.com/positions.json?page=1&search=${query}`).then(
+                (res) => res.data
+            );
+            console.log('jobResults', jobResults);
 
             res.status(200).send({ data: jobResults });
         } catch (err) {

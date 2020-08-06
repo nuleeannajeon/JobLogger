@@ -21,6 +21,7 @@ import Testing from './pages/Testing';
 import UserEntry from './pages/Userentry'
 import Reminders from './pages/Reminders'
 import Search from './pages/Search'
+import Footer from './components/Footer'
 const NavbarWithRouter = withRouter(Navbar);
 
 const theme = createMuiTheme({
@@ -86,6 +87,7 @@ function App() {
                         {/* <Route exact path="/myjourney" component={MyJourney} /> */}
                         {/* <Route exact path="/newpost" component={PostAdd} /> */}
                     </div>
+                    <Footer />
                 </Router>
             </GlobalStore>
         </ThemeProvider>
