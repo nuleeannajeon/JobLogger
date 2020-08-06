@@ -22,7 +22,7 @@
 ## Usage
 
 ## License
-![License](https://img.shields.io/badge/License-MIT%20License-blue)
+![License](https://joblogger-loc.herokuapp.com/)
 - **[MIT License](https://opensource.org/licenses/MIT)** 
 - 2020 League of Coders
 
