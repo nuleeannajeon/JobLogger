@@ -5,7 +5,7 @@ import {useGlobalStore } from '../GlobalStore';
 import API from '../../utils/API';
 
 const Result= (props) => {
-
+    const [globalStore, dispatch] = useGlobalStore()
     const {id, url, company_logo, postLink, company, title, location, description} = props 
     const serverData = {
         company, 
@@ -16,22 +16,20 @@ const Result= (props) => {
         location
     }
     
-    const htmlReg = /<.+?>/i
+    const htmlReg = /<.+?>/
     const htmlLessString = description.replace(htmlReg, ' ')
     console.log("Result -> htmlLessString", htmlLessString)
 
     const sendMePlease = async () => {
         const serverResponse = await API.post('/api/posts', serverData)
         console.log("sendMePlease -> serverResponse", serverResponse)
-        return (
-            <div className="alert alert-success" role="alert">
-                Successfully added to the wishlist!
-            </div>
-        )
+        processServerReturn(serverResponse, dispatch)
+
+        
     }
 
     return (
-        <div className="card" key={id}>
+        <div className="card my-2" key={id}>
             <div className="row">
                 <div className="col-sm-12 col-md-3 text-center">
                     <img className="company-logo" src={company_logo} />
