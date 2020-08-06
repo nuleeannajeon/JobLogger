@@ -445,7 +445,7 @@ export default function SimpleModal(props) {
 
     return (
         <div>
-            <Button onClick={handleOpen} style={{ float: 'right' }}>
+            <Button onClick={handleOpen} style={{ float: 'right', zIndex: 1 }}>
                 View/Edit
             </Button>
             {/* <button className="box-view-button" type="button" onClick={handleOpen}>

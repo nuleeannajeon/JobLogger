@@ -127,6 +127,8 @@ const UserSettings = () => {
             return;
         }
 
+        
+
         //check new and new 2 password match
         if (!(newPassword1 === newPassword2)) {
             dispatch({
@@ -136,6 +138,16 @@ const UserSettings = () => {
             });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2500);
             return;
+        }
+
+        if (newPassword1.length < 8) {
+            dispatch({
+                do: 'setMessage',
+                type: 'error',
+                message: 'Your password must be 8 characters or greater.',
+            });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2500);
+            return
         }
 
         const serverReturn = await API.put('/api/user', { currentPassword, newPassword: newPassword1 });
