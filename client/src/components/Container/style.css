@@ -15,3 +15,7 @@
 .right-col {
     margin-top: 50px;
 }
+
+.alert {
+    position: absolute;
+}

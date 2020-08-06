@@ -24,8 +24,11 @@ const Result= (props) => {
         const serverResponse = await API.post('/api/posts', serverData)
         console.log("sendMePlease -> serverResponse", serverResponse)
         processServerReturn(serverResponse, dispatch)
-
-        
+        return (
+            <div class="alert alert-success" role="alert">
+                Successfully added!
+            </div>
+        )
     }
 
     return (
