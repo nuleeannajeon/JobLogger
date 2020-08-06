@@ -23,7 +23,7 @@ import Reminders from './pages/Reminders';
 import Search from './pages/Search';
 import Footer from './components/Footer';
 const NavbarWithRouter = withRouter(Navbar);
-
+const FooterWithRouter = withRouter(Footer)
 const theme = createMuiTheme({
     palette: {
         primary: {
@@ -95,7 +95,7 @@ function App() {
                             {/* <Route exact path="/myjourney" component={MyJourney} /> */}
                             {/* <Route exact path="/newpost" component={PostAdd} /> */}
                         </div>
-                        <Footer />
+                        <FooterWithRouter />
                     </div>
                 </Router>
             </GlobalStore>
