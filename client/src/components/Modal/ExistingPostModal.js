@@ -65,7 +65,7 @@ export default function SimpleModal(props) {
     const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
 
     const datalist = props.data;
-    console.log("SimpleModal -> datalist", datalist)
+    console.log('SimpleModal -> datalist', datalist);
 
     const {
         _id,
@@ -85,7 +85,6 @@ export default function SimpleModal(props) {
         companyContact,
         companyLogoImage,
         reminder,
-        
     } = datalist;
 
     const [values, setValues] = React.useState({
@@ -107,55 +106,63 @@ export default function SimpleModal(props) {
     });
 
     const submitChange = async () => {
-        let serverMessage = {...values};
-      //Validate the fields are valid for the DB
+        let serverMessage = { ...values };
+        //Validate the fields are valid for the DB
 
-      //company can't be empty
-      if (serverMessage.company === ''){
-        dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        return
-      }
+        //company can't be empty
+        if (serverMessage.company === '') {
+            dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
 
-      //title can't be empty
-      if (serverMessage.title === ''){
-        dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        return
-      }
+        //title can't be empty
+        if (serverMessage.title === '') {
+            dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
 
-      //posting Type cant't be empty
-      if (serverMessage.postingType === ''){
-        dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
-        setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        return
-      }
+        //posting Type cant't be empty
+        if (serverMessage.postingType === '') {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
 
-      //postLink has to be a valid URL
-      // TODO add in regex to check if valid URL string
-      const verifyURL = (url) => {
-        var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
-        if (re.test(url)){
-            if (! url.includes('http://') && url.includes('www.')){
-                return 'http://' + url
-            } else {
-                return url
+        //postLink has to be a valid URL
+        // TODO add in regex to check if valid URL string
+        const verifyURL = (url) => {
+            var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+            if (re.test(url)) {
+                if (!url.includes('http://') && url.includes('www.')) {
+                    return 'http://' + url;
+                } else {
+                    return url;
+                }
             }
+            return false;
+        };
+        if (serverMessage.postLink !== '') {
+            const validurl = verifyURL(serverMessage.postLink);
+            console.log('submitChange -> validurl', validurl);
+            if (validurl === false) {
+                dispatch({ do: 'setMessage', type: 'error', message: 'The Post Link has be a valid url.' });
+                setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+                return;
+            }
+            serverMessage.postLink = validurl;
+            values.postLink = validurl;
         }
-        return false
-      }
-      if( serverMessage.postLink !== '' ){
-        const validurl = verifyURL(serverMessage.postLink)
-        console.log("submitChange -> validurl", validurl)
-        if (validurl === false){
-          dispatch({ do: 'setMessage', type: 'error', message: 'The Post Link has be a valid url.' });
-          setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-          return
+
+        if (!['applied', 'interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
+            delete serverMessage.appliedDate;
         }
-        serverMessage.postLink = validurl
-        values.postLink = validurl
-      }
-    
+
+        if (!['interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
+            delete serverMessage.heardBackDate;
+        }
+
         //removing any empty fields from the put statement
         Object.keys(serverMessage).forEach((key) => {
             if (!serverMessage[key]) {
@@ -257,12 +264,7 @@ export default function SimpleModal(props) {
                 </RadioGroup>
             </FormControl>
 
-            <TextField
-                id="company-text"
-                label="Company"
-                value={values.company}
-                onChange={handleChange('company')}
-            />
+            <TextField id="company-text" label="Company" value={values.company} onChange={handleChange('company')} />
 
             <TextField id="title-text" label="Title" value={values.title} onChange={handleChange('title')} />
 
@@ -443,7 +445,9 @@ export default function SimpleModal(props) {
 
     return (
         <div>
-            <Button onClick={handleOpen} style={{float: "right"}}>View/Edit</Button>
+            <Button onClick={handleOpen} style={{ float: 'right' }}>
+                View/Edit
+            </Button>
             {/* <button className="box-view-button" type="button" onClick={handleOpen}>
                 View/Edit
             </button> */}
