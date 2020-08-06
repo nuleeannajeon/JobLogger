@@ -2,23 +2,24 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
-// import { purple, green } from '@material-ui/core/colors';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import { GlobalStore } from './components/GlobalStore';
 
+import './App.css';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute';
-import Content from './pages/Content'; // temp for testing
 import Message from './components/Message';
 import Logout from './pages/Logout';
 import UserSettings from './pages/UserSettings';
 import Home from './pages/Home';
-import './App.css';
 import Navbar from './components/Navbar';
-// import PostAdd from './pages/PostAdd';
 import Overview from './pages/Overview';
-// import Search from "./pages/Search";
+import MyJourney from './pages/MyJourney';
+import Testing from './pages/Testing';
+import UserEntry from './pages/Userentry'
+import Reminders from './pages/Reminders'
 const NavbarWithRouter = withRouter(Navbar);
 
 const theme = createMuiTheme({
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-    const classes = useStyles()
+    const classes = useStyles();
     return (
         <ThemeProvider theme={theme}>
             <GlobalStore>
@@ -57,19 +58,31 @@ function App() {
                     <NavbarWithRouter />
                     <div className={classes.paddingTop}>
                         <Route exact path="/" component={Home} />
+                        <Route exact path="/entry" component={UserEntry} />
                         <Route exact path="/register" component={Registration} />
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/logout" component={Logout} />
+                        <Route exact path="/testing" component={Testing} />
                         {/* <Route exact path="/overview" component={Overview} /> */}
-                        <PrivateRoute exact path="/home">
+                        {/* <PrivateRoute exact path="/home">
                             <Content />
-                        </PrivateRoute>
+                        </PrivateRoute> */}
                         <PrivateRoute path="/overview">
                             <Overview />
                         </PrivateRoute>
+                        {/* <PrivateRoute path="/search">
+                            <Search />
+                        </PrivateRoute> */}
                         <PrivateRoute path="/settings">
                             <UserSettings />
                         </PrivateRoute>
+                        <PrivateRoute exact path="/myjourney">
+                            <MyJourney />
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/reminders">
+                            <Reminders />
+                        </PrivateRoute>
+                        {/* <Route exact path="/myjourney" component={MyJourney} /> */}
                         {/* <Route exact path="/newpost" component={PostAdd} /> */}
                     </div>
                 </Router>

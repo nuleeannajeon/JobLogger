@@ -45,6 +45,22 @@ const useStyles = makeStyles((theme) => ({
     inputContainer: {
         marginBottom: theme.spacing(4),
     },
+    hero: {
+        width: '100%',
+        height: 300,
+        backgroundColor: theme.palette.primary.main,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    heroIcon: {
+        fontSize: '3em',
+    },
+    personImage: {
+        borderRadius: '25px',
+        width: '150px'
+        
+    },
 }));
 
 const UserSettings = () => {
@@ -165,6 +181,15 @@ const UserSettings = () => {
 
     return (
         <div>
+            <div className={classes.hero}>
+                <Typography variant="h2">
+                    {globalStore.thumbnail ? (
+                        <img className={classes.personImage} src={globalStore.thumbnail} alt="UserIcon" />
+                    ) : (
+                        <PersonIcon className={classes.heroIcon} />
+                    )}
+                </Typography>
+            </div>
             <Container maxWidth="sm">
                 <Typography className={classes.title} variant="h4">
                     My profile
@@ -273,7 +298,7 @@ const UserSettings = () => {
                     <TextField
                         label="Current Password"
                         required
-                        className={styles.marginTop}
+                        className={classes.inputField}
                         type={values.showcurrentPassword ? 'text' : 'password'}
                         value={values.currentPassword}
                         onChange={handleChange('currentPassword')}
@@ -294,7 +319,7 @@ const UserSettings = () => {
                     <TextField
                         label="New Password"
                         required
-                        className={styles.marginTop}
+                        className={classes.inputField}
                         type={values.shownewPassword1 ? 'text' : 'password'}
                         value={values.newPassword1}
                         onChange={handleChange('newPassword1')}
@@ -315,7 +340,7 @@ const UserSettings = () => {
                     <TextField
                         label="New Password"
                         required
-                        className={styles.marginTop}
+                        className={classes.inputField}
                         type={values.shownewPassword2 ? 'text' : 'password'}
                         value={values.newPassword2}
                         onChange={handleChange('newPassword2')}

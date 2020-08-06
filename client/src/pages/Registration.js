@@ -57,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const saveSession = (sessionID) => {
+    localStorage.session = sessionID;
+};
+
 function validateEmail(email) {
     //eslint-disable-next-line
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -117,7 +121,6 @@ const Registration = (props) => {
                                     // endAdornment={<InputAdornment position="end"></InputAdornment>}
                                 />
                                 <TextField
-                                    style={{ marginTop: 10, marginBottom: 15 }}
                                     className={classes.input}
                                     id="password"
                                     label="Password"
@@ -156,7 +159,7 @@ const Registration = (props) => {
                             // style={{ maxWidth: 500 }}
                             container
                             direction="column"
-                            justify="space-between"
+                            // justify="space-between"
                             alignItems="stretch"
                         >
                             <form noValidate={false} autoComplete="on">
@@ -194,7 +197,7 @@ const Registration = (props) => {
                                     label="Portfolio Link"
                                     fullWidth
                                     // error={values.errorName}
-                                    className={(classes.input, classes.bottomSpace)}
+                                    className={[classes.input, classes.bottomSpace].join(' ')}
                                     value={values.portfolioLink}
                                     onChange={handleChange('portfolioLink')}
                                     InputProps={{
@@ -245,13 +248,13 @@ const Registration = (props) => {
         const loggedInReturn = await API.get('/loginstatus');
         if (loggedInReturn.loggedIn === true) {
             dispatch({ do: 'login', userId: loggedInReturn.db_id });
-            history.push('/home');
+            history.push('/overview');
         }
     };
 
     useEffect(() => {
         if (globalStore.loggedIn) {
-            history.push('/home');
+            history.push('/overview');
         } else if (localStorage.session) {
             checkLoggedIn();
         }
@@ -298,7 +301,13 @@ const Registration = (props) => {
         const serverReturn = await API.post('/register', userData);
         // console.log('submitRegistration -> serverReturn', serverReturn);
 
+        if (serverReturn.session && !serverReturn.error) {
+            saveSession(serverReturn.session);
+        }
+
+
         processServerReturn(serverReturn, dispatch);
+        console.log("sendRegistrationToServer -> serverReturn", serverReturn)
         return !serverReturn.error;
     };
 
@@ -306,11 +315,15 @@ const Registration = (props) => {
         event.preventDefault();
         setLoading(true);
         const success = await sendRegistrationToServer();
+
         let timer = setTimeout(() => {
             setLoading(false);
             clearTimeout(timer);
         }, 500);
-        if (success) setTimeout(() => history.push('/login'), 2000);
+        if (success) {
+            dispatch({ do: 'login' });
+            setTimeout(() => history.push('/overview'), 2000);
+        }
     };
 
     const handleChange = (prop) => (event) => {
@@ -332,7 +345,7 @@ const Registration = (props) => {
                 <Typography variant="h4" className={classes.title} gutterBottom>
                     Register
                 </Typography>
-                <Button className={classes.spaceMe} onClick={() => history.push('/login')}>
+                <Button className={classes.spaceMe} onClick={() => history.push('/entry')}>
                     I'm already registered
                 </Button>
                 <Stepper activeStep={activeStep} orientation="vertical">

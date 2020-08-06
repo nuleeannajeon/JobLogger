@@ -5,6 +5,7 @@ export default {
     checkSecured: async () => {},
 
     get: (url) => {
+        console.log(localStorage);
         return fetch(url, {
             headers: { Session: localStorage.session ? localStorage.session : '' },
         }).then((result) => result.json());
@@ -53,5 +54,12 @@ export default {
         return fetch('/api/posts', {
             headers: { Session: localStorage.session ? localStorage.session : '' },
         }).then((res) => res.json());
+    },
+    getLoggedState: async () => {
+        return fetch('/loginstatus', {
+            headers: { Session: localStorage.session ? localStorage.session : '' },
+        })
+            .then((res) => res.json())
+            .then((res) => (res.error ? false : res.loggedIn));
     },
 };

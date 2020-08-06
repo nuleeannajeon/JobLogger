@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const postsSchema = new Schema({
@@ -9,48 +9,48 @@ const postsSchema = new Schema({
     },
     company: {
         type: String,
-        required: 'Please enter a name of the company!'
+        required: 'Please enter a name of the company!',
     },
     companyLogoImage: {
         type: String,
     },
     title: {
         type: String,
-        required: 'Please enter a name of the position!'
+        required: 'Please enter a name of the position!',
     },
     postingType: {
         type: String,
         enum: ['wishlists', 'applied', 'interview', 'offer', 'reject']
     },
     salary: {
-        type: Number
+        type: Number,
     },
     dateAdded: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     notes: {
-        type: String
+        type: String,
     },
     postLink: {
-        type: String
+        type: String,
     },
     location: {
-        type: String
+        type: String,
     },
     // applied: {
     //     type: Boolean
     // },
     appliedDate: {
         type: Date,
-        default: Date.now
+        // default: Date.now,
     },
     // heardBack: {
     //     type: Boolean
     // },
     heardBackDate: {
         type: Date,
-        default: Date.now
+        // default: Date.now,
     },
     interviewState: {
         type: String,
@@ -60,20 +60,15 @@ const postsSchema = new Schema({
     interviewNote: {
         type: String
     },
-    companyContact: [
-        { name: String },
-        { email: String},
-        { phone: Number },
-        { position: String }
-    ],
-    savedApiLink :{
-        type: String
+    companyContact: [{ name: String, email: String, phone: String, position: String }],
+    savedApiLink: {
+        type: String,
     },
     reminder: {
-        type: Date
-    }
-})
+        type: Date,
+    },
+});
 
-const Posts = mongoose.model("Posts", postsSchema);
+const Posts = mongoose.model('Posts', postsSchema);
 
 module.exports = Posts;

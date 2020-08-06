@@ -9,7 +9,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
-// import './login.css';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
 import LinkedInOAuthButton from '../components/LinkedInOAuth/index.js';
@@ -19,15 +18,11 @@ import Typography from '@material-ui/core/Typography';
 import processServerReturn from '../utils/processServerReturn';
 import ResponsiveSubmit from '../components/ResponsiveSubmit';
 import { makeStyles } from '@material-ui/core/styles';
-import { blue } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
     loginButton: {
         margin: theme.spacing(1),
         backgroundColor: theme.primary,
-        // '&:hover': {
-        //     backgroundColor: blue[700],
-        // },
     },
     buttonContainer: {
         display: 'flex',
@@ -37,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     inputContainer: {
-        // maxWidth: 500,
         '& > *': {
             marginTop: theme.spacing(2),
         },
@@ -56,8 +50,8 @@ const useStyles = makeStyles((theme) => ({
     title: { textAlign: 'center', marginTop: 20, marginBottom: 40 },
     spaceMe: { marginTop: 20 },
     input: {
-        marginTop: theme.spacing(2)
-    }
+        marginTop: theme.spacing(2),
+    },
 }));
 
 const saveSession = (sessionID) => {
@@ -81,14 +75,14 @@ const Login = () => {
         const loggedInReturn = await API.get('/loginstatus');
         if (loggedInReturn.loggedIn === true) {
             dispatch({ do: 'login', userId: loggedInReturn.db_id });
-            history.push('/home');
+            history.push('/overview');
         }
     };
 
     // checking if already logged in
     useEffect(() => {
         if (globalStore.loggedIn) {
-            history.push('/home');
+            history.push('/overview');
         } else if (localStorage.session) {
             checkLoggedIn();
         }
@@ -99,11 +93,11 @@ const Login = () => {
     const oAuthloginComplete = (returnedData) => {
         processServerReturn(returnedData, dispatch);
 
-        localStorage.session = JSON.stringify(returnedData.session);
+        localStorage.session = returnedData.session;
         dispatch({ do: 'setMessage', type: 'success', message: returnedData.message });
         dispatch({ do: 'login', userId: returnedData.db_id });
         setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-        setTimeout(() => history.push('/home'), 2000);
+        setTimeout(() => history.push('/overview'), 2000);
     };
 
     const sendLogin = async () => {
@@ -148,7 +142,7 @@ const Login = () => {
         }, 500);
         if (success) {
             dispatch({ do: 'login' });
-            setTimeout(() => history.push('/home'), 2000);
+            setTimeout(() => history.push('/overview'), 2000);
         }
     };
 
@@ -192,14 +186,12 @@ const Login = () => {
                             id="email"
                             fullWidth
                             autoComplete="username"
-                            // className="spaceMe inputField"
                             type={values.email}
                             value={values.email}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') passwordRef.current.children[0].focus();
                             }}
                             onChange={handleChange('email')}
-                            // endAdornment={<InputAdornment position="end"></InputAdornment>}
                         />
                     </FormControl>
                     <FormControl>
@@ -208,7 +200,6 @@ const Login = () => {
                             id="password"
                             autoComplete="password"
                             ref={passwordRef}
-                            // className="spaceMe inputField"
                             type={values.showPassword ? 'text' : 'password'}
                             value={values.password}
                             onKeyDown={(e) => {
@@ -236,22 +227,11 @@ const Login = () => {
                             buttonClass={classes.loginButton}
                             submit={submitLogin}
                         />
-                        {/* <Button
-                            variant="contained"
-                            style={{ marginBottom: '1em' }}
-                            color="primary"
-                            className="spaceMe"
-                            onClick={submitLogin}
-                            disabled={loading}
-                        >
-                            Login
-                        </Button> */}
                         <Button className="spaceMe" onClick={() => history.push('/register')}>
                             Register
                         </Button>
                         <LinkedInOAuthButton className="spaceMe" loginComplete={oAuthloginComplete} />
                     </div>
-                    {/* </div> */}
                 </Grid>
             </Container>
         </div>

@@ -1,7 +1,7 @@
 // import { useGlobalStore } from '../components/GlobalStore';
 
 export default (serverReturn, dispatch) => {
-console.log("serverReturn", serverReturn)
+    console.log('serverReturn', serverReturn);
     // const [, dispatch] = useGlobalStore();
     if (!serverReturn) {
         dispatch({

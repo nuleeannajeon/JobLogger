@@ -70,14 +70,9 @@ module.exports = {
             console.log('there was an error creating the new user', err);
             return { error: 'Error creating user' };
         }
-
-        delete newUser.password;
-        delete newUser.authId;
-
         return {
             message: `Welcome ${newUserDataObject.name}!`,
-            db_id: newUserDataObject._id,
-            ...newUser,
+            session: newUser.session
         };
     },
 };

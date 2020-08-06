@@ -43,7 +43,10 @@ module.exports = (router) => {
             }
 
             const newPost = await db.Posts.create(body);
-            await db.UserData.findByIdAndUpdate({ _id: user.userData }, { $push: { posts: newPost._id } });
+            await db.UserData.findByIdAndUpdate(
+                { _id: user.userData },
+                { $push: { posts: newPost._id }, $inc: { totalPosts: 1 } }
+            );
 
             res.status(200).send({ message: 'Post successfully added', messageData: newPost });
         } catch (err) {
@@ -76,6 +79,39 @@ module.exports = (router) => {
             const post = await db.Posts.findByIdAndUpdate({ _id: postId }, body, { new: true });
 
             res.status(200).send({ message: 'Successfully updated', messageData: post });
+        } catch (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Something went wrong with the server' });
+        }
+    });
+
+    router.put('/api/postreminders/:postId', secured, async ({ headers, body, params }, res) => {
+        try {
+            const { session } = headers;
+            const { postId } = params;
+            const user = await db.UserLogin.findOne({ session });
+
+            if (!user) {
+                console.log("This shouldn't happen, but an authenticated user has no data?");
+                res.status(400).send({ error: 'No user found' });
+                return;
+            }
+
+            //checking this post belongs to this user just in case
+            const userPosts = await db.UserData.findById({ _id: user.userData }).then((res) => res.posts);
+
+            if (!userPosts.includes(postId)) {
+                console.log('A request to edit a post not belonging to present user was made');
+                res.status(403).send({ error: 'Request made on post not belonging to user' });
+                return;
+            }
+
+            if (body.reminder === 'unset'){
+                await db.Posts.findByIdAndUpdate({ _id: postId }, {$unset: {reminder: ''}}, { new: true });
+            }
+
+
+            res.status(200).send({ message: 'Successfully updated' });
         } catch (err) {
             console.log(err);
             res.status(500).send({ error: 'Something went wrong with the server' });

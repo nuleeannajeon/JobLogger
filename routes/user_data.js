@@ -5,20 +5,25 @@ module.exports = (router) => {
     router.get('/api/userdata', secured, async ({ headers }, res) => {
         try {
             const { session } = headers;
-            const userData = await User.findOne({ session }).populate('userData').populate('posts');
+            const userData = await User.findOne({ session }).populate('userData');
 
             if (!userData) {
                 console.log("This shouldn't happen, but an authenticated user has no data?");
                 res.status(400).send({ error: 'No user found' });
                 return;
             }
-            const { name, school, location, portfolioLink, posts } = userData.userData;
+            const { name, school, location, portfolioLink, posts, totalPosts, createdAt } = userData.userData;
+            const { thumbnail } = userData;
+            console.log('userData being sent', userData);
             res.status(200).send({
                 school,
                 location,
                 portfolioLink,
                 posts,
                 name,
+                totalPosts,
+                createdAt,
+                thumbnail,
             });
         } catch (err) {
             console.log(err);
@@ -47,8 +52,6 @@ module.exports = (router) => {
             Object.keys(newData).forEach((item) => {
                 if (!newData[item]) delete newData[item];
             });
-            // console.log("user id should be", user.userData)
-            // console.log('yser not user', await UserData.find({}))
 
             await UserData.findByIdAndUpdate({ _id: user.userData }, newData);
             changedMessage = `Changed your ${Object.keys(newData).join(', ')}`;
@@ -58,18 +61,4 @@ module.exports = (router) => {
             res.status(500).send({ error: 'Something went wrong with the server' });
         }
     });
-
-    // ROUTES FOR CRUD
-
-    // edit school
-
-    // edit location
-
-    // edit portfolio link
-
-    // add post
-
-    // remove post
-
-    // edit post
 };

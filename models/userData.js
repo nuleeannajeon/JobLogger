@@ -1,28 +1,37 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const UserDataSchema = new Schema({
-    userLogin: { type: Schema.Types.ObjectId, ref: 'UserAuthentication' },
-    name: {
-        type: String,
-        required: true,
-    },
-    school: {
-        type: String,
-    },
-    location: {
-        type: String,
-    },
-    portfolioLink: {
-        type: String,
-    },
-    posts: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Posts',
+const UserDataSchema = new Schema(
+    {
+        userLogin: { type: Schema.Types.ObjectId, ref: 'UserAuthentication' },
+        name: {
+            type: String,
+            required: true,
         },
-    ],
-});
+        school: {
+            type: String,
+        },
+        location: {
+            type: String,
+        },
+        portfolioLink: {
+            type: String,
+        },
+        posts: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Posts',
+            },
+        ],
+        totalPosts: {
+            type: Number,
+            default: 0,
+        },
+    },
+    {
+        timestamps: true,
+    }
+);
 
 const UserData = mongoose.model('UserData', UserDataSchema);
 

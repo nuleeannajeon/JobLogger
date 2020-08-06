@@ -12,6 +12,10 @@ const defaultGlobalStore = {
     location: '',
     posts: [],
     portfolioLink: '',
+    totalPosts: 0,
+    createdAt: '',
+    thumbnail: '',
+    reminders: false,
 };
 
 const GlobalData = React.createContext();
@@ -19,6 +23,7 @@ const GlobalData = React.createContext();
 // let lastDispatcher = { do: '', time: 0 };
 
 function dispatcher(state, action) {
+    console.log('GlobalDispatcher ', action, state);
     // if (action.do === lastDispatcher.do && Date.now() - lastDispatcher.time < 1000) {
     //     console.log('Cancelling action')
     //     return state; //cancelling action because repeated within a second
@@ -27,11 +32,13 @@ function dispatcher(state, action) {
     let newState = { ...state };
     switch (action.do) {
         case 'setUserData':
-            ['name', 'school', 'location', 'posts', 'portfolioLink'].forEach((item) => {
-                if (action[item]) {
-                    newState[item] = action[item];
+            ['name', 'school', 'location', 'posts', 'portfolioLink', 'totalPosts', 'createdAt', 'thumbnail', 'reminders'].forEach(
+                (item) => {
+                    if (action[item]) {
+                        newState[item] = action[item];
+                    }
                 }
-            });
+            );
             return newState;
         case 'setMessage':
             newState.messageType = action.type;
@@ -43,7 +50,6 @@ function dispatcher(state, action) {
             return newState;
         case 'login':
             newState.loggedIn = true;
-            newState.userId = action.userId;
             return newState;
         case 'logout':
             newState.loggedIn = false;

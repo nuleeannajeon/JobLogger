@@ -1,0 +1,25 @@
+.jumbotron {
+    background: url("https://images-ext-1.discordapp.net/external/dtDWDH0uPEhIEQ-Z50oWS9sDb1hMSqsecLnb_eGwLM0/https/www.mentaldaily.com/wp-content/uploads/2020/07/5907980386511.jpg?width=800&height=534");
+    background-repeat: no-repeat;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-position: 100% 20%;
+    height: 40vh;
+    /* color: white; */
+    margin-bottom: 0;
+}
+
+.display-4 {
+    color: cadetblue;
+    font-family: 'Quando', serif;
+    font-size: 40px;
+}
+
+.input-group{
+}
+
+.btn-search {
+    background-color: cadetblue;
+    color: white;
+}
