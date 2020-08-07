@@ -12,7 +12,6 @@ import ReminderMessage from '../components/ReminderMessage';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
 
-
 const useStyles = makeStyles((theme) => ({
     addButton: {
         [theme.breakpoints.down('xs')]: {
@@ -43,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
         '& > *': {
             marginBottom: '2em',
         },
+        backgroundImage: 'url(./assets/marten-bjork-6dW3xyQvcYE-removebg.png)',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
     },
 }));
 
@@ -80,18 +82,19 @@ function Overview() {
             setWelcomeText(
                 <div className={classes.welcomeText}>
                     <Typography variant="h4">Hi, welcome to your JobLogger overview</Typography>
-                    <Typography>With the new post button you can add to these lists.
-                    The wishlist is for opportunities you haven't yet applied to
-                    
-                        From there, you can change the category of your posts through from applied to their final state
-                        of acceptance offer or rejection.
-                    
-                Good luck with your job search!</Typography>
+                    <Typography>
+                        With the new post button you can add to these lists. The wishlist is for opportunities you
+                        haven't yet applied to From there, you can change the category of your posts through from
+                        applied to their final state of acceptance offer or rejection. Good luck with your job search!
+                    </Typography>
                 </div>
             );
         } else {
-            setWelcomeText('')
-            history.push('/overview/wishlists')
+            setWelcomeText('');
+            console.log('path, url', history)
+            if (history.location.pathname === '/overview'){
+                history.push('/overview/wishlists');
+            }
             // if (wishlists.length > 0){
             //     return
             // }
@@ -112,8 +115,6 @@ function Overview() {
             //     history.push('/overview/reject')
             //     return
             // }
-
-
         }
     };
 
