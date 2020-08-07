@@ -54,7 +54,7 @@ Job Search Engine: The API was provided by [Github Public API](https://jobs.gith
 - **[MIT License](https://opensource.org/licenses/MIT)** 
 - 2020 League of Coders 
 
-## Question어
+## Question
 | Ask Me Now! | Ask Me Now! | Ask Me Now! |
 | :---: | :---: | :---: |
 | ![alt text](https://avatars0.githubusercontent.com/u/65268642?s=460&u=bd568c7596e7f6c9585caeb89e88b084e56c21f9&v=4 "Github Profile Picture") | ![alt text](https://avatars3.githubusercontent.com/u/63874445?s=460&u=002d392fd3ed13215f1c72eec6952f72b24bc516&v=4 "Github Profile Picture") | ![alt text](https://avatars3.githubusercontent.com/u/48775473?s=400&u=e657eac2191121ccbff7caba85bd7a5686464951&v=4 "Github Profile Picture") |
