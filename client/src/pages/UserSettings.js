@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Switch, Route, useRouteMatch, Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Button from '@material-ui/core/Button';
 import { useGlobalStore } from '../components/GlobalStore';
-import JobLoggerIcon from '../components/JobLoggerIcon';
 import PersonIcon from '@material-ui/icons/Person';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -20,12 +15,11 @@ import SchoolIcon from '@material-ui/icons/School';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import WorkIcon from '@material-ui/icons/Work';
 import { makeStyles } from '@material-ui/core/styles';
-import { blue } from '@material-ui/core/colors';
 import ResponsiveSubmit from '../components/ResponsiveSubmit';
 import Divider from '@material-ui/core/Divider';
 import SaveIcon from '@material-ui/icons/Save';
 
-import styles from './UserSettings.module.css';
+// import styles from './UserSettings.module.css';
 const useStyles = makeStyles((theme) => ({
     inputField: {
         marginTop: theme.spacing(2),
@@ -66,10 +60,8 @@ const useStyles = makeStyles((theme) => ({
 
 const UserSettings = () => {
     const [globalStore, dispatch] = useGlobalStore();
-    const history = useHistory();
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
-    let { path, url } = useRouteMatch();
 
     //FIELDS
     const defaultValues = {
@@ -160,7 +152,7 @@ const UserSettings = () => {
     const handlePasswordSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
-        const success = submitPasswordChange();
+        await submitPasswordChange();
         let timer = setTimeout(() => {
             setLoading(false);
             clearFields();
@@ -184,7 +176,7 @@ const UserSettings = () => {
     const handleSubmitDetails = async (event) => {
         event.preventDefault();
         setLoading(true);
-        const success = await submitDetails();
+        await submitDetails();
         let timer = setTimeout(() => {
             setLoading(false);
             clearFields();

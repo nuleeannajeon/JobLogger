@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 // import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-import Modal from '@material-ui/core/Modal';
+// import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 // import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -160,6 +160,7 @@ export default function SimpleModal(props) {
 
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+    //eslint-disable-next-line
     const [scroll, setScroll] = useState('paper');
 
     const handleOpen = () => {
@@ -226,7 +227,8 @@ export default function SimpleModal(props) {
 
         //postLink has to be a valid URL
         const verifyURL = (url) => {
-            var re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+            //eslint-disable-next-line
+            const re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
             if (re.test(url)) {
                 if (!url.includes('http://') && !url.includes('https://') && url.includes('www.')) {
                     return 'http://' + url;

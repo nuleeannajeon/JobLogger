@@ -39,6 +39,7 @@ const MyJourney = () => {
     const classes = useStyles();
     const [globalStore, dispatch] = useGlobalStore();
     const [loading, setLoading] = useState(true);
+    //eslint-disable-next-line
     const [posts, setPosts] = useState([])
 
     const getUserData = async () => {
@@ -63,6 +64,7 @@ const MyJourney = () => {
 
     useEffect(() => {
         getUserData();
+        //eslint-disable-next-line
     }, []);
 
     return (

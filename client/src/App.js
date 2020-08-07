@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import { GlobalStore } from './components/GlobalStore';
 
@@ -17,7 +16,6 @@ import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import Overview from './pages/Overview';
 import MyJourney from './pages/MyJourney';
-import Testing from './pages/Testing';
 import UserEntry from './pages/Userentry';
 import Reminders from './pages/Reminders';
 import Search from './pages/Search';
@@ -73,11 +71,6 @@ function App() {
                             <Route exact path="/register" component={Registration} />
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/logout" component={Logout} />
-                            <Route exact path="/testing" component={Testing} />
-                            {/* <Route exact path="/overview" component={Overview} /> */}
-                            {/* <PrivateRoute exact path="/home">
-                            <Content />
-                        </PrivateRoute> */}
                             <PrivateRoute path="/overview">
                                 <Overview />
                             </PrivateRoute>
@@ -93,8 +86,6 @@ function App() {
                             <PrivateRoute exact path="/reminders">
                                 <Reminders />
                             </PrivateRoute>
-                            {/* <Route exact path="/myjourney" component={MyJourney} /> */}
-                            {/* <Route exact path="/newpost" component={PostAdd} /> */}
                         </div>
                         <FooterWithRouter />
                     </div>
