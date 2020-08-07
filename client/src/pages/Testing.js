@@ -39,14 +39,12 @@ const Testing = (props) => {
     const getUserData = async () => {
         const userData = await API.getUserData();
         const posts = await API.getUserPosts().then(res => res.message);
-        console.log("getUserData -> posts", posts)
         dispatch({ do: 'setUserData', ...userData });
         dispatch({ do: 'setUserData', posts });
 
         //FOR TESTING
         setPost(posts[0])
 
-        console.log(userData);
     };
 
     useEffect(() => {
@@ -55,7 +53,6 @@ const Testing = (props) => {
     }, []);
 
     if (!post) return <p>Loading</p>
-    console.log('here')
     return (
         <div>
             <ViewPost {...post} />

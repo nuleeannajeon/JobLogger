@@ -91,7 +91,6 @@ function Overview() {
             );
         } else {
             setWelcomeText('');
-            console.log('path, url', history)
             if (history.location.pathname === '/overview'){
                 history.push('/overview/wishlists');
             }

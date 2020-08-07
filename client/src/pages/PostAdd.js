@@ -59,7 +59,6 @@ const PostAdd = () => {
     });
 
     const handleSaveButton = () => {
-        console.log('Saved not implemented');
         setLoading(true);
     };
 
