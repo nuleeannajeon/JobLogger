@@ -11,6 +11,7 @@ import NewPostModal from '../components/Modal/NewPostModal.js';
 import ReminderMessage from '../components/ReminderMessage';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
+import OverviewInstruction from '../components/OverviewInstruction';
 
 const useStyles = makeStyles((theme) => ({
     addButton: {
@@ -35,16 +36,6 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
         //   marginRight: theme.spacing(1),
-    },
-    welcomeText: {
-        marginLeft: '2em',
-        maxWidth: '80ch',
-        '& > *': {
-            marginBottom: '2em',
-        },
-        backgroundImage: 'url(./assets/marten-bjork-6dW3xyQvcYE-removebg.png)',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
     },
 }));
 
@@ -80,14 +71,7 @@ function Overview() {
 
         if (userPosts.length === 0) {
             setWelcomeText(
-                <div className={classes.welcomeText}>
-                    <Typography variant="h4">Hi, welcome to your JobLogger overview</Typography>
-                    <Typography>
-                        With the new post button you can add to these lists. The wishlist is for opportunities you
-                        haven't yet applied to From there, you can change the category of your posts through from
-                        applied to their final state of acceptance offer or rejection. Good luck with your job search!
-                    </Typography>
-                </div>
+                    <OverviewInstruction />
             );
         } else {
             setWelcomeText('');
