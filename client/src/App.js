@@ -25,7 +25,7 @@ import Footer from './components/Footer';
 import OverviewInstruction from './components/OverviewInstruction';
 
 const NavbarWithRouter = withRouter(Navbar);
-
+const FooterWithRouter = withRouter(Footer)
 const theme = createMuiTheme({
     palette: {
         primary: {
@@ -97,7 +97,7 @@ function App() {
                             {/* <Route exact path="/myjourney" component={MyJourney} /> */}
                             {/* <Route exact path="/newpost" component={PostAdd} /> */}
                         </div>
-                        <Footer />
+                        <FooterWithRouter />
                     </div>
                 </Router>
             </GlobalStore>
