@@ -22,23 +22,39 @@ So that I can better organize myself and spend my time searching for jobs and no
 
 ## Demo
 ### Heroku URL
-[Click Here to checkout JobLogger](https://joblogger-loc.herokuapp.com/)
+[Click Here to check out JobLogger](https://joblogger-loc.herokuapp.com/)
 
 ### Screenshots
-![JobLogger](need home page screenshot)
+
+
 This is the main page of our application. You can sign up locally or use your LinkedIn account to login.
 
-![JobLogger](login page screenhot)
+![JobLogger Homepage](./readmeAssets/home.jpg)
+
+
 Login/Registration Page.
 
-![JobLogger](overview page screenshot)
-![JobLogger](overview page input modal image)
-Overview Page: On this page, you can keep track on your job application status by changing and updating its status. You can manually add the job listings that you are interested in or you can also bring it from the search engine result that is provided next to this page.
+![JobLogger](./readmeAssets/login.jpg)
 
-![JobLogger](search page screenshot)
+![JobLogger](./readmeAssets/register.jpg)
+
+
+Overview Page: On this page, you can keep track on your job application status by changing and updating its status. You can manually add the job listings that you are interested in or you can also save them from the search engine result that is provided next to this page.
+
+![JobLogger](./readmeAssets/overview.jpg)
+
+![JobLogger](./readmeAssets/newpost.jpg)
+
+![JobLogger](./readmeAssets/savedpost.jpg)
+
+
 Job Search Engine: The API was provided by [Github Public API](https://jobs.github.com/api). Users can search the job listings by typing in the keywords such as web developer, software engineer, node and so on. If there is a listing that you want to add it to the wishlist, you can simply add it by clicking the `Save to Wishlist` button.
 
+![JobLogger](./readmeAssets/search.jpg)
 
+Settings Page: On this page you can see and update your personal information, and update your password.
+
+![JobLogger](./readmeAssets/settings.jpg)
 
 ## Technologies
 - MongoDB ([Documentation](https://docs.mongodb.com/)) and Mongoose ([Documentation](https://mongoosejs.com/docs/api.html))
