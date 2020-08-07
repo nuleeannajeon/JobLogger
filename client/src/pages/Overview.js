@@ -109,7 +109,7 @@ function Overview() {
     return (
         <div style={{ marginTop: '4rem', borderTop: '1px solid #f1f1f1fb', position: 'relative'}}>
             <ReminderMessage />
-            <div className="sidebar">
+            <div className="sidebar" style={{fontFamily: 'Varela Round'}}>
                 <NavLink to={`${url}/wishlists`} activeClassName="active">
                     <i className="fa fa-fw fa-star"></i> <span className="overview-link">Wishlists</span>
                 </NavLink>
