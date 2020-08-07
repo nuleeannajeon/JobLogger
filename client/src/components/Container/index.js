@@ -5,8 +5,8 @@ import {useGlobalStore } from '../GlobalStore';
 import API from '../../utils/API';
 
 const Result= (props) => {
-    const [globalStore, dispatch] = useGlobalStore()
-    const {id, url, company_logo, postLink, company, title, location, description} = props 
+    const [, dispatch] = useGlobalStore()
+    const {id, url, company_logo, company, title, location, description} = props 
     const serverData = {
         company, 
         title, 
@@ -35,7 +35,7 @@ const Result= (props) => {
         <div className="card my-2" key={id}>
             <div className="row">
                 <div className="col-sm-12 col-md-3 text-center left-col">
-                    <img className="company-logo" src={company_logo} />
+                    <img className="company-logo" src={company_logo} alt='company logo' />
                     <br></br>
                     <br />
                     <button onClick={() => {sendMePlease()}} className="btn add-btn">Add to My Wishlist</button>

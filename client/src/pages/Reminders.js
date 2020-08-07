@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useGlobalStore } from '../components/GlobalStore';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import API from '../utils/API';
 import processServerReturn from '../utils/processServerReturn';
-import ResponsiveSubmit from '../components/ResponsiveSubmit';
 import SmallPost from '../components/SmallPost';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button'
-
-const useStyles = makeStyles((theme) => ({}));
 
 const EmptyRemindersContent = () => {
     return (
@@ -52,8 +47,7 @@ const ConfirmationDialog = (props) => {
 };
 
 const Reminders = () => {
-    const classes = useStyles();
-    const [globalStore, dispatch] = useGlobalStore();
+    const [, dispatch] = useGlobalStore();
     const [posts, setPosts] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false)
     const [dialogID, setDialogID] = useState(null)
@@ -88,6 +82,7 @@ const Reminders = () => {
 
     useEffect(() => {
         checkForMessages();
+        //eslint-disable-next-line
     }, []);
 
     return (

@@ -2,50 +2,47 @@ import React, { useState, useEffect } from 'react';
 import OverviewComponents from '../components/OverviewComponents';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
-import { BrowserRouter as Router, Switch, Route, Link, NavLink, useParams, useRouteMatch } from 'react-router-dom';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import { Switch, Route, NavLink, useRouteMatch } from 'react-router-dom';
+// import { makeStyles } from '@material-ui/core/styles';
 import NewPostModal from '../components/Modal/NewPostModal.js';
 import ReminderMessage from '../components/ReminderMessage';
-import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
 import OverviewInstruction from '../components/OverviewInstruction';
 
-const useStyles = makeStyles((theme) => ({
-    addButton: {
-        [theme.breakpoints.down('xs')]: {
-            position: 'fixed',
-            bottom: theme.spacing(8),
-            right: theme.spacing(2),
-        },
-        [theme.breakpoints.up('sm')]: {
-            display: 'none',
-        },
-    },
-    desktopAdd: {
-        [theme.breakpoints.up('md')]: {
-            position: 'absolute',
-            top: theme.spacing(10),
-            right: theme.spacing(2),
-            border: '1px solid cadetblue',
-            color: 'cadetblue',
-        },
-        [theme.breakpoints.down('sm')]: {
-            display: 'none',
-        },
-        //   marginRight: theme.spacing(1),
-    },
-}));
+// const useStyles = makeStyles((theme) => ({
+//     addButton: {
+//         [theme.breakpoints.down('xs')]: {
+//             position: 'fixed',
+//             bottom: theme.spacing(8),
+//             right: theme.spacing(2),
+//         },
+//         [theme.breakpoints.up('sm')]: {
+//             display: 'none',
+//         },
+//     },
+//     desktopAdd: {
+//         [theme.breakpoints.up('md')]: {
+//             position: 'absolute',
+//             top: theme.spacing(10),
+//             right: theme.spacing(2),
+//             border: '1px solid cadetblue',
+//             color: 'cadetblue',
+//         },
+//         [theme.breakpoints.down('sm')]: {
+//             display: 'none',
+//         },
+//         //   marginRight: theme.spacing(1),
+//     },
+// }));
 
 function Overview() {
     let { path, url } = useRouteMatch();
     const history = useHistory();
 
-    const classes = useStyles();
+    // const classes = useStyles();
 
-    const [globalStore, dispatch] = useGlobalStore();
+    const [, dispatch] = useGlobalStore();
+    //eslint-disable-next-line
     const [userPosts, setUserPosts] = useState([]);
     const [wishlists, setWishlists] = useState([]);
     const [applied, setApplied] = useState([]);
@@ -70,13 +67,11 @@ function Overview() {
         dispatch({ do: 'setUserData', ...userData });
 
         if (userPosts.length === 0) {
-            setWelcomeText(
-                    <OverviewInstruction />
-            );
+            setWelcomeText(<OverviewInstruction />);
         } else {
             setWelcomeText('');
-            console.log('path, url', history)
-            if (history.location.pathname === '/overview'){
+            console.log('path, url', history);
+            if (history.location.pathname === '/overview') {
                 history.push('/overview/wishlists');
             }
             // if (wishlists.length > 0){
@@ -104,12 +99,13 @@ function Overview() {
 
     useEffect(() => {
         getUserData();
+        //eslint-disable-next-line
     }, []);
 
     return (
-        <div style={{ marginTop: '4rem', borderTop: '1px solid #f1f1f1fb', position: 'relative'}}>
+        <div style={{ marginTop: '4rem', borderTop: '1px solid #f1f1f1fb', position: 'relative' }}>
             <ReminderMessage />
-            <div className="sidebar" style={{fontFamily: 'Varela Round'}}>
+            <div className="sidebar" style={{ fontFamily: 'Varela Round' }}>
                 <NavLink to={`${url}/wishlists`} activeClassName="active">
                     <i className="fa fa-fw fa-star"></i> <span className="overview-link">Wishlists</span>
                 </NavLink>
