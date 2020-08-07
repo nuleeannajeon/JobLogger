@@ -185,7 +185,6 @@ export default function SimpleModal(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('here')
         setLoading(true);
         const success = await submitChange();
         setTimeout(() => setLoading(false), 500);
@@ -272,7 +271,6 @@ export default function SimpleModal(props) {
     const addReminder = (reminderDate) => {
         //when okay is clicked in reminder dialog, add to the values
         setValues({ ...values, reminder: reminderDate });
-        console.log('addReminder -> reminderDate', reminderDate);
         setReminderDialogOpen(false);
     };
 

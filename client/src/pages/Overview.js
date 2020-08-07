@@ -70,7 +70,6 @@ function Overview() {
             setWelcomeText(<OverviewInstruction />);
         } else {
             setWelcomeText('');
-            console.log('path, url', history);
             if (history.location.pathname === '/overview') {
                 history.push('/overview/wishlists');
             }
