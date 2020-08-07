@@ -6,7 +6,7 @@
 - [Demo](#demo) 
 - [Technologies](#technologies) 
 - [License](#license) 
-- [Questions](#questions)
+- [Question](#question)
 
 ## Description
 Hunting for a new job is hard.  There are so many things to keep track of, contact information, details of how your interviews have gone, salaries, the list is endless.  
