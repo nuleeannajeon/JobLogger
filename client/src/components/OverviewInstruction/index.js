@@ -1,5 +1,9 @@
 import React from 'react';
 import './style.css';
+import NavigationImage from './navigation.png';
+import GlanceImage from './glance.png';
+import ColorImage from './color.png';
+import ReminderImage from './reminder.png';
 
 function OverviewInstruction(){
     return(
@@ -14,7 +18,7 @@ function OverviewInstruction(){
 
             <div className="instruction-container">
                 <div className="row first-instruction">
-                    <div className="col-xs-12 col-md-6">hello</div>
+                    <div className="col-xs-12 col-md-6"><img src={NavigationImage} alt="joblogger-navigation"/></div>
                     <div className="col-xs-12 col-md-6">
                         <h3>Navigate by progress</h3>
                         <p>JobLogger will help you visualize and track informatin by its status. 
@@ -23,7 +27,7 @@ function OverviewInstruction(){
                     </div>
                 </div>
                 <div className="row second-instruction">
-                    <div className="col-xs-12 col-md-6">hello</div>
+                    <div className="col-xs-12 col-md-6"><img src={GlanceImage} alt="joblogger-instruction"/></div>
                     <div className="col-xs-12 col-md-6">
                         <h3>Key Information at a Glace</h3>
                         <p>Before you get into details, 
@@ -39,7 +43,7 @@ function OverviewInstruction(){
                     </div>
                 </div>
                 <div className="row third-instruction">
-                    <div className="col-xs-12 col-md-6">hello</div>
+                    <div className="col-xs-12 col-md-6"><img src={ReminderImage} alt="joblogger-instruction"/></div>
                     <div className="col-xs-12 col-md-6">
                         <h3>Remind Yourself</h3>
                         <p>JobLogger will provide you with a powerful tools, Reminder, for every posts you make.
@@ -48,7 +52,7 @@ function OverviewInstruction(){
                     </div>
                 </div>
                 <div className="row fourth-instruction">
-                    <div className="col-xs-12 col-md-6">hello</div>
+                    <div className="col-xs-12 col-md-6"><img src={ColorImage} alt="joblogger-instruction"/></div>
                     <div className="col-xs-12 col-md-6">
                         <h3>Make it your Own!</h3>
                         <p>Every post can be coloured by your choice! 

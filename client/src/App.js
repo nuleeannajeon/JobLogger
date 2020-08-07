@@ -22,6 +22,8 @@ import UserEntry from './pages/Userentry';
 import Reminders from './pages/Reminders';
 import Search from './pages/Search';
 import Footer from './components/Footer';
+import OverviewInstruction from './components/OverviewInstruction';
+
 const NavbarWithRouter = withRouter(Navbar);
 
 const theme = createMuiTheme({
@@ -67,7 +69,7 @@ function App() {
                     <div className='main-app-container'>
                         <NavbarWithRouter />
                         <div className={classes.paddingTop}>
-                            <Route exact path="/" component={Home} />
+                            <Route exact path="/" component={OverviewInstruction} />
                             <Route exact path="/entry" component={UserEntry} />
                             <Route exact path="/register" component={Registration} />
                             <Route exact path="/login" component={Login} />
