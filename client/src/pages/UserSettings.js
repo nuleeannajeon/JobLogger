@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
     title: {
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
+        fontFamily: "Quando",
     },
     sectionDivider: {
         marginTop: theme.spacing(5),
@@ -204,7 +205,7 @@ const UserSettings = () => {
             </div>
             <Container maxWidth="sm">
                 <Typography className={classes.title} variant="h4">
-                    My profile
+                    My Profile
                 </Typography>
                 <Grid
                     className={classes.inputContainer}

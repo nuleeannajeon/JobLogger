@@ -42,7 +42,7 @@ function Wishlists(props){
 
     return(
         <div className="content">
-            <h2 className="overview-title">{topicId.charAt(0).toUpperCase() + topicId.slice(1)}
+            <h2 className="overview-title" style={{fontFamily: "Varela Round"}}>{topicId.charAt(0).toUpperCase() + topicId.slice(1)}
             </h2>
              
             {dataListByType ? dataListByType.map(
@@ -52,10 +52,10 @@ function Wishlists(props){
                             <button className="box-delete-button" onClick={() => handleDelete(posting._id)}><i className="fas fa-trash-alt"></i></button>
                             <ExistingPostModal data={posting} rerender={props.rerender} />
                             <img src={posting.companyLogoImage ? posting.companyLogoImage : companyLogo} alt={posting.compnay ? posting.company : ''}/>
-                            <span>{posting.company ? posting.company : 'No defined company'}</span>
+                            <span style={{fontFamily:'Varela Round'}}>{posting.company ? posting.company : 'No defined company'}</span>
                             <div style={{paddingTop: "15px"}}>
                                 <h6 style={{display: "inline-block"}}>{posting.title ? posting.title : "No defined Position"}</h6>
-                                <p>{posting.location ? posting.location : 'No Location available'}, 
+                                <p style={{color: '#4d4d4d'}}>{posting.location ? posting.location : 'No Location available'}, 
                                 ${posting.salary ? posting.salary : '....'}/monthly</p>
                             </div>
                         </div>
