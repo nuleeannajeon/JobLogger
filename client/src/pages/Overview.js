@@ -9,6 +9,10 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import NewPostModal from '../components/Modal/NewPostModal.js';
 import ReminderMessage from '../components/ReminderMessage';
+import Typography from '@material-ui/core/Typography';
+import { useHistory } from 'react-router-dom';
+
+
 const useStyles = makeStyles((theme) => ({
     addButton: {
         [theme.breakpoints.down('xs')]: {
@@ -33,10 +37,18 @@ const useStyles = makeStyles((theme) => ({
         },
         //   marginRight: theme.spacing(1),
     },
+    welcomeText: {
+        marginLeft: '2em',
+        maxWidth: '80ch',
+        '& > *': {
+            marginBottom: '2em',
+        },
+    },
 }));
 
 function Overview() {
     let { path, url } = useRouteMatch();
+    const history = useHistory();
 
     const classes = useStyles();
 
@@ -47,6 +59,7 @@ function Overview() {
     const [interview, setInterview] = useState([]);
     const [offer, setOffer] = useState([]);
     const [reject, setReject] = useState([]);
+    const [welcomeText, setWelcomeText] = useState('');
 
     const getUserData = async () => {
         const userPostsData = await API.getUserPosts();
@@ -62,6 +75,46 @@ function Overview() {
 
         const userData = await API.getUserData();
         dispatch({ do: 'setUserData', ...userData });
+
+        if (userPosts.length === 0) {
+            setWelcomeText(
+                <div className={classes.welcomeText}>
+                    <Typography variant="h4">Hi, welcome to your JobLogger overview</Typography>
+                    <Typography>With the new post button you can add to these lists.
+                    The wishlist is for opportunities you haven't yet applied to
+                    
+                        From there, you can change the category of your posts through from applied to their final state
+                        of acceptance offer or rejection.
+                    
+                Good luck with your job search!</Typography>
+                </div>
+            );
+        } else {
+            setWelcomeText('')
+            history.push('/overview/wishlists')
+            // if (wishlists.length > 0){
+            //     return
+            // }
+            // if (applied.length > 0){
+            //     history.push('/overview/applied')
+            //     return
+            // }
+            // console.log("getUserData -> applied.length", applied.length)
+            // if (interview.length > 0){
+            //     history.push('/overview/interview')
+            //     return
+            // }
+            // if (offer.length > 0){
+            //     history.push('/overview/offer')
+            //     return
+            // }
+            // if (reject.length > 0){
+            //     history.push('/overview/reject')
+            //     return
+            // }
+
+
+        }
     };
 
     useEffect(() => {
@@ -91,12 +144,7 @@ function Overview() {
             <NewPostModal rerender={getUserData} />
             <Switch>
                 <Route exact path={path}>
-                    <div className="content">
-                        <h3 className="overview-heading">Hi welcome to overview page. </h3>
-                        Do you want to render Wishlists auto or Some instruction page for overview
-                        <br />
-                        and I added top right corner for addbutton :p Just to make it visible for all pages
-                    </div>
+                    <div className="content">{welcomeText}</div>
                 </Route>
                 <Route path={`${path}/:topicId`}>
                     <OverviewComponents
@@ -109,8 +157,6 @@ function Overview() {
                     />
                 </Route>
             </Switch>
-
-            
         </div>
     );
 }
