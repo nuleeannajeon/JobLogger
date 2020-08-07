@@ -1,20 +1,20 @@
 .first-instruction, .second-instruction, .third-instruction, .fourth-instruction{
    padding-top: 50px;
    padding-bottom: 50px;
-   padding-left: 130px;
-   padding-right: 130px;
-   align-items: center; /* vertical center */
+   /* padding-left: 130px; */
+   /* padding-right: 130px; */
+   /* align-items: center; vertical center */
 }
 .first-instruction{
     background: rgba(233, 233, 233, 0.514);
-    flex-direction: row-reverse;
+    /* flex-direction: row-reverse; */
 }
 .second-instruction{
     background: white;
 }
 .third-instruction{
     background: rgba(233, 233, 233, 0.514);
-    flex-direction: row-reverse;
+    /* flex-direction: row-reverse; */
 }
 .fourth-instruction{
     background: white;
