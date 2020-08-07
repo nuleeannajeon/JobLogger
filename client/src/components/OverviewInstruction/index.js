@@ -8,13 +8,13 @@ import ReminderImage from './reminder.png';
 function OverviewInstruction(){
     return(
         <div>
-            <div className="jumbotron jumbotron-fluid overview-jumbotron">
+            {/* <div className="jumbotron jumbotron-fluid overview-jumbotron">
                 <div className="container">
                     <h1 className="overview-jumbo-title">JOB LOGGING APPLICATION</h1>
                     <p className="overview-jumbo-text">Tracking the status and progress of jobs from wishlists to success.</p>
                     <button className="overview-jumbo-btn">REGISTER TO GET STARTED</button>
                 </div>
-            </div>
+            </div> */}
 
             <div className="instruction-container">
                 <div className="row first-instruction">
