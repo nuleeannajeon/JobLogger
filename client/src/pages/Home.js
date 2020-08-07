@@ -6,7 +6,7 @@ import { useGlobalStore } from '../components/GlobalStore';
 import React, { useEffect } from 'react';
 
 const Home = () => {
-    const [globalStore, dispatch] = useGlobalStore();
+    const [, dispatch] = useGlobalStore();
     
     const checkLoggedIn = async () => {
         const loggedInReturn = await API.getLoggedState();
@@ -25,6 +25,7 @@ const Home = () => {
 
     useEffect(() => {
         checkLoggedIn();
+        // eslint-disable-next-line
     }, []);
 
     return (

@@ -19,9 +19,9 @@ function About() {
               <p>Hunting for a new job is hard.  There are so many things to keep track of, contact information, details of how your interviews have gone, salaries, the list is endless.  JobLogger helps you keep track of all that in a central location, as well as offering a portal to search for jobs and easily save them.  You can track your employment opportunities, from a wishlist for things you want to apply to but haven't yet, all the way through to tracking the status of interviews and offers, to saving positions you've heard back on for future reference.  JobLogger is here to make the search easier for you so you can spend your time where it counts.</p>
           </div>
           <div className="container text-center avatar-container">
-              <img className="avatar" src={Haley} alt="Card image cap" />
-              <img className="avatar" src={James} alt="Card image cap" />
-              <img className="avatar" src={Anna} alt="Card image cap" />
+              <img className="avatar" src={Haley} alt="Haley" />
+              <img className="avatar" src={James} alt="James" />
+              <img className="avatar" src={Anna} alt="Anna" />
           </div>
       </div>
     )

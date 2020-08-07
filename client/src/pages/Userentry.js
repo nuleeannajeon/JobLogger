@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import './UserEntry.css';
 import RegisterBox from '../components/RegisterBox';
@@ -45,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         //     // opacity: 0.5,
         // },
         [theme.breakpoints.down('xs')]: {
-            width: 'auto',
+            // width: 'auto',
             marginTop: '2em',
             padding: '0',
             width: '100%',
