@@ -310,7 +310,6 @@ const RegisterBox = (props) => {
         }
 
         processServerReturn(serverReturn, dispatch);
-        console.log('sendRegistrationToServer -> serverReturn', serverReturn);
         return !serverReturn.error;
     };
 

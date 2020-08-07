@@ -16,13 +16,11 @@ const Result= (props) => {
         location
     }
     
-    const htmlReg = /<.+?>/
-    const htmlLessString = description.replace(htmlReg, ' ')
-    console.log("Result -> htmlLessString", htmlLessString)
+    // const htmlReg = /<.+?>/  TODO Future dev, add to description with parsed html
+    // const htmlLessString = description.replace(htmlReg, ' ')
 
     const sendMePlease = async () => {
         const serverResponse = await API.post('/api/posts', serverData)
-        console.log("sendMePlease -> serverResponse", serverResponse)
         processServerReturn(serverResponse, dispatch)
         return (
             <div class="alert alert-success" role="alert">

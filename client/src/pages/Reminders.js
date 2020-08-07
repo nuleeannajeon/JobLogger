@@ -54,7 +54,6 @@ const Reminders = () => {
 
     const checkForMessages = async () => {
         const reminders = await API.get('/api/reminders');
-        console.log("checkForMessages -> reminders", reminders)
         // if (!reminders) {
         //     return;
         // }
@@ -73,7 +72,6 @@ const Reminders = () => {
     }
 
     const deleteReminder = async (id) => {
-        console.log('actually deleting', id)
         const serverResponse = await API.put(`/api/postreminders/${id}`, {reminder: 'unset'})
         processServerReturn(serverResponse, dispatch)
         setDialogOpen(false)

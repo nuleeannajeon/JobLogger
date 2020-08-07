@@ -24,7 +24,6 @@ function OAuth({ loginComplete, ...rest }) {
                     return;
 
                 const loginData = JSON.parse(event.data);
-                console.log(`Popup window has returned`, loginData);
                 if (oAuthWindow) oAuthWindow.close();
                 if (loginComplete) loginComplete(loginData);
             },
@@ -41,7 +40,6 @@ function OAuth({ loginComplete, ...rest }) {
         const left = window.innerWidth / 2 - width / 2;
         const top = window.innerHeight / 2 - height / 2;
         const url = `${API_URL}/oauth/linkedin`;
-        console.log(`[openOAuth] opening url: ${url}`);
         oAuthWindow = window.open(
             url,
             '',

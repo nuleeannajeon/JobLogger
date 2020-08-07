@@ -109,7 +109,6 @@ export default function SimpleModal(props) {
     const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
 
     const datalist = props.data;
-    console.log('SimpleModal -> datalist', datalist);
 
     const {
         _id,
@@ -262,7 +261,6 @@ export default function SimpleModal(props) {
     const addReminder = (reminderDate) => {
         //when okay is clicked in reminder dialog, add to the values
         setValues({ ...values, reminder: reminderDate });
-        console.log('addReminder -> reminderDate', reminderDate);
         setReminderDialogOpen(false);
     };
 

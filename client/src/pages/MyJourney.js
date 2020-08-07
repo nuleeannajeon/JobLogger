@@ -44,10 +44,8 @@ const MyJourney = () => {
 
     const getUserData = async () => {
         const userData = await API.getUserData();
-        console.log('getUserData -> userData', userData);
         const posts = await API.getUserPosts();
         setPosts(posts.message)
-        console.log("getUserData -> posts.message", posts.message)
         if (userData.error || posts.error) {
             dispatch({
                 do: 'setMessage',

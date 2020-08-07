@@ -167,7 +167,6 @@ const UserSettings = () => {
         });
 
         const serverReturn = await API.put('/api/userdata', changedData);
-        console.log('submitDetailChange -> serverReturn', serverReturn);
         processServerReturn(serverReturn, dispatch);
         await getUserData();
         return !serverReturn.error;

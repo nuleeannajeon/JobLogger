@@ -15,7 +15,6 @@ const ReminderMessage = () => {
 
     const checkForMessages = async () => {
         const reminders = await API.get('/api/reminders');
-        console.log("checkForMessages -> reminders", reminders)
         dispatch({ do: 'setUserData', reminders: reminders.length > 0 });
 
         if (reminders.length === 0) {

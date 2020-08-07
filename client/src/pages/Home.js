@@ -10,7 +10,6 @@ const Home = () => {
     
     const checkLoggedIn = async () => {
         const loggedInReturn = await API.getLoggedState();
-        console.log("checkLoggedIn -> loggedInReturn", loggedInReturn)
         if (loggedInReturn === true) {
             dispatch({ do: 'login'});
             getUserData()
@@ -19,7 +18,6 @@ const Home = () => {
 
     const getUserData = async () => {
         const userData = await API.getUserData();
-        console.log("getUserData -> userData", userData)
         dispatch({ do: 'setUserData', ...userData });
     };
 
