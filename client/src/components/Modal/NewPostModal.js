@@ -118,6 +118,7 @@ const useStyles = makeStyles((theme) => ({
     addButton: {
         [theme.breakpoints.down('xs')]: {
             position: 'fixed',
+            zIndex: 10,
             bottom: theme.spacing(8),
             right: theme.spacing(2),
         },
