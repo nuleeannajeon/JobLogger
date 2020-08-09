@@ -1,11 +1,11 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useGlobalStore } from '../GlobalStore';
 import { makeStyles } from '@material-ui/core/styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MenuIcon from '@material-ui/icons/Menu'
+import MenuIcon from '@material-ui/icons/Menu';
 import {
     IconButton,
     AppBar,
@@ -20,7 +20,7 @@ import {
     MenuList,
 } from '@material-ui/core';
 
-import MainSideNav from '../MainSideNav'
+import MainSideNav from '../MainSideNav';
 
 const useStyles = makeStyles((theme) => ({
     navbar: {},
@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     titleLink: {
         color: 'inherit',
         marginRight: theme.spacing(2),
+        textShadow: '1px 1px 2px rgba(0, 0, 0, 0.4)',
         '&:hover': {
             color: '#cfe2e2',
             textDecoration: 'none',
@@ -43,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
             color: '#cfe2e2',
             textDecoration: 'none',
         },
+    },
+    activeLink: {
+        textShadow: '0px 0px 4px #A16F4F',
+        // color: '#8E6FA1',
     },
     left: {
         flexGrow: 1,
@@ -75,10 +80,11 @@ const useStyles = makeStyles((theme) => ({
 const NavbarMUI = () => {
     const classes = useStyles();
     const history = useHistory();
+    const [globalStore] = useGlobalStore();
 
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
-    const [sidenavOpen, setSidenavOpen] = useState(false)
+    const [sidenavOpen, setSidenavOpen] = useState(false);
 
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
@@ -111,29 +117,54 @@ const NavbarMUI = () => {
         prevOpen.current = open;
     }, [open]);
 
+    let titleClasses = [classes.title];
+    if (!globalStore.loggedIn) {
+        titleClasses.push(classes.left);
+    }
+    titleClasses = titleClasses.join(' ');
+
+    const accountMenuLoggedIn = [
+        <MenuItem key='settingsMenuItem' value="settings" onClick={handleClose('settings')}>
+            My account
+        </MenuItem>,
+        <MenuItem key='logoutMenuItem' value="logout" onClick={handleClose('logout')}>
+            Log out
+        </MenuItem>,
+    ];
+
+    const accountMenuLoggedOut = (
+        <MenuItem value="login" onClick={handleClose('entry')}>
+            Log In
+        </MenuItem>
+    );
+
     return (
         <div className={classes.root}>
             <AppBar position="fixed">
                 <Toolbar>
                     {/* <div className={classes.left}> */}
-                    <Typography variant="h6" className={classes.title}>
+                    <Typography variant="h6" className={titleClasses}>
                         <Link to="/" className={classes.titleLink}>
                             JobLogger
                         </Link>
                     </Typography>
-                    <NavLink to="/overview" activeClass={classes.activeLink} className={classes.navLink}>
-                        Overview
-                    </NavLink>
-                    <NavLink to="/contacts" activeClass={classes.activeLink} className={classes.navLink}>
-                        Contacts
-                    </NavLink>
-                    <NavLink
-                        to="/search"
-                        activeClass={classes.activeLink}
-                        className={[classes.navLink, classes.left].join(' ')}
-                    >
-                        Search
-                    </NavLink>
+                    {globalStore.loggedIn && (
+                        <>
+                            <NavLink to="/overview" activeClassName={classes.activeLink} className={classes.navLink}>
+                                Overview
+                            </NavLink>
+                            <NavLink to="/contacts" activeClassName={classes.activeLink} className={classes.navLink}>
+                                Contacts
+                            </NavLink>
+                            <NavLink
+                                to="/search"
+                                activeClassName={classes.activeLink}
+                                className={[classes.navLink, classes.left].join(' ')}
+                            >
+                                Search
+                            </NavLink>
+                        </>
+                    )}
                     {/* <NavLink to="/overview" activeClass={classes.activeLink} className={classes.navLink}> */}
                     <IconButton
                         ref={anchorRef}
@@ -144,7 +175,13 @@ const NavbarMUI = () => {
                     >
                         <AccountCircleIcon />
                     </IconButton>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => setSidenavOpen(true)}>
+                    <IconButton
+                        edge="start"
+                        className={classes.menuButton}
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={() => setSidenavOpen(true)}
+                    >
                         <MenuIcon />
                     </IconButton>
                     <MainSideNav open={sidenavOpen} setOpen={setSidenavOpen} />
@@ -168,12 +205,7 @@ const NavbarMUI = () => {
                                             id="menu-list-grow"
                                             onKeyDown={handleListKeyDown}
                                         >
-                                            <MenuItem value="settings" onClick={handleClose('settings')}>
-                                                My account
-                                            </MenuItem>
-                                            <MenuItem value="logout" onClick={handleClose('logout')}>
-                                                Logout
-                                            </MenuItem>
+                                            {globalStore.loggedIn ? accountMenuLoggedIn : accountMenuLoggedOut}
                                         </MenuList>
                                     </ClickAwayListener>
                                 </Paper>
