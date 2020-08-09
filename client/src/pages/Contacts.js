@@ -17,7 +17,7 @@ import ContactsIcon from '@material-ui/icons/Contacts';
 import PhoneIcon from '@material-ui/icons/Phone';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import WorkIcon from '@material-ui/icons/Work';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // import MuiAccordion from '@material-ui/core/Accordion';
 // import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
@@ -25,7 +25,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 // import Typography from '@material-ui/core/Typography';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
-
 
 const useStyles = makeStyles((theme) => ({
     hero: {
@@ -41,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     },
     mainContainer: {
         paddingTop: theme.spacing(2),
-    }
+    },
 }));
 
 const Accordion = withStyles({
@@ -65,6 +64,10 @@ const ContactAccordion = (props) => {
     const { expanded, handleExpand, contact } = props;
 
     const { id, name, title, email, phone, company } = props;
+    const formatPhoneNumber = (phoneNumber) => {
+        const nonNumberPattern = /[^0-9]*/gm;
+        return phoneNumber.replace(nonNumberPattern, '');
+    };
 
     return (
         <Accordion square expanded={expanded === id} onChange={handleExpand(id)}>
@@ -88,7 +91,7 @@ const ContactAccordion = (props) => {
                             <ListItemIcon>
                                 <PhoneIcon />
                             </ListItemIcon>
-                            <ListItemText primary={phone} />
+                            <ListItemText primary={<a href={`tel:${formatPhoneNumber(phone)}`} target="_blank" rel="noopener noreferrer">{phone}</a>} />
                         </ListItem>
                     ) : (
                         ''
@@ -98,7 +101,7 @@ const ContactAccordion = (props) => {
                             <ListItemIcon>
                                 <AlternateEmailIcon />
                             </ListItemIcon>
-                            <ListItemText primary={email} />
+                            <ListItemText primary={<a href={`mailto:${email}`} target="_blank" rel="noopener noreferrer">{email}</a>} />
                         </ListItem>
                     ) : (
                         ''
@@ -110,7 +113,7 @@ const ContactAccordion = (props) => {
 };
 
 const Contacts = () => {
-    const [,dispatch] = useGlobalStore()
+    const [, dispatch] = useGlobalStore();
     const [contactsList, setContactsList] = useState([]);
     const [expanded, setExpanded] = useState(false);
 
@@ -122,14 +125,14 @@ const Contacts = () => {
         const contacts = await API.get('/api/contacts');
 
         //check for error
-        if (contacts.error){
+        if (contacts.error) {
             dispatch({
                 do: 'setMessage',
                 type: 'error',
                 message: contacts.error,
             });
             setTimeout(() => dispatch({ do: 'clearMessage' }), 2500);
-            return
+            return;
         }
 
         setContactsList(contacts);
@@ -152,7 +155,7 @@ const Contacts = () => {
             </div>
             <Container maxWidth="sm" className={classes.mainContainer}>
                 {contactsList.map((contact) => (
-                    <ContactAccordion {...{handleExpand, expanded}} {...contact} key={contact.id} />
+                    <ContactAccordion {...{ handleExpand, expanded }} {...contact} key={contact.id} />
                 ))}
             </Container>
         </div>
