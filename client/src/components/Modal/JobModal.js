@@ -27,7 +27,6 @@ import ReminderDialog from '../ReminderDialog';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
-import ContactsSection from './ContactsSection'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -104,11 +103,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SimpleModal(props) {
+export default function SimpleModal() {
     const [, dispatch] = useGlobalStore();
     const [loading, setLoading] = useState(false);
     const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
-
+    
     const datalist = props.data;
 
     const {
@@ -131,8 +130,6 @@ export default function SimpleModal(props) {
         reminder,
     } = datalist;
 
-    const date = new Date(dateAdded)
-
     const [values, setValues] = React.useState({
         color: color || '',
         company: company,
@@ -146,7 +143,7 @@ export default function SimpleModal(props) {
         heardBackDate: heardBackDate || new Date(),
         interviewState: interviewState || '',
         interviewNote: interviewNote || '',
-        companyContact: companyContact ||  [],
+        companyContact: companyContact || '',
         reminder: reminder || '',
         companyLogoImage: companyLogoImage || '',
     });
@@ -486,16 +483,11 @@ export default function SimpleModal(props) {
                 variant="outlined"
                 value={values.notes}
             />
-            <ContactsSection values={values} setValues={setValues} />
         </Grid>
     );
 
     return (
         <div>
-            <Button onClick={handleOpen} style={{ float: 'right', zIndex: 1 }}>
-                View/Edit
-            </Button>
-
             <ReminderDialog
                 open={reminderDialogOpen}
                 handleOk={addReminder}
@@ -504,7 +496,6 @@ export default function SimpleModal(props) {
 
             <Dialog
                 open={open}
-                maxWidth='sm'
                 onClose={handleClose}
                 className={classes.modal}
                 scroll={scroll}
@@ -512,11 +503,12 @@ export default function SimpleModal(props) {
                 aria-describedby="scroll-dialog-description"
                 TransitionComponent={Transition}
             >
-                <DialogTitle id="scroll-dialog-title">{company} <span style={{float: "right"}}>{date.getFullYear()+' / '+(date.getMonth()+1)+' / '+date.getDate()}</span></DialogTitle>
+                <DialogTitle id="scroll-dialog-title">Post</DialogTitle>
                 <DialogContent dividers={scroll === 'paper'} style={{ margin: '0' }}>
                     {body}
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleReset}>Reset</Button>
                     <Button onClick={handleClose} color="secondary">
                         Cancel
                     </Button>

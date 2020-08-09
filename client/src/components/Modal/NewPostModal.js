@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
-// import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-// import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
-// import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-// import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
-// import MenuItem from '@material-ui/core/MenuItem';
-// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
-// import Switch from '@material-ui/core/Switch';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import Radio from '@material-ui/core/Radio';
@@ -25,7 +17,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useGlobalStore } from '../GlobalStore';
 import API from '../../utils/API';
@@ -39,6 +30,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ReminderDialog from '../ReminderDialog';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
+import ContactsSection from './ContactsSection'
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -139,6 +132,8 @@ export default function SimpleModal(props) {
     const [loading, setLoading] = useState(false);
     const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
 
+    const date = new Date()
+
     const defaultValues = {
         color: '',
         company: '',
@@ -153,7 +148,7 @@ export default function SimpleModal(props) {
         heardBackDate: Date.now(),
         interviewState: null,
         interviewNote: '',
-        companyContact: '',
+        companyContact: [],
     }
 
 
@@ -500,13 +495,14 @@ export default function SimpleModal(props) {
                 variant="outlined"
                 value={values.notes}
             />
+            <ContactsSection values={values} setValues={setValues} />
         </Grid>
     );
 
     return (
         <div>
             <button className="create-button" type="button" onClick={handleOpen}>
-                Create New Post
+                Add new job
             </button>
             <Fab color="primary" className={classes.addButton} aria-label="add post" onClick={handleOpen}>
                 <AddIcon />
@@ -525,7 +521,7 @@ export default function SimpleModal(props) {
                 aria-describedby="scroll-dialog-description"
                 TransitionComponent={Transition}
             >
-                <DialogTitle id="scroll-dialog-title">Post</DialogTitle>
+                <DialogTitle id="scroll-dialog-title">New Job <span style={{float: "right"}}>{date.getFullYear()+' / '+(date.getMonth()+1)+' / '+date.getDate()}</span></DialogTitle>
                 <DialogContent dividers={scroll === 'paper'} style={{ margin: '0' }}>
                     {body}
                 </DialogContent>

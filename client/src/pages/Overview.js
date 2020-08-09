@@ -52,21 +52,20 @@ function Overview() {
     const [welcomeText, setWelcomeText] = useState('');
 
     const getUserData = async () => {
-        const userPostsData = await API.getUserPosts();
-        const userPosts = userPostsData.message;
+        const userPostsData = await API.getUserPosts().then(resp => resp.message);
 
-        setUserPosts(userPosts);
+        setUserPosts(userPostsData);
 
-        setWishlists(userPosts.filter((post) => post.postingType === 'wishlists'));
-        setApplied(userPosts.filter((post) => post.postingType === 'applied'));
-        setInterview(userPosts.filter((post) => post.postingType === 'interview'));
-        setOffer(userPosts.filter((post) => post.postingType === 'offer'));
-        setReject(userPosts.filter((post) => post.postingType === 'reject'));
+        setWishlists(userPostsData.filter((post) => post.postingType === 'wishlists'));
+        setApplied(userPostsData.filter((post) => post.postingType === 'applied'));
+        setInterview(userPostsData.filter((post) => post.postingType === 'interview'));
+        setOffer(userPostsData.filter((post) => post.postingType === 'offer'));
+        setReject(userPostsData.filter((post) => post.postingType === 'reject'));
 
         const userData = await API.getUserData();
         dispatch({ do: 'setUserData', ...userData });
 
-        if (userPosts.length === 0) {
+        if (userPostsData.length === 0) {
             setWelcomeText(<OverviewInstruction />);
         } else {
             setWelcomeText('');
