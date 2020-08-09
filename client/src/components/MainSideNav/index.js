@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MainSideNav = (props) => {
     const classes = useStyles();
-    const { open, setOpen } = props;
+    const { open, setOpen, loggedIn } = props;
 
     const toggleDrawer = (state) => (event) => {
         if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {

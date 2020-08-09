@@ -171,20 +171,20 @@ const NavbarMUI = () => {
                         aria-controls={open ? 'menu-list-grow' : undefined}
                         aria-haspopup="true"
                         onClick={handleToggle}
-                        className={classes.iconButton}
+                        className={!globalStore.loggedIn ? classes.menuButton : classes.iconButton}
                     >
                         <AccountCircleIcon />
                     </IconButton>
                     <IconButton
                         edge="start"
-                        className={classes.menuButton}
+                        className={globalStore.loggedIn ? classes.menuButton : classes.iconButton}
                         color="inherit"
                         aria-label="menu"
                         onClick={() => setSidenavOpen(true)}
                     >
                         <MenuIcon />
                     </IconButton>
-                    <MainSideNav open={sidenavOpen} setOpen={setSidenavOpen} />
+                    {globalStore.loggedIn && (<MainSideNav loggedIn={globalStore.loggedIn} open={sidenavOpen} setOpen={setSidenavOpen} />)}
                     <Popper
                         className={classes.zind}
                         open={open}

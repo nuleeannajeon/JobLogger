@@ -57,6 +57,16 @@ const Reminders = () => {
         // if (!reminders) {
         //     return;
         // }
+        if (reminders.error){
+            dispatch({
+                do: 'setMessage',
+                type: 'error',
+                message: reminders.error,
+            });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2500);
+            return
+        }
+
         dispatch({ do: 'setUserData', reminders: reminders.length > 0 });
         setPosts(reminders);
     };

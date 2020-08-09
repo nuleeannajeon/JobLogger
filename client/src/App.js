@@ -21,6 +21,7 @@ import Reminders from './pages/Reminders';
 import Search from './pages/Search';
 import Footer from './components/Footer';
 import NavbarMUI from './components/NavbarMUI'
+import Contacts from './pages/Contacts'
 
 const NavbarWithRouter = withRouter(Navbar);
 const FooterWithRouter = withRouter(Footer)
@@ -81,6 +82,9 @@ function App() {
                             </PrivateRoute>
                             <PrivateRoute path="/settings">
                                 <UserSettings />
+                            </PrivateRoute>
+                            <PrivateRoute path="/contacts">
+                                <Contacts />
                             </PrivateRoute>
                             <PrivateRoute exact path="/myjourney">
                                 <MyJourney />
