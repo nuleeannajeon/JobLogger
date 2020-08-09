@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     },
     outerContainer: {
         paddingTop: '4em',
+        [theme.breakpoints.down('xs')]: {
+            paddingTop: 0,
+        },
     },
     container: {
         // height: '90vh',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -19,6 +19,8 @@ import {
     MenuItem,
     MenuList,
 } from '@material-ui/core';
+
+import MainSideNav from '../MainSideNav'
 
 const useStyles = makeStyles((theme) => ({
     navbar: {},
@@ -74,8 +76,9 @@ const NavbarMUI = () => {
     const classes = useStyles();
     const history = useHistory();
 
-    const [open, setOpen] = React.useState(false);
-    const anchorRef = React.useRef(null);
+    const [open, setOpen] = useState(false);
+    const anchorRef = useRef(null);
+    const [sidenavOpen, setSidenavOpen] = useState(false)
 
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
@@ -141,9 +144,10 @@ const NavbarMUI = () => {
                     >
                         <AccountCircleIcon />
                     </IconButton>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => setSidenavOpen(true)}>
                         <MenuIcon />
                     </IconButton>
+                    <MainSideNav open={sidenavOpen} setOpen={setSidenavOpen} />
                     <Popper
                         className={classes.zind}
                         open={open}

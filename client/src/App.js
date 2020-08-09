@@ -20,6 +20,7 @@ import UserEntry from './pages/Userentry';
 import Reminders from './pages/Reminders';
 import Search from './pages/Search';
 import Footer from './components/Footer';
+import NavbarMUI from './components/NavbarMUI'
 
 const NavbarWithRouter = withRouter(Navbar);
 const FooterWithRouter = withRouter(Footer)
@@ -64,7 +65,8 @@ function App() {
                 <Message />
                 <Router>
                     <div className='main-app-container'>
-                        <NavbarWithRouter />
+                        {/* <NavbarWithRouter /> */}
+                        <NavbarMUI />
                         <div className={classes.paddingTop}>
                             <Route exact path="/" component={Home} />
                             <Route exact path="/entry" component={UserEntry} />
