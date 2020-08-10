@@ -54,6 +54,9 @@ const theme = createMuiTheme({
 const useStyles = makeStyles((theme) => ({
     paddingTop: {
         marginTop: '4rem',
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 40,
+        }
     },
     
 }));
