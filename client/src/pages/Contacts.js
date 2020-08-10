@@ -264,7 +264,7 @@ const Contacts = () => {
                     <ContactsIcon className={classes.heroIcon} />
                 </Typography>
             </div>
-            <Container maxWidth="sm" className={classes.mainContainer}>
+            <Container maxWidth="sm">
                 <Typography className={classes.title} variant="h4">
                     My Contacts
                 </Typography>
@@ -272,10 +272,13 @@ const Contacts = () => {
                     <ContactAccordion {...{ handleExpand, expanded }} {...contact} key={contact.id} />
                 ))}
                 {contactsList.length === 0 && (
-                    <p>
-                        You don't have any contacts added yet. On your overview page in either a new job, or an existing saved one, at the very
-                        bottom of the dialog click the "Add contact" button to get started.
-                    </p>
+                    <>
+                        <Typography variant="subtitle1">You don't have any contacts added yet!</Typography>
+                        <Typography variant="subtitle2">
+                            On your overview page in either a new job, or an existing saved one, at the very bottom of
+                            the dialog click the "Add contact" button to get started.
+                        </Typography>
+                    </>
                 )}
             </Container>
         </div>
