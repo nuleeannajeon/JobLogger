@@ -188,7 +188,7 @@ const UserSettings = () => {
             <div className={classes.hero}>
                 <Typography variant="h2">
                     {globalStore.thumbnail ? (
-                        <img className={classes.personImage} src={globalStore.thumbnail} alt="UserIcon" />
+                        <img className={classes.personImage} src={globalStore.thumbnail} alt="Settings" />
                     ) : (
                         <PersonIcon className={classes.heroIcon} />
                     )}

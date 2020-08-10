@@ -11,6 +11,8 @@ import {
     ListItem,
     ListItemText,
     ListItemIcon,
+    IconButton,
+    TextField,
 } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import ContactsIcon from '@material-ui/icons/Contacts';
@@ -18,6 +20,7 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import WorkIcon from '@material-ui/icons/Work';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import EditIcon from '@material-ui/icons/Edit';
 
 // import MuiAccordion from '@material-ui/core/Accordion';
 // import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
@@ -25,6 +28,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 // import Typography from '@material-ui/core/Typography';
 import API from '../utils/API';
 import { useGlobalStore } from '../components/GlobalStore';
+import processServerReturn from '../utils/processServerReturn';
 
 const useStyles = makeStyles((theme) => ({
     hero: {
@@ -40,6 +44,22 @@ const useStyles = makeStyles((theme) => ({
     },
     mainContainer: {
         paddingTop: theme.spacing(2),
+    },
+    accordionDetails: {
+        position: 'relative',
+    },
+    editButton: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        bottom: theme.spacing(1),
+    },
+    inputContainer: {
+        '& > *': {
+            marginBottom: theme.spacing(2),
+        },
+        '& > *:last-child': {
+            marginBottom: theme.spacing(5),
+        },
     },
 }));
 
@@ -61,9 +81,32 @@ const Accordion = withStyles({
 })(BaseAccordion);
 
 const ContactAccordion = (props) => {
-    const { expanded, handleExpand, contact } = props;
+    const classes = useStyles();
+    const [, dispatch] = useGlobalStore();
+    const { expanded, handleExpand } = props;
+    const { id, name, title, email, phone, company, postID } = props;
+    const [values, setValues] = useState({ id, name, title, email, phone, company, postID });
 
-    const { id, name, title, email, phone, company } = props;
+    const handleChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
+    };
+
+    const submitEdit = async () => {
+        const serverResponse = await API.put('/api/contacts', values);
+        console.log("submitEdit -> serverResponse", serverResponse)
+        processServerReturn(serverResponse, dispatch);
+    };
+
+    const handleEdit = async () => {
+        if (edit) {
+            submitEdit();
+            setEdit(false);
+        } else {
+            setEdit(true);
+        }
+    };
+
+    const [edit, setEdit] = useState(false);
     const formatPhoneNumber = (phoneNumber) => {
         const nonNumberPattern = /[^0-9]*/gm;
         return phoneNumber.replace(nonNumberPattern, '');
@@ -72,41 +115,100 @@ const ContactAccordion = (props) => {
     return (
         <Accordion square expanded={expanded === id} onChange={handleExpand(id)}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                {name} {company ? ' - ' + company : ''}
+                {values.name} {values.company ? ' - ' + values.company : ''}
             </AccordionSummary>
-            <AccordionDetails>
-                <List>
-                    {title ? (
-                        <ListItem>
-                            <ListItemIcon>
-                                <WorkIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={title} />
-                        </ListItem>
-                    ) : (
-                        ''
-                    )}
-                    {phone ? (
-                        <ListItem>
-                            <ListItemIcon>
-                                <PhoneIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={<a href={`tel:${formatPhoneNumber(phone)}`} target="_blank" rel="noopener noreferrer">{phone}</a>} />
-                        </ListItem>
-                    ) : (
-                        ''
-                    )}
-                    {email ? (
-                        <ListItem>
-                            <ListItemIcon>
-                                <AlternateEmailIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={<a href={`mailto:${email}`} target="_blank" rel="noopener noreferrer">{email}</a>} />
-                        </ListItem>
-                    ) : (
-                        ''
-                    )}
-                </List>
+            <AccordionDetails className={classes.accordionDetails}>
+                <IconButton onClick={handleEdit} className={classes.editButton}>
+                    <EditIcon />
+                </IconButton>
+                {!edit && (
+                    <>
+                        <List>
+                            {values.title ? (
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <WorkIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary={values.title} />
+                                </ListItem>
+                            ) : (
+                                ''
+                            )}
+                            {values.phone ? (
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <PhoneIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={
+                                            <a
+                                                href={`tel:${formatPhoneNumber(values.phone)}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                {values.phone}
+                                            </a>
+                                        }
+                                    />
+                                </ListItem>
+                            ) : (
+                                ''
+                            )}
+                            {values.email ? (
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <AlternateEmailIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={
+                                            <a
+                                                href={`mailto:${values.email}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                {values.email}
+                                            </a>
+                                        }
+                                    />
+                                </ListItem>
+                            ) : (
+                                ''
+                            )}
+                        </List>
+                    </>
+                )}
+                {edit && (
+                    <Grid container direction="column" alignItems="stretch" className={classes.inputContainer}>
+                        <TextField
+                            id="nameEdit"
+                            label="Name"
+                            variant="outlined"
+                            value={values.name}
+                            onChange={handleChange('name')}
+                        />
+                        <TextField
+                            id="titleEdit"
+                            label="Title"
+                            variant="outlined"
+                            value={values.title}
+                            onChange={handleChange('title')}
+                        />
+                        <TextField
+                            id="phoneEdit"
+                            label="Phone"
+                            variant="outlined"
+                            value={values.phone}
+                            onChange={handleChange('phone')}
+                        />
+                        <TextField
+                            id="emailEdit"
+                            label="Email"
+                            variant="outlined"
+                            value={values.email}
+                            onChange={handleChange('email')}
+                        />
+                    </Grid>
+                )}
             </AccordionDetails>
         </Accordion>
     );
