@@ -60,13 +60,14 @@ const postsSchema = new Schema({
     interviewNote: {
         type: String
     },
-    companyContact: [{ name: String, email: String, phone: String, position: String }],
+    companyContact: [{ name: String, email: String, phone: String, title: String }],
     savedApiLink: {
         type: String,
     },
     reminder: {
         type: Date,
     },
+    interviews: [{interviewDate: Date, interviewType: String, interviewNotes: String}]
 });
 
 const Posts = mongoose.model('Posts', postsSchema);

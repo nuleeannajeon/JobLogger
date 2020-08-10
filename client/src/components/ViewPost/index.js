@@ -68,7 +68,6 @@ const DateChooser = (props) => {
 
 const ViewPost = (props) => {
     const classes = useStyles();
-    console.log('props are ', props);
     const {
         company,
         title,

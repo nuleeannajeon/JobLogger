@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useGlobalStore } from '../GlobalStore';
 import Alert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import API from '../../utils/API';
 import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-const useStyles = makeStyles((theme) => ({
-    reminder: {
-        // position: 'fixed',
-        // bottom: 10,
-        // left: 10,
-        zIndex: 10000,
-    },
-}));
 
 const ReminderMessage = () => {
-    const [globalStore, dispatch] = useGlobalStore()
+    const [, dispatch] = useGlobalStore()
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState(null);
     const history = useHistory();
@@ -24,7 +15,6 @@ const ReminderMessage = () => {
 
     const checkForMessages = async () => {
         const reminders = await API.get('/api/reminders');
-        console.log("checkForMessages -> reminders", reminders)
         dispatch({ do: 'setUserData', reminders: reminders.length > 0 });
 
         if (reminders.length === 0) {
@@ -38,6 +28,7 @@ const ReminderMessage = () => {
 
     useEffect(() => {
         checkForMessages();
+        //eslint-disable-next-line
     }, []);
 
     const handleClose = () => {

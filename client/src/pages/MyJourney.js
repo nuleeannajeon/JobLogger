@@ -39,14 +39,13 @@ const MyJourney = () => {
     const classes = useStyles();
     const [globalStore, dispatch] = useGlobalStore();
     const [loading, setLoading] = useState(true);
+    //eslint-disable-next-line
     const [posts, setPosts] = useState([])
 
     const getUserData = async () => {
         const userData = await API.getUserData();
-        console.log('getUserData -> userData', userData);
         const posts = await API.getUserPosts();
         setPosts(posts.message)
-        console.log("getUserData -> posts.message", posts.message)
         if (userData.error || posts.error) {
             dispatch({
                 do: 'setMessage',
@@ -63,6 +62,7 @@ const MyJourney = () => {
 
     useEffect(() => {
         getUserData();
+        //eslint-disable-next-line
     }, []);
 
     return (

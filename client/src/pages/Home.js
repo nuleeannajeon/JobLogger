@@ -6,11 +6,10 @@ import { useGlobalStore } from '../components/GlobalStore';
 import React, { useEffect } from 'react';
 
 const Home = () => {
-    const [globalStore, dispatch] = useGlobalStore();
+    const [, dispatch] = useGlobalStore();
     
     const checkLoggedIn = async () => {
         const loggedInReturn = await API.getLoggedState();
-        console.log("checkLoggedIn -> loggedInReturn", loggedInReturn)
         if (loggedInReturn === true) {
             dispatch({ do: 'login'});
             getUserData()
@@ -19,12 +18,12 @@ const Home = () => {
 
     const getUserData = async () => {
         const userData = await API.getUserData();
-        console.log("getUserData -> userData", userData)
         dispatch({ do: 'setUserData', ...userData });
     };
 
     useEffect(() => {
         checkLoggedIn();
+        // eslint-disable-next-line
     }, []);
 
     return (

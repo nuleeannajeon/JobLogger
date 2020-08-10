@@ -175,6 +175,6 @@ module.exports = (app, baseURL, createSession) => {
         if (!user) {
             console.log('Logout attempted for null user');
         }
-        req.status(200).send({ message: 'Successful logout' });
+        req.status(200).send({ message: 'Log out successful' });
     });
 };

@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import { GlobalStore } from './components/GlobalStore';
 
@@ -17,12 +16,12 @@ import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import Overview from './pages/Overview';
 import MyJourney from './pages/MyJourney';
-import Testing from './pages/Testing';
 import UserEntry from './pages/Userentry';
 import Reminders from './pages/Reminders';
 import Search from './pages/Search';
 import Footer from './components/Footer';
-import OverviewInstruction from './components/OverviewInstruction';
+import NavbarMUI from './components/NavbarMUI'
+import Contacts from './pages/Contacts'
 
 const NavbarWithRouter = withRouter(Navbar);
 const FooterWithRouter = withRouter(Footer)
@@ -32,7 +31,7 @@ const theme = createMuiTheme({
             main: '#5F9EA0',
         },
         secondary: {
-            main: '#605fa0',
+            main: '#A16F90',
         },
     },
     breakpoints: {
@@ -55,6 +54,9 @@ const theme = createMuiTheme({
 const useStyles = makeStyles((theme) => ({
     paddingTop: {
         marginTop: '4rem',
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 40,
+        }
     },
     
 }));
@@ -67,18 +69,14 @@ function App() {
                 <Message />
                 <Router>
                     <div className='main-app-container'>
-                        <NavbarWithRouter />
+                        {/* <NavbarWithRouter /> */}
+                        <NavbarMUI />
                         <div className={classes.paddingTop}>
-                            <Route exact path="/" component={OverviewInstruction} />
+                            <Route exact path="/" component={Home} />
                             <Route exact path="/entry" component={UserEntry} />
                             <Route exact path="/register" component={Registration} />
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/logout" component={Logout} />
-                            <Route exact path="/testing" component={Testing} />
-                            {/* <Route exact path="/overview" component={Overview} /> */}
-                            {/* <PrivateRoute exact path="/home">
-                            <Content />
-                        </PrivateRoute> */}
                             <PrivateRoute path="/overview">
                                 <Overview />
                             </PrivateRoute>
@@ -88,14 +86,15 @@ function App() {
                             <PrivateRoute path="/settings">
                                 <UserSettings />
                             </PrivateRoute>
+                            <PrivateRoute path="/contacts">
+                                <Contacts />
+                            </PrivateRoute>
                             <PrivateRoute exact path="/myjourney">
                                 <MyJourney />
                             </PrivateRoute>
                             <PrivateRoute exact path="/reminders">
                                 <Reminders />
                             </PrivateRoute>
-                            {/* <Route exact path="/myjourney" component={MyJourney} /> */}
-                            {/* <Route exact path="/newpost" component={PostAdd} /> */}
                         </div>
                         <FooterWithRouter />
                     </div>
