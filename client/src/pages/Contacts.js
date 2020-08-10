@@ -62,8 +62,13 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     name: {
-        color: theme.palette.primary.main
-    }
+        color: theme.palette.primary.main,
+    },
+    title: {
+        marginTop: theme.spacing(3),
+        marginBottom: theme.spacing(3),
+        fontFamily: 'Quando',
+    },
 }));
 
 const Accordion = withStyles({
@@ -117,7 +122,9 @@ const ContactAccordion = (props) => {
     return (
         <Accordion square expanded={expanded === id} onChange={handleExpand(id)}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <span className={classes.name}>{values.name} {values.company ? ' - ' + values.company : ''}</span>
+                <span className={classes.name}>
+                    {values.name} {values.company ? ' - ' + values.company : ''}
+                </span>
             </AccordionSummary>
             <AccordionDetails className={classes.accordionDetails}>
                 <IconButton onClick={handleEdit} className={classes.editButton}>
@@ -258,9 +265,18 @@ const Contacts = () => {
                 </Typography>
             </div>
             <Container maxWidth="sm" className={classes.mainContainer}>
+                <Typography className={classes.title} variant="h4">
+                    My Contacts
+                </Typography>
                 {contactsList.map((contact) => (
                     <ContactAccordion {...{ handleExpand, expanded }} {...contact} key={contact.id} />
                 ))}
+                {contactsList.length === 0 && (
+                    <p>
+                        You don't have any contacts added yet. On your overview page in either a new job, or an existing saved one, at the very
+                        bottom of the dialog click the "Add contact" button to get started.
+                    </p>
+                )}
             </Container>
         </div>
     );
