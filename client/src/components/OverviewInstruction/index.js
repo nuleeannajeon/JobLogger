@@ -13,9 +13,13 @@ function OverviewInstruction(){
                     <div className="col-md-12 col-lg-6"><img className="instruction-image img-fluid" src={NavigationImage} alt="joblogger-navigation"/></div>
                     <div className="col-md-12 col-lg-6 pr-2 pl-4">
                         <h3>Navigate by progress</h3>
-                        <p>JobLogger will help you visualize and track information by its status. 
+                        <p>JobLogger helps organize your job searching journey by organizing your various applications and jobs by category.
+                            The navigation bar helps you find your jobs ranging from the ones on your wishlist, to jobs you've applied to, interviewed for, and heard back definitively from.
+                            
+                            {/* JobLogger will help you visualize and track information by its status. 
                             Once you've clicked on each side navigation bars, it populates the lists 
-                            of key information of your job searching progress.</p>
+                            of key information of your job searching progress. */}
+                            </p>
                     </div>
                 </div>
                 <div className="row align-items-center second-instruction">
@@ -24,13 +28,13 @@ function OverviewInstruction(){
                         <h3>Key Information at a Glance</h3>
                         <p>Before you get into details, 
                             JobLogger will bring key information to help you 
-                            easily find the post that you need. 
-                            At any time you can create a new post, 
+                            easily find the post that you're looking for. 
+                            At any time you can add a new job, 
                             view and edit existing ones, 
                             and delete them. 
                             Also you can save your job at any time with information like
                             the posting URL, job title, 
-                            salary, location, company and more
+                            salary, location, company and more.
                         </p>
                     </div>
                 </div>
@@ -47,8 +51,8 @@ function OverviewInstruction(){
                     <div className="col-md-12 col-lg-6 order-lg-last"><img className="instruction-image img-fluid" src={ReminderImage} alt="joblogger-instruction"/></div>
                     <div className="col-md-12 col-lg-6 order-lg-first pr-2 pl-4">
                         <h3>Remind Yourself</h3>
-                        <p>JobLogger will provide you with a powerful tool, Reminder, for every posts you make.
-                            You can always remind yourself of your next upcoming event and see it's key information.
+                        <p>JobLogger will provide you with a powerful tool in the form of reminders, for every job you add.
+                            You can always remind yourself of your next upcoming event and see its key information.
                         </p>
                     </div>
                 </div>

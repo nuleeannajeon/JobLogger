@@ -7,6 +7,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SearchIcon from '@material-ui/icons/Search';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import HomeIcon from '@material-ui/icons/Home';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const useStyles = makeStyles((theme) => ({
     navList: {
@@ -66,6 +68,10 @@ const MainSideNav = (props) => {
                         <ListItem button component={Link} to="/settings">
                             <ListItemIcon><AccountCircleIcon /></ListItemIcon>
                             <ListItemText primary="My Profile" />
+                        </ListItem>
+                        <ListItem button component={Link} to="/reminders">
+                            <ListItemIcon><NotificationsIcon /></ListItemIcon>
+                            <ListItemText primary="Reminders" />
                         </ListItem>
                         <ListItem button component={Link} to="/logout">
                             <ListItemIcon><ExitToAppIcon /></ListItemIcon>

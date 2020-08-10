@@ -124,10 +124,10 @@ const NavbarMUI = () => {
     titleClasses = titleClasses.join(' ');
 
     const accountMenuLoggedIn = [
-        <MenuItem key='settingsMenuItem' value="settings" onClick={handleClose('settings')}>
+        <MenuItem key="settingsMenuItem" value="settings" onClick={handleClose('settings')}>
             My account
         </MenuItem>,
-        <MenuItem key='logoutMenuItem' value="logout" onClick={handleClose('logout')}>
+        <MenuItem key="logoutMenuItem" value="logout" onClick={handleClose('logout')}>
             Log out
         </MenuItem>,
     ];
@@ -166,6 +166,11 @@ const NavbarMUI = () => {
                         </>
                     )}
                     {/* <NavLink to="/overview" activeClass={classes.activeLink} className={classes.navLink}> */}
+                    {globalStore.loggedIn && (
+                        <NavLink className={classes.navLink} activeClassName={classes.activeLink} to="/reminders">
+                            {globalStore.reminders ? <NotificationsActiveIcon /> : <NotificationsIcon />}
+                        </NavLink>
+                    )}
                     <IconButton
                         ref={anchorRef}
                         aria-controls={open ? 'menu-list-grow' : undefined}
@@ -184,7 +189,9 @@ const NavbarMUI = () => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    {globalStore.loggedIn && (<MainSideNav loggedIn={globalStore.loggedIn} open={sidenavOpen} setOpen={setSidenavOpen} />)}
+                    {globalStore.loggedIn && (
+                        <MainSideNav loggedIn={globalStore.loggedIn} open={sidenavOpen} setOpen={setSidenavOpen} />
+                    )}
                     <Popper
                         className={classes.zind}
                         open={open}
