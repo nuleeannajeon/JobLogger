@@ -61,6 +61,9 @@ const useStyles = makeStyles((theme) => ({
     menuButton: {
         display: 'none',
     },
+    menuButtonLoggedOut: {
+        display: 'none'
+    },
     [theme.breakpoints.down('sm')]: {
         navLink: {
             display: 'none',
@@ -74,6 +77,9 @@ const useStyles = makeStyles((theme) => ({
         menuButton: {
             display: 'block',
         },
+        menuButtonLoggedOut: {
+            display: 'none'
+        }
     },
 }));
 
@@ -176,13 +182,13 @@ const NavbarMUI = () => {
                         aria-controls={open ? 'menu-list-grow' : undefined}
                         aria-haspopup="true"
                         onClick={handleToggle}
-                        className={!globalStore.loggedIn ? classes.menuButton : classes.iconButton}
+                        className={globalStore.loggedIn ? classes.iconButton : classes.iconButtonLoggedOut}
                     >
                         <AccountCircleIcon />
                     </IconButton>
                     <IconButton
                         edge="start"
-                        className={globalStore.loggedIn ? classes.menuButton : classes.iconButton}
+                        className={globalStore.loggedIn ? classes.menuButton : classes.menuButtonLoggedOut}
                         color="inherit"
                         aria-label="menu"
                         onClick={() => setSidenavOpen(true)}

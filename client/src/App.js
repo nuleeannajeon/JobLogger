@@ -31,7 +31,7 @@ const theme = createMuiTheme({
             main: '#5F9EA0',
         },
         secondary: {
-            main: '#605fa0',
+            main: '#A16F90',
         },
     },
     breakpoints: {
