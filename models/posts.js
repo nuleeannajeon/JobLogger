@@ -67,6 +67,7 @@ const postsSchema = new Schema({
     reminder: {
         type: Date,
     },
+    interviews: [{interviewDate: Date, interviewType: String, interviewNotes: String}]
 });
 
 const Posts = mongoose.model('Posts', postsSchema);

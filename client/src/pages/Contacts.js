@@ -61,6 +61,9 @@ const useStyles = makeStyles((theme) => ({
             marginBottom: theme.spacing(5),
         },
     },
+    name: {
+        color: theme.palette.primary.main
+    }
 }));
 
 const Accordion = withStyles({
@@ -93,7 +96,6 @@ const ContactAccordion = (props) => {
 
     const submitEdit = async () => {
         const serverResponse = await API.put('/api/contacts', values);
-        console.log("submitEdit -> serverResponse", serverResponse)
         processServerReturn(serverResponse, dispatch);
     };
 
@@ -115,7 +117,7 @@ const ContactAccordion = (props) => {
     return (
         <Accordion square expanded={expanded === id} onChange={handleExpand(id)}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                {values.name} {values.company ? ' - ' + values.company : ''}
+                <span className={classes.name}>{values.name} {values.company ? ' - ' + values.company : ''}</span>
             </AccordionSummary>
             <AccordionDetails className={classes.accordionDetails}>
                 <IconButton onClick={handleEdit} className={classes.editButton}>

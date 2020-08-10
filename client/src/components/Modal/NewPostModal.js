@@ -30,62 +30,61 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ReminderDialog from '../ReminderDialog';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
-import ContactsSection from './ContactsSection'
-
+import ContactsSection from './ContactsSection';
+import InterviewSection from './InterviewSection';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 const RedRadio = withStyles({
     root: {
-      color: "red",
-      '&$checked': {
-        color: "red",
-      },
+        color: 'red',
+        '&$checked': {
+            color: 'red',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const YellowRadio = withStyles({
     root: {
-      color: "yellow",
-      '&$checked': {
-        color: "yellow",
-      },
+        color: 'yellow',
+        '&$checked': {
+            color: 'yellow',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const GreenRadio = withStyles({
     root: {
-      color: "green",
-      '&$checked': {
-        color: "green",
-      },
+        color: 'green',
+        '&$checked': {
+            color: 'green',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const BlueRadio = withStyles({
     root: {
-      color: "blue",
-      '&$checked': {
-        color: "blue",
-      },
+        color: 'blue',
+        '&$checked': {
+            color: 'blue',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const PurpleRadio = withStyles({
     root: {
-      color: "purple",
-      '&$checked': {
-        color: "purple",
-      },
+        color: 'purple',
+        '&$checked': {
+            color: 'purple',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -132,7 +131,7 @@ export default function SimpleModal(props) {
     const [loading, setLoading] = useState(false);
     const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
 
-    const date = new Date()
+    const date = new Date();
 
     const defaultValues = {
         color: '',
@@ -149,8 +148,8 @@ export default function SimpleModal(props) {
         interviewState: null,
         interviewNote: '',
         companyContact: [],
-    }
-
+        interviews: [],
+    };
 
     const [values, setValues] = useState(defaultValues);
 
@@ -197,7 +196,7 @@ export default function SimpleModal(props) {
     };
 
     const submitChange = async () => {
-        let serverMessage = {...values};
+        let serverMessage = { ...values };
 
         //Validate the fields are valid for the DB
         //company can't be empty
@@ -243,12 +242,12 @@ export default function SimpleModal(props) {
             serverMessage.postLink = validurl;
         }
 
-        if (!['applied', 'interview', 'offer', 'reject'].includes(serverMessage.postingType)){
-            delete serverMessage.appliedDate
+        if (!['applied', 'interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
+            delete serverMessage.appliedDate;
         }
 
-        if (! ['interview', 'offer', 'reject'].includes(serverMessage.postingType)){
-            delete serverMessage.heardBackDate
+        if (!['interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
+            delete serverMessage.heardBackDate;
         }
         //removing any empty fields from the put statement
         Object.keys(serverMessage).forEach((key) => {
@@ -275,21 +274,21 @@ export default function SimpleModal(props) {
             <Grid container direction="row" justify="space-between">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     {/* <Grid container alignItems="flex-end"> */}
-                        <KeyboardDatePicker
-                            disableToolbar
-                            variant="inline"
-                            format="MM/dd/yyyy"
-                            margin="normal"
-                            id="date-picker-inline"
-                            label="Date Added"
-                            value={new Date()}
-                            onChange={() => {
-                                console.log('no');
-                            }}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                        />
+                    <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="MM/dd/yyyy"
+                        margin="normal"
+                        id="date-picker-inline"
+                        label="Date Added"
+                        value={new Date()}
+                        onChange={() => {
+                            console.log('no');
+                        }}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                    />
                     {/* </Grid> */}
                 </MuiPickersUtilsProvider>
                 <Tooltip title="Reminder">
@@ -314,12 +313,7 @@ export default function SimpleModal(props) {
                 </RadioGroup>
             </FormControl>
 
-            <TextField
-                id="company-text"
-                label="Company"
-                value={values.company}
-                onChange={handleChange('company')}
-            />
+            <TextField id="company-text" label="Company" value={values.company} onChange={handleChange('company')} />
 
             <TextField id="title-text" label="Title" value={values.title} onChange={handleChange('title')} />
 
@@ -421,7 +415,7 @@ export default function SimpleModal(props) {
                 values.postingType === 'reject' ? (
                     <Grid item xs={12} md={7}>
                         <FormControl component="fieldset">
-                            <FormLabel component="legend">Interview State</FormLabel>
+                            <FormLabel component="legend">Interview Type</FormLabel>
                             <RadioGroup
                                 row
                                 aria-label="interviewState"
@@ -475,7 +469,9 @@ export default function SimpleModal(props) {
                     ''
                 )}
             </Grid>
-
+            {/* {(values.postingType === 'interview' ||
+                values.postingType === 'offer' ||
+                values.postingType === 'reject') && (<InterviewSection values={values} setValues={setValues} />)} */}
             <TextField id="postLink" label="Post Link" value={values.postLink} onChange={handleChange('postLink')} />
 
             <TextField
@@ -521,7 +517,12 @@ export default function SimpleModal(props) {
                 aria-describedby="scroll-dialog-description"
                 TransitionComponent={Transition}
             >
-                <DialogTitle id="scroll-dialog-title">New Job <span style={{float: "right"}}>{date.getFullYear()+' / '+(date.getMonth()+1)+' / '+date.getDate()}</span></DialogTitle>
+                <DialogTitle id="scroll-dialog-title">
+                    New Job{' '}
+                    <span style={{ float: 'right' }}>
+                        {date.getFullYear() + ' / ' + (date.getMonth() + 1) + ' / ' + date.getDate()}
+                    </span>
+                </DialogTitle>
                 <DialogContent dividers={scroll === 'paper'} style={{ margin: '0' }}>
                     {body}
                 </DialogContent>

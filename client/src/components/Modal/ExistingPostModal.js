@@ -27,7 +27,8 @@ import ReminderDialog from '../ReminderDialog';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
-import ContactsSection from './ContactsSection'
+import ContactsSection from './ContactsSection';
+import InterviewSection from './InterviewSection';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -35,50 +36,50 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const RedRadio = withStyles({
     root: {
-      color: "red",
-      '&$checked': {
-        color: "red",
-      },
+        color: 'red',
+        '&$checked': {
+            color: 'red',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const YellowRadio = withStyles({
     root: {
-      color: "yellow",
-      '&$checked': {
-        color: "yellow",
-      },
+        color: 'yellow',
+        '&$checked': {
+            color: 'yellow',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const GreenRadio = withStyles({
     root: {
-      color: "green",
-      '&$checked': {
-        color: "green",
-      },
+        color: 'green',
+        '&$checked': {
+            color: 'green',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const BlueRadio = withStyles({
     root: {
-      color: "blue",
-      '&$checked': {
-        color: "blue",
-      },
+        color: 'blue',
+        '&$checked': {
+            color: 'blue',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const PurpleRadio = withStyles({
     root: {
-      color: "purple",
-      '&$checked': {
-        color: "purple",
-      },
+        color: 'purple',
+        '&$checked': {
+            color: 'purple',
+        },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
@@ -129,9 +130,10 @@ export default function SimpleModal(props) {
         companyContact,
         companyLogoImage,
         reminder,
+        interviews,
     } = datalist;
 
-    const date = new Date(dateAdded)
+    const date = new Date(dateAdded);
 
     const [values, setValues] = React.useState({
         color: color || '',
@@ -146,9 +148,10 @@ export default function SimpleModal(props) {
         heardBackDate: heardBackDate || new Date(),
         interviewState: interviewState || '',
         interviewNote: interviewNote || '',
-        companyContact: companyContact ||  [],
+        companyContact: companyContact || [],
         reminder: reminder || '',
         companyLogoImage: companyLogoImage || '',
+        interviews: [],
     });
 
     const submitChange = async () => {
@@ -250,7 +253,7 @@ export default function SimpleModal(props) {
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    const [scroll, ] = React.useState('paper');
+    const [scroll] = React.useState('paper');
 
     const handleOpen = () => {
         setOpen(true);
@@ -412,7 +415,7 @@ export default function SimpleModal(props) {
                 values.postingType === 'reject' ? (
                     <Grid item xs={12} md={7}>
                         <FormControl component="fieldset">
-                            <FormLabel component="legend">Interview State</FormLabel>
+                            <FormLabel component="legend">Interview Type</FormLabel>
                             <RadioGroup
                                 row
                                 aria-label="interviewState"
@@ -466,6 +469,9 @@ export default function SimpleModal(props) {
                     ''
                 )}
             </Grid>
+            {/* {(values.postingType === 'interview' ||
+                values.postingType === 'offer' ||
+                values.postingType === 'reject') && <InterviewSection values={values} setValues={setValues} />} */}
 
             <TextField id="postLink" label="Post Link" value={values.postLink} onChange={handleChange('postLink')} />
 
@@ -504,7 +510,7 @@ export default function SimpleModal(props) {
 
             <Dialog
                 open={open}
-                maxWidth='sm'
+                maxWidth="sm"
                 onClose={handleClose}
                 className={classes.modal}
                 scroll={scroll}
@@ -512,7 +518,12 @@ export default function SimpleModal(props) {
                 aria-describedby="scroll-dialog-description"
                 TransitionComponent={Transition}
             >
-                <DialogTitle id="scroll-dialog-title">{company} <span style={{float: "right"}}>{date.getFullYear()+' / '+(date.getMonth()+1)+' / '+date.getDate()}</span></DialogTitle>
+                <DialogTitle id="scroll-dialog-title">
+                    {company}{' '}
+                    <span style={{ float: 'right' }}>
+                        {date.getFullYear() + ' / ' + (date.getMonth() + 1) + ' / ' + date.getDate()}
+                    </span>
+                </DialogTitle>
                 <DialogContent dividers={scroll === 'paper'} style={{ margin: '0' }}>
                     {body}
                 </DialogContent>
