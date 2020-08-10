@@ -20,6 +20,8 @@ import UserEntry from './pages/Userentry';
 import Reminders from './pages/Reminders';
 import Search from './pages/Search';
 import Footer from './components/Footer';
+import NavbarMUI from './components/NavbarMUI'
+import Contacts from './pages/Contacts'
 
 const NavbarWithRouter = withRouter(Navbar);
 const FooterWithRouter = withRouter(Footer)
@@ -29,7 +31,7 @@ const theme = createMuiTheme({
             main: '#5F9EA0',
         },
         secondary: {
-            main: '#605fa0',
+            main: '#A16F90',
         },
     },
     breakpoints: {
@@ -52,6 +54,9 @@ const theme = createMuiTheme({
 const useStyles = makeStyles((theme) => ({
     paddingTop: {
         marginTop: '4rem',
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 40,
+        }
     },
     
 }));
@@ -64,7 +69,8 @@ function App() {
                 <Message />
                 <Router>
                     <div className='main-app-container'>
-                        <NavbarWithRouter />
+                        {/* <NavbarWithRouter /> */}
+                        <NavbarMUI />
                         <div className={classes.paddingTop}>
                             <Route exact path="/" component={Home} />
                             <Route exact path="/entry" component={UserEntry} />
@@ -79,6 +85,9 @@ function App() {
                             </PrivateRoute>
                             <PrivateRoute path="/settings">
                                 <UserSettings />
+                            </PrivateRoute>
+                            <PrivateRoute path="/contacts">
+                                <Contacts />
                             </PrivateRoute>
                             <PrivateRoute exact path="/myjourney">
                                 <MyJourney />

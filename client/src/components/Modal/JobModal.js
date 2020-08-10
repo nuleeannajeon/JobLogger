@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -23,65 +22,62 @@ import API from '../../utils/API';
 import processServerReturn from '../../utils/processServerReturn';
 import ResponsiveSubmit from '../ResponsiveSubmit';
 import Input from '@material-ui/core/Input';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import Slide from '@material-ui/core/Slide';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import ReminderDialog from '../ReminderDialog';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
-import ContactsSection from './ContactsSection';
-import InterviewSection from './InterviewSection';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
 const RedRadio = withStyles({
     root: {
-        color: 'red',
-        '&$checked': {
-            color: 'red',
-        },
+      color: "red",
+      '&$checked': {
+        color: "red",
+      },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const YellowRadio = withStyles({
     root: {
-        color: 'yellow',
-        '&$checked': {
-            color: 'yellow',
-        },
+      color: "yellow",
+      '&$checked': {
+        color: "yellow",
+      },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const GreenRadio = withStyles({
     root: {
-        color: 'green',
-        '&$checked': {
-            color: 'green',
-        },
+      color: "green",
+      '&$checked': {
+        color: "green",
+      },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const BlueRadio = withStyles({
     root: {
-        color: 'blue',
-        '&$checked': {
-            color: 'blue',
-        },
+      color: "blue",
+      '&$checked': {
+        color: "blue",
+      },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
 
 const PurpleRadio = withStyles({
     root: {
-        color: 'purple',
-        '&$checked': {
-            color: 'purple',
-        },
+      color: "purple",
+      '&$checked': {
+        color: "purple",
+      },
     },
     checked: {},
 })((props) => <Radio color="default" {...props} />);
@@ -94,10 +90,8 @@ const useStyles = makeStyles((theme) => ({
     },
     modal: {
         maxWidth: '100vw',
-        [theme.breakpoints.down('sm')]: {
-            '& .MuiDialog-paper': {
-                margin: '10px',
-            },
+        '& .MuiDialog-paper': {
+            margin: '10px',
         },
     },
     responsiveWrapper: {
@@ -107,63 +101,136 @@ const useStyles = makeStyles((theme) => ({
         width: '90%',
         marginTop: theme.spacing(2),
     },
-    addButton: {
-        [theme.breakpoints.down('xs')]: {
-            position: 'fixed',
-            zIndex: 10,
-            bottom: theme.spacing(8),
-            right: theme.spacing(2),
-        },
-        [theme.breakpoints.up('sm')]: {
-            display: 'none',
-        },
-        green: {
-            color: green[400],
-            '&$checked': {
-                color: green[600],
-            },
-        },
-    },
 }));
 
-export default function SimpleModal(props) {
+export default function SimpleModal() {
     const [, dispatch] = useGlobalStore();
     const [loading, setLoading] = useState(false);
     const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
+    
+    const datalist = props.data;
 
-    const date = new Date();
+    const {
+        _id,
+        color,
+        company,
+        title,
+        postingType,
+        salary,
+        dateAdded,
+        notes,
+        postLink,
+        location,
+        appliedDate,
+        heardBackDate,
+        interviewState,
+        interviewNote,
+        companyContact,
+        companyLogoImage,
+        reminder,
+    } = datalist;
 
-    const defaultValues = {
-        color: '',
-        company: '',
-        companyLogoImage: '',
-        postingType: '',
-        title: '',
-        location: '',
-        salary: '',
-        notes: '',
-        postLink: '',
-        appliedDate: Date.now(),
-        heardBackDate: Date.now(),
-        interviewState: null,
-        interviewNote: '',
-        companyContact: [],
-        interviews: [],
+    const [values, setValues] = React.useState({
+        color: color || '',
+        company: company,
+        postingType: postingType,
+        title: title || '',
+        location: location || '',
+        salary: salary || '',
+        notes: notes || '',
+        postLink: postLink || '',
+        appliedDate: appliedDate || new Date(),
+        heardBackDate: heardBackDate || new Date(),
+        interviewState: interviewState || '',
+        interviewNote: interviewNote || '',
+        companyContact: companyContact || '',
+        reminder: reminder || '',
+        companyLogoImage: companyLogoImage || '',
+    });
+
+    const submitChange = async () => {
+        let serverMessage = { ...values };
+        //Validate the fields are valid for the DB
+
+        //company can't be empty
+        if (serverMessage.company === '') {
+            dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+
+        //title can't be empty
+        if (serverMessage.title === '') {
+            dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+
+        //posting Type cant't be empty
+        if (serverMessage.postingType === '') {
+            dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
+            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+            return;
+        }
+
+        //postLink has to be a valid URL
+        // TODO add in regex to check if valid URL string
+        const verifyURL = (url) => {
+            //eslint-disable-next-line
+            const re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
+            if (re.test(url)) {
+                if (!url.includes('http://') && url.includes('www.')) {
+                    return 'http://' + url;
+                } else {
+                    return url;
+                }
+            }
+            return false;
+        };
+        if (serverMessage.postLink !== '') {
+            const validurl = verifyURL(serverMessage.postLink);
+            console.log('submitChange -> validurl', validurl);
+            if (validurl === false) {
+                dispatch({ do: 'setMessage', type: 'error', message: 'The Post Link has be a valid url.' });
+                setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
+                return;
+            }
+            serverMessage.postLink = validurl;
+            values.postLink = validurl;
+        }
+
+        if (!['applied', 'interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
+            delete serverMessage.appliedDate;
+        }
+
+        if (!['interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
+            delete serverMessage.heardBackDate;
+        }
+
+        //removing any empty fields from the put statement
+        Object.keys(serverMessage).forEach((key) => {
+            if (!serverMessage[key]) {
+                delete serverMessage[key];
+            }
+        });
+
+        const serverResponse = await API.put(`/api/posts/${_id}`, serverMessage);
+
+        processServerReturn(serverResponse, dispatch);
+
+        return !serverResponse.error;
     };
 
-    const [values, setValues] = useState(defaultValues);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        const success = await submitChange();
+        setTimeout(() => setLoading(false), 500);
 
-    const classes = useStyles();
-    const [open, setOpen] = useState(false);
-    //eslint-disable-next-line
-    const [scroll, setScroll] = useState('paper');
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
+        if (success) {
+            setOpen(false);
+            props.rerender();
+        }
     };
 
     const handleChange = (prop) => (event) => {
@@ -178,91 +245,19 @@ export default function SimpleModal(props) {
         setValues({ ...values, [prop]: date });
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setLoading(true);
-        const success = await submitChange();
-        setTimeout(() => setLoading(false), 500);
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    const [scroll, ] = React.useState('paper');
 
-        if (success) {
-            setOpen(false);
-            props.rerender();
-            setValues(defaultValues);
-        }
-    };
-    const handleReset = async (event) => {
-        event.preventDefault();
-        setValues(defaultValues);
+    const handleOpen = () => {
+        setOpen(true);
     };
 
-    const submitChange = async () => {
-        let serverMessage = { ...values };
-
-        //Validate the fields are valid for the DB
-        //company can't be empty
-        if (serverMessage.company === '') {
-            dispatch({ do: 'setMessage', type: 'error', message: 'The company name cannot be empty.' });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
-
-        //title can't be empty
-        if (serverMessage.title === '') {
-            dispatch({ do: 'setMessage', type: 'error', message: 'The title cannot be empty.' });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
-
-        if (serverMessage.postingType === '') {
-            dispatch({ do: 'setMessage', type: 'error', message: 'Please choose your posting type.' });
-            setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-            return;
-        }
-
-        //postLink has to be a valid URL
-        const verifyURL = (url) => {
-            //eslint-disable-next-line
-            const re = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
-            if (re.test(url)) {
-                if (!url.includes('http://') && !url.includes('https://') && url.includes('www.')) {
-                    return 'http://' + url;
-                } else {
-                    return url;
-                }
-            }
-            return false;
-        };
-        if (serverMessage.postLink.trim() !== '') {
-            const validurl = verifyURL(serverMessage.postLink.trim());
-            if (validurl === false) {
-                dispatch({ do: 'setMessage', type: 'error', message: 'Not a valid url.' });
-                setTimeout(() => dispatch({ do: 'clearMessage' }), 2000);
-                return;
-            }
-            serverMessage.postLink = validurl;
-        }
-
-        if (!['applied', 'interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
-            delete serverMessage.appliedDate;
-        }
-
-        if (!['interview', 'offer', 'reject'].includes(serverMessage.postingType)) {
-            delete serverMessage.heardBackDate;
-        }
-        //removing any empty fields from the put statement
-        Object.keys(serverMessage).forEach((key) => {
-            if (!serverMessage[key]) {
-                delete serverMessage[key];
-            }
-        });
-
-        const serverResponse = await API.post('/api/posts/', serverMessage);
-
-        processServerReturn(serverResponse, dispatch);
-        return !serverResponse.error;
+    const handleClose = () => {
+        setOpen(false);
     };
 
-    //Reminder adding modal stuff
+    //reminder stuff
     const addReminder = (reminderDate) => {
         //when okay is clicked in reminder dialog, add to the values
         setValues({ ...values, reminder: reminderDate });
@@ -271,9 +266,8 @@ export default function SimpleModal(props) {
 
     const body = (
         <Grid container direction="column" className={classes.root}>
-            <Grid container direction="row" justify="space-between">
+            <Grid container justify="space-between" alignItems="center">
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    {/* <Grid container alignItems="flex-end"> */}
                     <KeyboardDatePicker
                         disableToolbar
                         variant="inline"
@@ -281,7 +275,7 @@ export default function SimpleModal(props) {
                         margin="normal"
                         id="date-picker-inline"
                         label="Date Added"
-                        value={new Date()}
+                        value={dateAdded}
                         onChange={() => {
                             console.log('no');
                         }}
@@ -289,7 +283,6 @@ export default function SimpleModal(props) {
                             'aria-label': 'change date',
                         }}
                     />
-                    {/* </Grid> */}
                 </MuiPickersUtilsProvider>
                 <Tooltip title="Reminder">
                     <Button
@@ -301,6 +294,7 @@ export default function SimpleModal(props) {
                     </Button>
                 </Tooltip>
             </Grid>
+
             <FormControl component="fieldset">
                 <FormLabel component="legend">Box Color</FormLabel>
                 <RadioGroup row aria-label="color" name="color" value={values.color} onChange={handleChange('color')}>
@@ -352,7 +346,7 @@ export default function SimpleModal(props) {
 
                 <Grid item md={4} xs={12}>
                     <FormControl className={classes.changeWidth}>
-                        <InputLabel htmlFor="salasalary">Monthly Salary</InputLabel>
+                        <InputLabel htmlFor="salary">Monthly Salary</InputLabel>
                         <Input
                             id="salary"
                             type="number"
@@ -415,7 +409,7 @@ export default function SimpleModal(props) {
                 values.postingType === 'reject' ? (
                     <Grid item xs={12} md={7}>
                         <FormControl component="fieldset">
-                            <FormLabel component="legend">Interview Type</FormLabel>
+                            <FormLabel component="legend">Interview State</FormLabel>
                             <RadioGroup
                                 row
                                 aria-label="interviewState"
@@ -469,9 +463,7 @@ export default function SimpleModal(props) {
                     ''
                 )}
             </Grid>
-            {/* {(values.postingType === 'interview' ||
-                values.postingType === 'offer' ||
-                values.postingType === 'reject') && (<InterviewSection values={values} setValues={setValues} />)} */}
+
             <TextField id="postLink" label="Post Link" value={values.postLink} onChange={handleChange('postLink')} />
 
             <TextField
@@ -491,23 +483,17 @@ export default function SimpleModal(props) {
                 variant="outlined"
                 value={values.notes}
             />
-            <ContactsSection values={values} setValues={setValues} />
         </Grid>
     );
 
     return (
         <div>
-            <button className="create-button" type="button" onClick={handleOpen}>
-                Add new job
-            </button>
-            <Fab color="primary" className={classes.addButton} aria-label="add post" onClick={handleOpen}>
-                <AddIcon />
-            </Fab>
             <ReminderDialog
                 open={reminderDialogOpen}
                 handleOk={addReminder}
                 handleCancel={() => setReminderDialogOpen(false)}
             />
+
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -517,19 +503,14 @@ export default function SimpleModal(props) {
                 aria-describedby="scroll-dialog-description"
                 TransitionComponent={Transition}
             >
-                <DialogTitle id="scroll-dialog-title">
-                    New Job{' '}
-                    <span style={{ float: 'right' }}>
-                        {date.getFullYear() + ' / ' + (date.getMonth() + 1) + ' / ' + date.getDate()}
-                    </span>
-                </DialogTitle>
+                <DialogTitle id="scroll-dialog-title">Post</DialogTitle>
                 <DialogContent dividers={scroll === 'paper'} style={{ margin: '0' }}>
                     {body}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleReset}>Reset</Button>
                     <Button onClick={handleClose} color="secondary">
-                        Close
+                        Cancel
                     </Button>
                     <ResponsiveSubmit
                         submit={handleSubmit}
